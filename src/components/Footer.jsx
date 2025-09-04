@@ -149,7 +149,7 @@ const Footer = () => {
             <p>University of Ilorin,</p>
             <p>Ilorin, Nigeria. 240003</p>
             <p>TEL: +2348036910988</p>
-            <p>Email: <a href="mailto:supports@nisebnigeria.org">supports@nisebnigeria.org</a></p>
+            <p>Email: <a href="mailto:info@nisebnigeria.com">info@nisebnigeria.com</a></p>
           </ContactInfo>
           <SocialIcons>
             <a href="https://web.facebook.com/groups/1840033292958200?_rdc=1&_rdr#" aria-label="Facebook"><FaFacebookF /></a>

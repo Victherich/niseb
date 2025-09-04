@@ -57,11 +57,19 @@ const UserDetailModal = ({ user, onClose }) => {
           User Details
         </h2>
 
-        {Object.entries(user).map(([key, value]) => (
+        {/* {Object.entries(user).map(([key, value]) => (
           <UserDetailRow key={key}>
             <strong>{key.toLocaleUpperCase()}: </strong> {value || "—"}
           </UserDetailRow>
-        ))}
+        ))} */}
+
+   {Object.entries(user)
+  .filter(([key]) => !['password', 'mailbag', 'postcode'].includes(key))
+  .map(([key, value]) => (
+    <UserDetailRow key={key}>
+      <strong>{key.toLocaleUpperCase()}: </strong> {value || "—"}
+    </UserDetailRow>
+  ))}
       </ModalContent>
     </ModalOverlay>
   );

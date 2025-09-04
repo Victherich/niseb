@@ -1,9 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Fade, Slide } from 'react-awesome-reveal';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
 import p1 from '../Images/p1.jpg'
+import Swal from 'sweetalert2'
+import { Context } from './Context';
 
 // Styled Components for the page layout and elements
 const PageContainer = styled.div`
@@ -254,34 +256,73 @@ const faqs = [
 
 
 const ContactUsPage = () => {
+  const [openFaq, setOpenFaq]=useState(null);
+  const {domain}=useContext(Context)
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
-  const [submissionMessage, setSubmissionMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [openFaq, setOpenFaq] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate API call
-    console.log('Form submitted:', formData);
-    setSubmissionMessage('Thank you for your message! We will get back to you shortly.');
-    setIsSuccess(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
 
-    setTimeout(() => {
-      setSubmissionMessage('');
-      setIsSuccess(false);
-    }, 5000);
+    // Show loading state
+    Swal.fire({
+      title: "Sending...",
+      text: "Please wait while we submit your message.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      const response = await fetch(
+        `${domain}/contact_form_endpoint.php`, // <-- your backend endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Message Sent",
+          text: result.message || "We will get back to you shortly.",
+        });
+        // Reset form
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: result.error || "Something went wrong. Please try again.",
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Unable to send message. Please try again later.",
+      });
+      console.error("Form submission failed:", err);
+    }
   };
+
+  
 
   const handleFaqClick = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -313,9 +354,9 @@ const ContactUsPage = () => {
                 <ContactCard>
                   <FaEnvelope />
                   <ContactCardTitle>E-mail</ContactCardTitle>
-                  <ContactCardText>supports@nisebnigeria.org</ContactCardText>
-                  <ContactCardText>nisebpresident@gmail.com</ContactCardText>
-                  <ContactCardText>nisebsec@gmail.com</ContactCardText>
+                  <ContactCardText>info@nisebnigeria.com</ContactCardText>
+                  {/* <ContactCardText>nisebpresident@gmail.com</ContactCardText> */}
+                  {/* <ContactCardText>nisebsec@gmail.com</ContactCardText> */}
                 </ContactCard>
               </Slide>
             </ContactInfoGrid>
@@ -361,19 +402,20 @@ const ContactUsPage = () => {
                   required 
                 />
               </FormGroup>
-              <FormGroup>
- <Slide direction="right" duration={1500} triggerOnce={false}>
-                <FormLabel htmlFor="phone">Phone</FormLabel>
-                </Slide>
-                <FormInput 
-                  type="text" 
-                  id="phone" 
-                  name="phone" 
-                  value={formData.subject} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </FormGroup>
+        <FormGroup>
+  <Slide direction="right" duration={1500} triggerOnce={false}>
+    <FormLabel htmlFor="phone">Phone</FormLabel>
+  </Slide>
+  <FormInput 
+    type="text" 
+    id="phone" 
+    name="phone" 
+    value={formData.phone}   // ✅ Corrected
+    onChange={handleChange} 
+    required 
+  />
+</FormGroup>
+
               <FormGroup>
 
                  <Slide direction="right" duration={1500} triggerOnce={false}>
@@ -392,7 +434,7 @@ const ContactUsPage = () => {
               <SubmitButton type="submit">Send Message</SubmitButton>
               </Fade>
             </StyledForm>
-            {submissionMessage && <Message success={isSuccess}>{submissionMessage}</Message>}
+          
           </FormSection>
         </Fade>
 

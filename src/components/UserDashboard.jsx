@@ -226,7 +226,7 @@ const UserDashboard = () => {
             active={activeMenu === 'profile'}
             onClick={() => handleMenuClick('profile')}
           >
-            Hi, {userInfo.othername.slice(0,4)}...
+            Hi, {userInfo?.othername?.slice(0,4)}...
           </SidebarMenuItem>
 
    <SidebarMenuItem
