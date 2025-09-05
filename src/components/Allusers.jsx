@@ -1,3 +1,8 @@
+
+
+
+
+
 // import React, { useEffect, useState, useContext } from "react";
 // import styled from "styled-components";
 // import { 
@@ -6,7 +11,9 @@
 //   FaPhone, 
 //   FaClock, 
 //   FaArrowRight, 
-//   FaArrowLeft 
+//   FaArrowLeft, 
+//   FaSearch, 
+//   FaTimes 
 // } from "react-icons/fa";
 // import { Context } from "./Context";
 // import UserDetailModal from "./UserDetailModal";
@@ -39,12 +46,14 @@
 
 // const TableWrapper = styled.div`
 //   overflow-x: scroll;
+//   // width:300px;
 //   border-radius: 12px;
 //   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-//   -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+//   -webkit-overflow-scrolling: touch;
+
 
 //   @media(max-width:420px){
-//     width: 320px;
+//   width:320px;
 //   }
 // `;
 
@@ -87,26 +96,6 @@
 //     word-break: break-word;
 //     max-width: 220px;
 //   }
-
-//   @media (max-width: 768px) {
-//     th, td {
-//       font-size: 0.8rem;
-//       padding: 0.6rem;
-//     }
-//     td {
-//       max-width: 160px;
-//     }
-//   }
-
-//   @media (max-width: 480px) {
-//     th, td {
-//       font-size: 0.75rem;
-//       padding: 0.5rem;
-//     }
-//     td {
-//       max-width: 120px;
-//     }
-//   }
 // `;
 
 // const ErrorMsg = styled.div`
@@ -124,6 +113,48 @@
 //   font-weight: bold;
 // `;
 
+// const SearchWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin-bottom: 1.5rem;
+//   gap: 0.5rem;
+//   flex-wrap: wrap;
+// `;
+
+// const SearchInput = styled.input`
+//   padding: 0.5rem 1rem;
+//   border: 2px solid #008000;
+//   border-radius: 6px;
+//   font-size: 1rem;
+//   width: 250px;
+// `;
+
+// const FilterSelect = styled.select`
+//   padding: 0.5rem 1rem;
+//   border: 2px solid #008000;
+//   border-radius: 6px;
+//   font-size: 1rem;
+//   background: white;
+// `;
+
+// const Button = styled.button`
+//   padding: 0.5rem 0.8rem;
+//   border: none;
+//   border-radius: 6px;
+//   background: ${(props) => props.bg || "#008000"};
+//   color: white;
+//   cursor: pointer;
+//   font-weight: bold;
+//   &:hover {
+//     opacity: 0.85;
+//   }
+// `;
+
+// const Scroll = styled.p`
+// text-align:center;
+
+// `
+
 // /* ========================= Component ========================= */
 
 // const UserListPage = () => {
@@ -131,17 +162,24 @@
 //   const [loading, setLoading] = useState(true);
 //   const [error, setError] = useState(null);
 //   const [selectedUser, setSelectedUser]=useState(null);
+//   const [search, setSearch] = useState("");
+//   const [activeSearch, setActiveSearch] = useState("");
+//   const [filterMembership, setFilterMembership] = useState("all");
+//   const [filterStatus, setFilterStatus] = useState("all");
 
 //   const { domain } = useContext(Context);
 
-//   useEffect(() => {
-//     fetch(`${domain}/get_all_users.php`)
+//   const fetchUsers = (searchQuery="") => {
+//     setLoading(true);
+//     setError(null);
+//     fetch(`${domain}/get_all_users.php?search=${encodeURIComponent(searchQuery)}`)
 //       .then((res) => res.json())
 //       .then((data) => {
 //         if (data.success) {
 //           setUsers(data.users);
-//           console.log(data.users)
+//           setActiveSearch(searchQuery);
 //         } else {
+//           setUsers([]);
 //           setError(data.error || "Failed to fetch users.");
 //         }
 //         setLoading(false);
@@ -150,22 +188,77 @@
 //         setError("Error connecting to server: " + err.message);
 //         setLoading(false);
 //       });
-//   }, []);
+//   };
+
+//   useEffect(() => {
+//     fetchUsers("");
+//   }, [domain]);
+
+//   // Apply filters locally
+//   const filteredUsers = users.filter(u => {
+//     let match = true;
+
+//     if (filterMembership !== "all" && u.membershipCategory.toLowerCase() !== filterMembership.toLowerCase()) {
+//       match = false;
+//     }
+
+//     if (filterStatus !== "all") {
+//       const expiryDate = u.membership_expiry ? new Date(u.membership_expiry) : null;
+//       const today = new Date();
+//       const isActive = expiryDate && expiryDate >= today;
+//       if (filterStatus === "active" && !isActive) match = false;
+//       if (filterStatus === "expired" && isActive) match = false;
+//     }
+
+//     return match;
+//   });
 
 //   return (
 //     <PageContainer>
 //       <ContentWrapper>
-//         <SectionTitle>All Users</SectionTitle>
+//         <SectionTitle>All Users ({filteredUsers.length})</SectionTitle>
+
+//         {/* Search + Filters */}
+//         <SearchWrapper>
+//           <SearchInput 
+//             placeholder="Search by email..." 
+//             value={search} 
+//             onChange={(e)=>setSearch(e.target.value)} 
+//           />
+//           <Button onClick={()=>fetchUsers(search)}><FaSearch /> Search</Button>
+//           {activeSearch && (
+//             <Button bg="red" onClick={()=>{ setSearch(""); fetchUsers(""); }}>
+//               <FaTimes /> Cancel
+//             </Button>
+//           )}
+
+//           <FilterSelect value={filterMembership} onChange={(e)=>setFilterMembership(e.target.value)}>
+//             <option value="all">All Memberships</option>
+//             <option value="student">Students</option>
+//             <option value="fullmember">Full Members</option>
+//             <option value="fellow">Fellows </option>
+//              <option value="corporate">Corporate</option>
+//             <option value="foreign (undergraduate)">Foreign (undergraduate)</option>
+//             <option value="foreign (graduate)">Foreign (graduate)</option>
+//             <option value="foreign (fullmember)">Foreign (fullmember) </option>
+//             {/* add more categories here */}
+//           </FilterSelect>
+
+//           <FilterSelect value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)}>
+//             <option value="all">All Status</option>
+//             <option value="active">Active</option>
+//             <option value="expired">Expired</option>
+//           </FilterSelect>
+//         </SearchWrapper>
 
 //         {loading && <LoadingMsg>Loading users...</LoadingMsg>}
 //         {error && <ErrorMsg>{error}</ErrorMsg>}
-        
-//         <p style={{ width:"100%", textAlign:"center" }}>
-//           <FaArrowLeft /> (Scroll) <FaArrowRight />
-//         </p>
 
-//         {!loading && !error && users.length > 0 && (
+//         {!loading && !error && filteredUsers.length > 0 && (
 //           <TableWrapper>
+//             <Scroll>
+//               <FaArrowLeft/>Scroll<FaArrowRight/>
+//             </Scroll>
 //             <UserTable>
 //               <thead>
 //                 <tr>
@@ -173,42 +266,36 @@
 //                   <th>Name</th>
 //                   <th><FaEnvelope /> Email</th>
 //                   <th><FaPhone /> Mobile</th>
-//                   {/* <th><FaClock /> Created</th> */}
-//                    <th><FaClock /> Membership</th>
-//                    <th><FaClock /> Status</th>
+//                   <th><FaClock /> Membership</th>
+//                   <th><FaClock /> Status</th>
 //                 </tr>
 //               </thead>
 //               <tbody>
-//                 {users.map((u) => (
+//                 {filteredUsers.map((u) => (
 //                   <tr key={u.id} onClick={()=>setSelectedUser(u)}>
 //                     <td>{u.id}</td>
 //                     <td>{u.surname} {u.othername}</td>
 //                     <td>{u.email}</td>
 //                     <td>{u.mobile}</td>
-//                    <td>
-//   {u.membershipCategory
-//     ? u.membershipCategory.charAt(0).toUpperCase() + u.membershipCategory.slice(1).toLowerCase()
-//     : ""}
-// </td>
-// <td>
-//   {(() => {
-//     if (!u.membership_expiry) {
-//       return <span style={{ background: "#d1d5db", color: "#111", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>No expiry</span>;
-//     }
-
-//     const expiryDate = new Date(u.membership_expiry);
-//     const today = new Date();
-
-//     if (expiryDate >= today) {
-//       return <span style={{ background: "green", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Active</span>;
-//     } else {
-//       return <span style={{ background: "red", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Expired</span>;
-//     }
-//   })()}
-// </td>
-
-
-//                     {/* <td>{new Date(u.created_at).toLocaleString()}</td> */}
+//                     <td>
+//                       {u.membershipCategory
+//                         ? u.membershipCategory.charAt(0).toUpperCase() + u.membershipCategory.slice(1).toLowerCase()
+//                         : ""}
+//                     </td>
+//                     <td>
+//                       {(() => {
+//                         if (!u.membership_expiry) {
+//                           return <span style={{ background: "#d1d5db", color: "#111", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>No expiry</span>;
+//                         }
+//                         const expiryDate = new Date(u.membership_expiry);
+//                         const today = new Date();
+//                         if (expiryDate >= today) {
+//                           return <span style={{ background: "green", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Active</span>;
+//                         } else {
+//                           return <span style={{ background: "red", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Expired</span>;
+//                         }
+//                       })()}
+//                     </td>
 //                   </tr>
 //                 ))}
 //               </tbody>
@@ -216,25 +303,22 @@
 //           </TableWrapper>
 //         )}
 
-//         {!loading && !error && users.length === 0 && (
+//         {!loading && !error && filteredUsers.length === 0 && (
 //           <ErrorMsg>No users found.</ErrorMsg>
 //         )}
 //       </ContentWrapper>
 
 //       {selectedUser && (
-//   <UserDetailModal 
-//     user={selectedUser} 
-//     onClose={() => setSelectedUser(null)} 
-//   />
-// )}
+//         <UserDetailModal 
+//           user={selectedUser} 
+//           onClose={() => setSelectedUser(null)} 
+//         />
+//       )}
 //     </PageContainer>
 //   );
 // };
 
 // export default UserListPage;
-
-
-
 
 
 
@@ -283,14 +367,12 @@ const SectionTitle = styled.h1`
 
 const TableWrapper = styled.div`
   overflow-x: scroll;
-  // width:300px;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   -webkit-overflow-scrolling: touch;
 
-
   @media(max-width:420px){
-  width:320px;
+    width:320px;
   }
 `;
 
@@ -385,12 +467,20 @@ const Button = styled.button`
   &:hover {
     opacity: 0.85;
   }
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
 `;
 
-const Scroll = styled.p`
-text-align:center;
-
-`
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
 
 /* ========================= Component ========================= */
 
@@ -398,25 +488,31 @@ const UserListPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedUser, setSelectedUser]=useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
-  const [filterMembership, setFilterMembership] = useState("all");
-  const [filterStatus, setFilterStatus] = useState("all");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const usersPerPage = 100;
 
   const { domain } = useContext(Context);
 
-  const fetchUsers = (searchQuery="") => {
+  const fetchUsers = (page, searchQuery) => {
     setLoading(true);
     setError(null);
-    fetch(`${domain}/get_all_users.php?search=${encodeURIComponent(searchQuery)}`)
+    fetch(`${domain}/get_all_users2.php?page=${page}&limit=${usersPerPage}&search=${encodeURIComponent(searchQuery)}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
           setUsers(data.users);
+          setTotalUsers(data.totalUsers);
+          setCurrentPage(data.currentPage);
           setActiveSearch(searchQuery);
         } else {
           setUsers([]);
+          setTotalUsers(0);
           setError(data.error || "Failed to fetch users.");
         }
         setLoading(false);
@@ -428,128 +524,133 @@ const UserListPage = () => {
   };
 
   useEffect(() => {
-    fetchUsers("");
+    fetchUsers(1, "");
   }, [domain]);
 
-  // Apply filters locally
-  const filteredUsers = users.filter(u => {
-    let match = true;
-
-    if (filterMembership !== "all" && u.membershipCategory.toLowerCase() !== filterMembership.toLowerCase()) {
-      match = false;
-    }
-
-    if (filterStatus !== "all") {
-      const expiryDate = u.membership_expiry ? new Date(u.membership_expiry) : null;
-      const today = new Date();
-      const isActive = expiryDate && expiryDate >= today;
-      if (filterStatus === "active" && !isActive) match = false;
-      if (filterStatus === "expired" && isActive) match = false;
-    }
-
-    return match;
-  });
+  const handlePageChange = (page) => {
+    fetchUsers(page, activeSearch);
+  };
+  
+  const handleSearch = () => {
+    fetchUsers(1, search);
+  };
+  
+  const totalPages = Math.ceil(totalUsers / usersPerPage);
 
   return (
     <PageContainer>
       <ContentWrapper>
-        <SectionTitle>All Users ({filteredUsers.length})</SectionTitle>
+        <SectionTitle>All Users ({totalUsers})</SectionTitle>
 
         {/* Search + Filters */}
         <SearchWrapper>
           <SearchInput 
-            placeholder="Search by email..." 
-            value={search} 
-            onChange={(e)=>setSearch(e.target.value)} 
+            type="text"
+            placeholder="Search by email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <Button onClick={()=>fetchUsers(search)}><FaSearch /> Search</Button>
+          <Button onClick={handleSearch}>
+            <FaSearch /> Search
+          </Button>
           {activeSearch && (
-            <Button bg="red" onClick={()=>{ setSearch(""); fetchUsers(""); }}>
+            <Button
+              bg="red"
+              onClick={() => {
+                setSearch("");
+                fetchUsers(1, "");
+              }}
+            >
               <FaTimes /> Cancel
             </Button>
           )}
 
-          <FilterSelect value={filterMembership} onChange={(e)=>setFilterMembership(e.target.value)}>
+          <FilterSelect>
             <option value="all">All Memberships</option>
             <option value="student">Students</option>
             <option value="fullmember">Full Members</option>
             <option value="fellow">Fellows </option>
-             <option value="corporate">Corporate</option>
+            <option value="corporate">Corporate</option>
             <option value="foreign (undergraduate)">Foreign (undergraduate)</option>
             <option value="foreign (graduate)">Foreign (graduate)</option>
             <option value="foreign (fullmember)">Foreign (fullmember) </option>
-            {/* add more categories here */}
-          </FilterSelect>
-
-          <FilterSelect value={filterStatus} onChange={(e)=>setFilterStatus(e.target.value)}>
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="expired">Expired</option>
           </FilterSelect>
         </SearchWrapper>
-
+        
         {loading && <LoadingMsg>Loading users...</LoadingMsg>}
         {error && <ErrorMsg>{error}</ErrorMsg>}
 
-        {!loading && !error && filteredUsers.length > 0 && (
-          <TableWrapper>
-            <Scroll>
-              <FaArrowLeft/>Scroll<FaArrowRight/>
-            </Scroll>
-            <UserTable>
-              <thead>
-                <tr>
-                  <th><FaUser /> ID</th>
-                  <th>Name</th>
-                  <th><FaEnvelope /> Email</th>
-                  <th><FaPhone /> Mobile</th>
-                  <th><FaClock /> Membership</th>
-                  <th><FaClock /> Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((u) => (
-                  <tr key={u.id} onClick={()=>setSelectedUser(u)}>
-                    <td>{u.id}</td>
-                    <td>{u.surname} {u.othername}</td>
-                    <td>{u.email}</td>
-                    <td>{u.mobile}</td>
-                    <td>
-                      {u.membershipCategory
-                        ? u.membershipCategory.charAt(0).toUpperCase() + u.membershipCategory.slice(1).toLowerCase()
-                        : ""}
-                    </td>
-                    <td>
-                      {(() => {
-                        if (!u.membership_expiry) {
-                          return <span style={{ background: "#d1d5db", color: "#111", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>No expiry</span>;
-                        }
-                        const expiryDate = new Date(u.membership_expiry);
-                        const today = new Date();
-                        if (expiryDate >= today) {
-                          return <span style={{ background: "green", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Active</span>;
-                        } else {
-                          return <span style={{ background: "red", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Expired</span>;
-                        }
-                      })()}
-                    </td>
+        {!loading && !error && users.length > 0 && (
+          <>
+            <TableWrapper>
+              <UserTable>
+                <thead>
+                  <tr>
+                    <th><FaUser /> ID</th>
+                    <th>Name</th>
+                    <th><FaEnvelope /> Email</th>
+                    <th><FaPhone /> Mobile</th>
+                    <th><FaClock /> Membership</th>
+                    <th><FaClock /> Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </UserTable>
-          </TableWrapper>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr 
+                      key={u.id} 
+                      onClick={() => setSelectedUser(u)}
+                    >
+                      <td>{u.id}</td>
+                      <td>{u.surname} {u.othername}</td>
+                      <td>{u.email}</td>
+                      <td>{u.mobile}</td>
+                      <td>
+                        {u.membershipCategory ? u.membershipCategory.charAt(0).toUpperCase() + u.membershipCategory.slice(1).toLowerCase() : ""}
+                      </td>
+                      <td>
+                        {(() => {
+                          if (!u.membership_expiry) {
+                            return <span style={{ background: "#d1d5db", color: "#111", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>No expiry</span>;
+                          }
+                          const expiryDate = new Date(u.membership_expiry);
+                          const today = new Date();
+                          if (expiryDate >= today) {
+                            return <span style={{ background: "green", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Active</span>;
+                          } else {
+                            return <span style={{ background: "red", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Expired</span>;
+                          }
+                        })()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </UserTable>
+            </TableWrapper>
+
+            <PaginationWrapper>
+              <Button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1 || loading}
+              >
+                <FaArrowLeft /> Previous
+              </Button>
+              <span style={{color: '#4b5563', fontWeight: '600'}}>Page {currentPage} of {totalPages}</span>
+              <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages || loading}
+              >
+                Next <FaArrowRight />
+              </Button>
+            </PaginationWrapper>
+          </>
         )}
 
-        {!loading && !error && filteredUsers.length === 0 && (
-          <ErrorMsg>No users found.</ErrorMsg>
+        {!loading && !error && users.length === 0 && (
+          <ErrorMsg>No users found on this page.</ErrorMsg>
         )}
       </ContentWrapper>
-
       {selectedUser && (
-        <UserDetailModal 
-          user={selectedUser} 
-          onClose={() => setSelectedUser(null)} 
-        />
+        <UserDetailModal user={selectedUser} onClose={() => setSelectedUser(null)} />
       )}
     </PageContainer>
   );
