@@ -406,38 +406,55 @@ export default function ApplicationForm() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const { email, confirmEmail, password, confirmPassword, membershipCategory } = formData;
+  const { email, confirmEmail, password, confirmPassword, membershipCategory } = formData;
 
-    if (email !== confirmEmail) {
-      Swal.fire("Error", "Emails do not match!", "error");
+  if (email !== confirmEmail) {
+    Swal.fire("Error", "Emails do not match!", "error");
+    return;
+  }
+  if (password !== confirmPassword) {
+    Swal.fire("Error", "Passwords do not match!", "error");
+    return;
+  }
+  if (password.length < 6) {
+    Swal.fire("Error", "Passwords must be at least 6 characters!", "error");
+    return;
+  }
+
+  const amount = membershipFees[membershipCategory];
+  if (!amount) {
+    Swal.fire("Error", "Please select a membership category.", "error");
+    return;
+  }
+
+  try {
+    Swal.fire({ text: "Checking email...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+    const res = await fetch(`${domain}/check_user.php?email=${encodeURIComponent(email)}`);
+    const check = await res.json();
+
+    if (!check.success) {
+      Swal.fire("Error", check.message || "Server error.", "error");
       return;
     }
-    if (password !== confirmPassword) {
-      Swal.fire("Error", "Passwords do not match!", "error");
+    if (check.exists) {
+      Swal.fire("Error", "This email is already registered. Please login instead.", "error");
       return;
     }
 
-    const amount = membershipFees[membershipCategory];
-    if (!amount) {
-      Swal.fire("Error", "Please select a membership category.", "error");
-      return;
-    }
-
+    // If available → proceed with payment
     const paystack = new PaystackPop();
-    Swal.fire({ title: "Processing Payment...", text: "Please wait", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
     paystack.newTransaction({
       key: payStackTestKey,
-      //  key: payStackLiveKey,
       amount: Number(amount) * 100,
       email,
       firstname: formData.surname,
       phone: formData.mobile,
       onSuccess: async (transaction) => {
-        Swal.fire({text:"Please wait..."});
+        Swal.fire({ text: "Please wait..." });
         Swal.showLoading();
 
         try {
@@ -453,20 +470,27 @@ export default function ApplicationForm() {
           const result = await response.json();
 
           if (result.success) {
-            Swal.fire("Success", "Payment and registration successful! You can now login to your account. Please check your email inbox or spam folder for your confirmation.", "success");
-            navigate('/userlogin')
+            Swal.fire("Success", "Payment and registration successful! Please check your email.", "success");
+            navigate("/userlogin");
             setFormData({});
           } else {
             Swal.fire("Error", result.error || "Something went wrong!", "error");
           }
         } catch (err) {
           Swal.fire("Error", "Server error. Try again later.", "error");
+          console.error(err);
         }
       },
       onCancel: () => Swal.fire("Cancelled", "You cancelled the payment.", "info"),
       onError: (error) => Swal.fire("Payment Failed", error.message, "error"),
     });
-  };
+
+  } catch (error) {
+    Swal.fire("Error", "Could not verify email. Try again later.", "error");
+    console.error(error);
+  }
+};
+
 
   return (
     <PageWrapper>
@@ -516,11 +540,23 @@ export default function ApplicationForm() {
           <FormGroup><label>Mobile Number *</label><input type="tel" name="mobile" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>City *</label><input type="text" name="city" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>State *</label><input type="text" name="state" required onChange={handleChange} /></FormGroup>
+          
           <FormGroup><label>Country *</label><input type="text" name="country" required onChange={handleChange} /></FormGroup>
+          
           <FormGroup><label>Email *</label><input type="email" name="email" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>Confirm Email *</label><input type="email" name="confirmEmail" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>Password *</label><input type="password" name="password" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>Confirm Password *</label><input type="password" name="confirmPassword" required onChange={handleChange} /></FormGroup>
+          <FormGroup>
+  <label>Mailbag (Optional)</label>
+  <input type="text" name="mailbag" onChange={handleChange} />
+</FormGroup>
+
+<FormGroup>
+  <label>Postcode (Optional)</label>
+  <input type="text" name="postcode" onChange={handleChange} />
+</FormGroup>
+
           <FormGroup><label>Institution *</label><input type="text" name="institution" required onChange={handleChange} /></FormGroup>
           <FormGroup><label>Department *</label><input type="text" name="department" required onChange={handleChange} /></FormGroup>
 

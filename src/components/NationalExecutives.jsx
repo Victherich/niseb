@@ -132,55 +132,117 @@ const Card = styled.div`
   }
 `;
 
+// const members = [
+
+//    {
+//     name: "Prof. Ehimwenma S. Omoreghie",
+//     role: "PRESIDENT",
+//     desc: "University of Benin, Nigeria",
+//     img: p3,
+//   },
+
+//     {
+//     name: "Dr. Omowunmi T. Kayode",
+//     role: "VICE PRESIDENT",
+//     desc: "Mountain Top University, Prayer City, Ogun State, Nigeria | Medicinal, Nutritional and Reproductive Biochemistry",
+//     img: p4,
+//   },
+//     {
+//     name: "Dr. Rukayat Abiodun Oyegoke",
+//     role: "NATIONAL TREASURER",
+//     desc: "Department of Biochemistry, Faculty of Life Sciences, University of Ilorin, Nigeria",
+//     img: p2,
+//   },
+//   {
+//     name: "Prof. Bamidele Victor Owoyele",
+//     role: "PRESIDENT",
+//     desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
+//     img: president,
+//   },
+ 
+//   {
+//     name: "Dr. David O. Adetitun",
+//     role: "SECRETARY GENERAL",
+//     desc: "University of Ilorin, Nigeria | Environmental Microbiology",
+//     img: ns,
+//   },
+
+//   {
+//     name: "Prof. Olarewaju Oluba",
+//     role: "FINANCIAL SECRETARY",
+//     desc: "Landmark University, Omu-Aran, Kwara State, Nigeria | Nutritional Biochemistry and Agricultural Biotechnology",
+//     img: p1,
+//   },
+//   {
+//     name: "Dr. Faoziyah Adenike Sulaiman",
+//     role: "PUBLIC RELATION OFFICER",
+//     desc: "University of Ilorin, Nigeria",
+//     img: p5,
+//   },
+//   {
+//     name: "Prof. Taiga Akpovughaye",
+//     role: "EX-OFFICIO",
+//     desc: "Delta State University, Ozoro, Nigeria",
+//     img: p6,
+//   },
+
+// ];
+
+
 const members = [
-  {
-    name: "Prof. Bamidele Victor Owoyele",
+
+   {
+    name: "Prof. Ehimwenma Omoreghie",
     role: "PRESIDENT",
-    desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
-    img: president,
-  },
-  {
-    name: "Prof. E.S Omoreghie",
-    role: "VICE PRESIDENT",
     desc: "University of Benin, Nigeria",
     img: p3,
   },
-  {
-    name: "Dr. David O. Adetitun",
-    role: "SECRETARY GENERAL",
-    desc: "University of Ilorin, Nigeria | Environmental Microbiology",
-    img: ns,
-  },
-  {
-    name: "Dr. Omowunmi T. Kayode",
-    role: "TREASURER",
+
+    {
+    name: "Dr. Omowunmi Kayode",
+    role: "VICE PRESIDENT",
     desc: "Mountain Top University, Prayer City, Ogun State, Nigeria | Medicinal, Nutritional and Reproductive Biochemistry",
     img: p4,
   },
+    {
+    name: "Dr. Rukayat Abiodun Oyegoke",
+    role: "NATIONAL TREASURER",
+    desc: "Department of Biochemistry, Faculty of Life Sciences, University of Ilorin, Nigeria",
+    img: p2,
+  },
   {
-    name: "Prof. Olarewaju Oluba",
-    role: "FINANCIAL SECRETARY",
+    name: "Prof. Bamidele Owoyele",
+    role: "EX-OFFICIO",
+    desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
+    img: president,
+  },
+ 
+  // {
+  //   name: "Dr. David O. Adetitun",
+  //   role: "SECRETARY GENERAL",
+  //   desc: "University of Ilorin, Nigeria | Environmental Microbiology",
+  //   img: ns,
+  // },
+
+  {
+    name: "Prof. Oluba Micheal",
+    role: "ASSISTANT SECRETARY",
     desc: "Landmark University, Omu-Aran, Kwara State, Nigeria | Nutritional Biochemistry and Agricultural Biotechnology",
     img: p1,
   },
   {
-    name: "Dr. Faoziyah Adenike Sulaiman",
+    name: "Prof Riskat Ahmed",
     role: "PUBLIC RELATION OFFICER",
     desc: "University of Ilorin, Nigeria",
     img: p5,
   },
   {
-    name: "Prof. Taiga Akpovughaye",
-    role: "EX-OFFICIO",
+    name: "Prof. Eleojo Ojogbane",
+    role: "FINANCIAL SECRETARY",
     desc: "Delta State University, Ozoro, Nigeria",
     img: p6,
   },
-  {
-    name: "Dr. Rukayat Abiodun Oyegoke",
-    role: "ASSISTANT SECRETARY",
-    desc: "Department of Biochemistry, Faculty of Life Sciences, University of Ilorin, Nigeria",
-    img: p2,
-  },
+
 ];
 
 
@@ -208,7 +270,7 @@ export default function NationalExecutives() {
           {members.map((m, i) => (
             <Card key={i}>
               <img src={m.img} alt={m.name} />
-              <Slide cascade damping={0.2} duration={3000} triggerOnce={false} direction="down">
+              <Slide cascade damping={0.2} duration={1000} triggerOnce={false} direction="down">
                 <h3>{m.name}</h3>
                 <h4>{m.role}</h4>
                 <p>{m.desc}</p>
