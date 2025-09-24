@@ -993,8 +993,8 @@ const CertificatePage = ({ userId }) => {
 
         <SignatureBlock>
           <img src={signature} alt="Signature" />
-          <p style={{ fontWeight: "bold" }}>Prof. W. F. Gbolade, FNISEB</p>
-          <p>NISEB Secretary General</p>
+          <p style={{ fontWeight: "bold" }}>Prof Ehimwenma Omoregie</p>
+          <p>President of National Executive Council (NEC)</p>
         </SignatureBlock>
 
         <Seal />

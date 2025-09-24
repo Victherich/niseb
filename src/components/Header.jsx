@@ -317,6 +317,8 @@ useEffect(() => {
           <NavLink onClick={() => handleNavLinkClick('/bulletin')} className={isActive('/bulletin') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Bulletin</NavLink>
        <NavLink onClick={() => handleNavLinkClick('/editors')} className={isActive('/editors') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Editors</NavLink>
       <BeautifulDropdown2 color={"white"} fontSize={"1rem"}/>
+         <NavLink onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Gallery</NavLink>
+      
         <NavLink onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Contact Us</NavLink>
       
       </Nav>
@@ -344,7 +346,10 @@ useEffect(() => {
          <NavLink2 onClick={() => handleNavLinkClick('/bulletin')} className={isActive('/bulletin') ? 'active' : ''}>Bulletin</NavLink2>
        <NavLink2 onClick={() => handleNavLinkClick('/editors')} className={isActive('/editors') ? 'active' : ''}>Editors</NavLink2>
         <BeautifulDropdown2 color={"green"} fontSize={"1.2rem"}/>
-        <NavLink2 onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} style={{marginTop:"20px"}}>Contact Us</NavLink2>
+        
+           <NavLink2 onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{marginTop:"20px"}}>Gallery</NavLink2>
+      <NavLink2 onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} >Contact Us</NavLink2>
+      
         {/* <SocialIcons>
           <SocialLink href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube"></i></SocialLink>
           <SocialLink href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></SocialLink>

@@ -291,6 +291,7 @@ import PaystackPop from "@paystack/inline-js";
 import heroBg from "../Images/appliationform.jpg";
 import { Context } from "./Context";
 import { useNavigate } from "react-router-dom";
+import MembershipInfo from "./MembershipInfo";
 
 const PageWrapper = styled.div`
   font-family: Inter, ui-sans-serif, system-ui;
@@ -336,7 +337,7 @@ const FormWrapper = styled.div`
   background: white;
   padding: 40px;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 `;
 
 const Title = styled.h2`
@@ -498,6 +499,8 @@ export default function ApplicationForm() {
         <Fade duration={2000}><h1>NISEB Application Form</h1></Fade>
         <p>Join the Society and be part of an innovative Life Sciences network.</p>
       </Hero>
+
+      <MembershipInfo/>
 
       <FormWrapper>
         <Title>Membership Application</Title>

@@ -131,7 +131,7 @@
 import React, { useContext, useRef } from "react";
 import styled from "styled-components";
 import heroVideo from "../Images/media1.mp4";
-import heroPoster from "../Images/test.jpg";
+import heroPoster from "../Images/onf2.png";
 import { Fade, Slide, Zoom, Flip } from "react-awesome-reveal"; // Import all animation components
 import { Context } from "./Context";
 

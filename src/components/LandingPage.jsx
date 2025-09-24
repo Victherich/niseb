@@ -5,6 +5,7 @@ import AboutUsSection from './AboutUsSection'
 import Events from './Events'
 import Carousel from './Carousel'
 import QuizPage from './QuizPage'
+import GalleryComponent from './GalleryComponent'
 
 const LandingPage = () => {
   return (
@@ -14,6 +15,7 @@ const LandingPage = () => {
       <Carousel/>
       <Events/>
       <QuizPage/>
+      <GalleryComponent/>
     </div>
   )
 }

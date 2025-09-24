@@ -30,6 +30,8 @@ import UserResetPassword from './components/UserResetPassword';
 import UserLogin from './components/UserLogin';
 import AppUpdate from './components/AppUpdate';
 import ConferencePage from './components/ConferencePage';
+import wp from './Images/whatsapplogo.png';
+import GalleryPage from './components/GalleryPage';
 
 function App() {
   return (
@@ -51,6 +53,7 @@ function App() {
         <Route path='/renewmembership' element={<RenewMembershipPage/>}/>
        <Route path='/conferencepage' element={<ConferencePage/>}/>
         <Route path='/termsandconditions' element={<TermsPage/>}/>
+        <Route path='gallery' element={<GalleryPage/>}/>
 
 
         {/* admin routes */}
@@ -75,6 +78,7 @@ function App() {
         
 
     </Routes>
+    <a><img src={wp} alt="logo" className="WhatsAppIcon" onClick={() => window.open("https://wa.me/2349162035216", "_blank")} /></a> 
     <Footer/>
    </BrowserRouter>
   );

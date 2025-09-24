@@ -18,6 +18,7 @@ import p3 from '../Images2/p3.jpeg'
 import p4 from '../Images2/p4.jpeg'
 import p5 from '../Images2/p5.jpeg'
 import p6 from '../Images2/p6.jpeg'
+import sec from '../Images2/sec.jpeg';
 
 const Hero = styled.section`
   position: relative;
@@ -194,52 +195,52 @@ const members = [
    {
     name: "Prof. Ehimwenma Omoreghie",
     role: "PRESIDENT",
-    desc: "University of Benin, Nigeria",
+    // desc: "University of Benin, Nigeria",
     img: p3,
   },
 
     {
     name: "Dr. Omowunmi Kayode",
     role: "VICE PRESIDENT",
-    desc: "Mountain Top University, Prayer City, Ogun State, Nigeria | Medicinal, Nutritional and Reproductive Biochemistry",
+    // desc: "Mountain Top University, Prayer City, Ogun State, Nigeria | Medicinal, Nutritional and Reproductive Biochemistry",
     img: p4,
   },
     {
     name: "Dr. Rukayat Abiodun Oyegoke",
     role: "NATIONAL TREASURER",
-    desc: "Department of Biochemistry, Faculty of Life Sciences, University of Ilorin, Nigeria",
+    // desc: "Department of Biochemistry, Faculty of Life Sciences, University of Ilorin, Nigeria",
     img: p2,
   },
   {
     name: "Prof. Bamidele Owoyele",
     role: "EX-OFFICIO",
-    desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
+    // desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
     img: president,
   },
  
-  // {
-  //   name: "Dr. David O. Adetitun",
-  //   role: "SECRETARY GENERAL",
-  //   desc: "University of Ilorin, Nigeria | Environmental Microbiology",
-  //   img: ns,
-  // },
+  {
+    name: "Dr. Sylvester Obaika Uanseoje",
+    role: "SECRETARY GENERAL",
+    // desc: "University of Ilorin, Nigeria | Environmental Microbiology",
+    img: sec,
+  },
 
   {
     name: "Prof. Oluba Micheal",
     role: "ASSISTANT SECRETARY",
-    desc: "Landmark University, Omu-Aran, Kwara State, Nigeria | Nutritional Biochemistry and Agricultural Biotechnology",
+    // desc: "Landmark University, Omu-Aran, Kwara State, Nigeria | Nutritional Biochemistry and Agricultural Biotechnology",
     img: p1,
   },
   {
     name: "Prof Riskat Ahmed",
     role: "PUBLIC RELATION OFFICER",
-    desc: "University of Ilorin, Nigeria",
+    // desc: "University of Ilorin, Nigeria",
     img: p5,
   },
   {
     name: "Prof. Eleojo Ojogbane",
     role: "FINANCIAL SECRETARY",
-    desc: "Delta State University, Ozoro, Nigeria",
+    // desc: "Delta State University, Ozoro, Nigeria",
     img: p6,
   },
 

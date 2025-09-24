@@ -6,6 +6,7 @@ import { FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
 import p1 from '../Images/p1.jpg'
 import Swal from 'sweetalert2'
 import { Context } from './Context';
+import EditorsContacts from './EditorsContacts';
 
 // Styled Components for the page layout and elements
 const PageContainer = styled.div`
@@ -348,6 +349,8 @@ const ContactUsPage = () => {
                   <ContactCardTitle>Phone Numbers</ContactCardTitle>
                   <ContactCardText>+2348036910988</ContactCardText>
                   <ContactCardText>+2348035065190</ContactCardText>
+                   <ContactCardText>+2348062075089</ContactCardText>
+                  <ContactCardText>+2349162035216 - whatsapp</ContactCardText>
                 </ContactCard>
               </Fade>
               <Slide direction="right" duration={1500} triggerOnce={false}>
@@ -359,6 +362,8 @@ const ContactUsPage = () => {
                   {/* <ContactCardText>nisebsec@gmail.com</ContactCardText> */}
                 </ContactCard>
               </Slide>
+
+              
             </ContactInfoGrid>
           </HeroSection>
         </Fade>
@@ -456,6 +461,7 @@ const ContactUsPage = () => {
           </FaqSection>
         </Fade>
       </ContentWrapper>
+      <EditorsContacts/>
     </PageContainer>
   );
 };
