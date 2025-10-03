@@ -174,7 +174,7 @@ const AdminDetailsPage = ({ adminId }) => {
       {admin ? (
         <>
           <Card>
-            <Title>Admin Details</Title>
+            <Title>{admin.role} Details</Title>
             {/* <InfoRow><Label>ID:</Label><Value>{admin.id}</Value></InfoRow> */}
             <InfoRow><Label>Name:</Label><Value>{admin.name}</Value></InfoRow>
             <InfoRow><Label>Email:</Label><Value>{admin.email}</Value></InfoRow>

@@ -108,7 +108,7 @@ export default function EditorsContacts() {
 
   return (
     <Container>
-      <Fade cascade triggerOnce={false} damping={0.2}>
+      <Fade triggerOnce={true}>
         <Title>NISEB Journal Editors & Bank Details</Title>
         {journals.map((j, idx) => (
           <JournalCard key={idx}>

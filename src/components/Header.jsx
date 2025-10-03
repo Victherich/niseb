@@ -13,6 +13,7 @@ import niseblogo from '../Images/nisebLogo.png'
 import BeautifulDropdown from './DropDown';
 import BeautifulDropdown2 from './DropDown2';
 import { FaUser } from 'react-icons/fa';
+import BeautifulDropdown3 from './Dropdown3';
 // import logo from '../Images/logo.png'
 
 // --- Styled Components for the Header ---
@@ -318,6 +319,8 @@ useEffect(() => {
        <NavLink onClick={() => handleNavLinkClick('/editors')} className={isActive('/editors') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Editors</NavLink>
       <BeautifulDropdown2 color={"white"} fontSize={"1rem"}/>
          <NavLink onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Gallery</NavLink>
+      <NavLink onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Webinars</NavLink>
+      <BeautifulDropdown3 color={"white"} fontSize={"1rem"}/>
       
         <NavLink onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Contact Us</NavLink>
       
@@ -325,12 +328,7 @@ useEffect(() => {
       <BeautifulDropdown/>
     
 
-      {/* Social media icons for desktop */}
-      {/* <SocialIcons ref={socialIconsRef} id="social-icons">
-        <SocialLink href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube"></i></SocialLink>
-        <SocialLink href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></SocialLink>
-        <SocialLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin-in"></i></SocialLink>
-      </SocialIcons> */}
+ 
 
       {/* Hamburger menu icon for mobile */}
       <MobileMenuIcon onClick={toggleMobileMenu} ref={mobileMenuIconRef}>
@@ -348,13 +346,12 @@ useEffect(() => {
         <BeautifulDropdown2 color={"green"} fontSize={"1.2rem"}/>
         
            <NavLink2 onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{marginTop:"20px"}}>Gallery</NavLink2>
+      <NavLink2 onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} >Webinars</NavLink2>
+      
+    <BeautifulDropdown3 color={"green"} fontSize={"1rem"}/>
       <NavLink2 onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} >Contact Us</NavLink2>
       
-        {/* <SocialIcons>
-          <SocialLink href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-youtube"></i></SocialLink>
-          <SocialLink href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-twitter"></i></SocialLink>
-          <SocialLink href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer"><i className="fab fa-linkedin-in"></i></SocialLink>
-        </SocialIcons> */}
+   
       </MobileMenu>
     </HeaderContainer>
   );

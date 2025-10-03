@@ -138,24 +138,31 @@ const Card = styled.div`
 `;
 
 const members1 = [
+    {
+    name: "Prof. Oyebamiji O. Fafioye",
+    role: "CHAIRMAN, BOT",
+    desc: "...",
+    img: member2,
+  },
   {
     name: "Prof. H.O.B Oloyede",
-    role: "CHAIRMAN, BOT",
+    role: "IMMEDIATE PAST CHAIRMAN, BOT",
     desc: "...",
     img: chairman,
   },
-  {
-    name: "Prof. Clement Bewaji",
-    role: "MEMBER",
-    desc: "...",
-    img: member7,
-  },
+ 
 
 ]
 
 
 
 const members = [
+   {
+    name: "Prof. Clement Bewaji",
+    role: "MEMBER",
+    desc: "...",
+    img: member7,
+  },
 
   {
     name: "Prof. M.T Yakubu",
@@ -199,12 +206,7 @@ const members = [
     desc: "...",
     img: member6,
   },
-  {
-    name: "Prof. Oyebamiji O. Fafioye",
-    role: "MEMBER",
-    desc: "...",
-    img: member2,
-  },
+
 ];
 
 export default function BoardOfTrusteesPage() {

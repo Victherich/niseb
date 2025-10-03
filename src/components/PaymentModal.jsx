@@ -73,8 +73,8 @@ const PaymentModal = ({ user, onClose }) => {
     });
 
     paystack.newTransaction({
-      key: payStackTestKey,
-    //   key: payStackLiveKey,
+      // key: payStackTestKey,
+      key: payStackLiveKey,
       amount: Number(amount) * 100,
       email: user.email,
       firstname: user.surname,

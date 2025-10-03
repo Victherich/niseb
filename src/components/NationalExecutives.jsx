@@ -213,7 +213,7 @@ const members = [
   },
   {
     name: "Prof. Bamidele Owoyele",
-    role: "EX-OFFICIO",
+    role: "EX-OFFICIO (EX-PRESIDENT)",
     // desc: "University of Ilorin, Nigeria | Physiology (Neuroscience)",
     img: president,
   },

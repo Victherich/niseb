@@ -92,7 +92,9 @@ export default function MembershipInfo() {
         </Section>
 
         <Section>
-          <Subtitle>Who Can Join?</Subtitle>
+          <Subtitle>NISEB membership is opened to credible professionals in
+various fields of life sciences including :
+</Subtitle>
           <List>
             <ListItem>Lecturers</ListItem>
             <ListItem>Students (undergraduates and postgraduates)</ListItem>

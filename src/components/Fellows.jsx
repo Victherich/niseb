@@ -108,7 +108,42 @@ const fellows = [
   "Chief Emmanuel Iwuanyanwu (Honorary)",
   "Otunba (Dr.) Oyin Jolayemi (Honorary)",
   "Dr. D. K. Olukoya (Honorary)",
+    "Hon.Sir. E.C. Adinkwu",
+  "Prof. Jacob Snapp Oboreh",
+  "Prof Nyehovwo Johnbull Tonukari",
+  "Prof Samuel Ogheneovo Asagba",
+  "Prof Sunday Paul Bako",
+  "Prof Adenike Oladiji",
+  "Prof. Benjamin OluwoleAkinyele",
+  "Prof Emmanuel Adedayo Fasakin",
+  "Prof Ehimwenma Sheena Omoregie",
+  "Prof Akpovughaye Taiga",
+  "Prof Bamidele Owoyele",
+  "Prof Musa Toyin Yakubu",
+  "Prof Fafioye",
+  "Prof Obaleye"
 ];
+
+
+
+// const fellows = [
+//   "Hon.Sir. E.C. Adinkwu",
+//   "Prof. Jacob Snapp Oboreh",
+//   "Prof Nyehovwo Johnbull Tonukari",
+//   "Prof Samuel Ogheneovo Asagba",
+//   "Prof Sunday Paul Bako",
+//   "Prof Adenike Oladiji",
+//   "Prof. Benjamin OluwoleAkinyele",
+//   "Prof Emmanuel Adedayo Fasakin",
+//   "Prof Ehimwenma Sheena Omoregie",
+//   "Prof Akpovughaye Taiga",
+//   "Prof Bamidele Owoyele",
+//   "Prof Musa Toyin Yakubu",
+//   "Prof Fafioye",
+//   "Prof Obaleye"
+// ];
+
+
 
 export default function FellowsPage() {
   return (

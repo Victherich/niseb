@@ -474,14 +474,14 @@ export default function GalleryPage() {
 
 
 const pictures2 = [
-  { src: p1, title: "Picture 1" },
-  { src: p2, title: "Picture 2" },
-  { src: p3, title: "Picture 3" },
-  { src: p4, title: "Picture 4" },
-  { src: p5, title: "Picture 5" },
-  { src: p6, title: "Picture 6" },
-  { src: p7, title: "Picture 7" },
-  { src: p8, title: "Picture 8" },
+  // { src: p1, title: "Picture 1" },
+  // { src: p2, title: "Picture 2" },
+  // { src: p3, title: "Picture 3" },
+  // { src: p4, title: "Picture 4" },
+  // { src: p5, title: "Picture 5" },
+  // { src: p6, title: "Picture 6" },
+  // { src: p7, title: "Picture 7" },
+  // { src: p8, title: "Picture 8" },
   { src: p13, title: "Picture 13" },
   { src: p15, title: "Picture 15" },
   { src: p16, title: "Picture 16" },

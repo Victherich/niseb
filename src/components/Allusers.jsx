@@ -624,6 +624,7 @@ const UserListPage = () => {
                     </tr>
                   ))}
                 </tbody>
+                
               </UserTable>
             </TableWrapper>
 

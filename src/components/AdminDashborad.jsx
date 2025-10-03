@@ -20,6 +20,8 @@ import AdminSignup from './AdminSignUp.jsx';
 import AdminListPage from './AllAdmin.jsx';
 import UserListPage from './Allusers.jsx';
 import PaymentHistoryPage from './PaymentHistory.jsx';
+import Manuscripts from './Manuscripts.jsx';
+import ManagePublications from './ManagePublications.jsx';
 // import AccessCodeManager from './AccessCodeManager';
 // import AllLecturers from './AllLecturers';
 
@@ -205,6 +207,12 @@ const AdminDashboard = () => {
          case 'alladmin':
         return <AdminListPage/>;
 
+           case 'manuscripts':
+        return <Manuscripts/>;
+
+      case 'publications':
+        return <ManagePublications/>;
+
          case 'paymenthistory':
         return <PaymentHistoryPage/>;
        
@@ -223,7 +231,7 @@ const AdminDashboard = () => {
       </Hamburger>
       <Overlay isOpen={menuOpen} onClick={closeMenuOnOutsideClick} />
       <Sidebar isOpen={menuOpen}>
-        <SidebarHeader>Admin Dashboard</SidebarHeader>
+        <SidebarHeader>{adminInfo?.role} Dashboard</SidebarHeader>
         <SidebarMenu>
        
           <SidebarMenuItem
@@ -237,31 +245,46 @@ const AdminDashboard = () => {
             active={activeMenu === 'alluser'}
             onClick={() => handleMenuClick('alluser')}
           >
-            All User
+            Members
           </SidebarMenuItem>
 
             <SidebarMenuItem
             active={activeMenu === 'alladmin'}
             onClick={() => handleMenuClick('alladmin')}
           >
-            All Admin
+            Admins / Editors / Reviewers
+          </SidebarMenuItem>
+
+              <SidebarMenuItem
+            active={activeMenu === 'manuscripts'}
+            onClick={() => handleMenuClick('manuscripts')}
+          >
+            Manuscripts
           </SidebarMenuItem>
 
 
-  <SidebarMenuItem
+             <SidebarMenuItem
+            active={activeMenu === 'publications'}
+            onClick={() => handleMenuClick('publications')}
+          >
+            Manage Publications
+          </SidebarMenuItem>
+
+
+ {adminInfo?.role==='Admin'&& <SidebarMenuItem
             active={activeMenu === 'paymenthistory'}
             onClick={() => handleMenuClick('paymenthistory')}
           >
-            Payment History
-          </SidebarMenuItem>
+            Membership Payments History
+          </SidebarMenuItem>}
 
 
-       <SidebarMenuItem
+       {adminInfo?.role==='Admin'&&<SidebarMenuItem
             active={activeMenu === 'adminsignup'}
             onClick={() => handleMenuClick('adminsignup')}
           >
-           Register Admin
-          </SidebarMenuItem>
+           Register Editor / Reviewer
+          </SidebarMenuItem>}
             
           <SidebarMenuItem
             onClick={handleLogout}

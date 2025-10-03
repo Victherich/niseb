@@ -148,7 +148,10 @@ const Footer = () => {
             <p>Department of Biochemistry</p>
             <p>University of Ilorin,</p>
             <p>Ilorin, Nigeria. 240003</p>
-            <p>TEL: +2348036910988</p>
+            <p>TEL: {/* +2348036910988,  */} 09162035216, 
+              08034804373, 
+              08062075089, 
+              08063109301 </p>
             <p>Email: <a href="mailto:info@nisebnigeria.com">info@nisebnigeria.com</a></p>
           </ContactInfo>
           <SocialIcons>

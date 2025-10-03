@@ -54,7 +54,7 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #eee;
+  border: 2px solid green;
   border-radius: 8px;
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -92,7 +92,7 @@ const AdminSignup = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    role: 'Admin',
+    role: '',
   });
 
   const handleChange = e => {
@@ -154,7 +154,7 @@ const AdminSignup = () => {
   return (
     <Container>
       <FormWrapper>
-        <Title>Admin Register</Title>
+        <Title>Register Editor / Reviewer</Title>
         <form onSubmit={handleSubmit}>
           <Label>Full Name</Label>
           <Input name="name" value={form.name} onChange={handleChange} required />
@@ -174,12 +174,12 @@ const AdminSignup = () => {
           <Label>Confirm Password</Label>
           <Input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} required />
 
-          {/* <Label>Role</Label> */}
-{/* <Select name="role" value={form.role} onChange={handleChange} required>
+          <Label>Role</Label>
+<Select name="role" value={form.role} onChange={handleChange} required>
   <option value="" disabled>--Select Role--</option>
-  <option value="Admin">Admin</option>
-  <option value="Lecturer">Lecturer</option>
-</Select> */}
+  <option value="Editor">Editor</option>
+  <option value="Reviewer">Reviewer</option>
+</Select>
 
 
           <Button type="submit">Create Account</Button>

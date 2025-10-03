@@ -32,6 +32,9 @@ import AppUpdate from './components/AppUpdate';
 import ConferencePage from './components/ConferencePage';
 import wp from './Images/whatsapplogo.png';
 import GalleryPage from './components/GalleryPage';
+import WebinarPage from './components/WebinarPage';
+import ManuscriptSubmission from './components/ManuscriptSubmission';
+import PublicationsPage from './components/PublicationsPage';
 
 function App() {
   return (
@@ -53,7 +56,10 @@ function App() {
         <Route path='/renewmembership' element={<RenewMembershipPage/>}/>
        <Route path='/conferencepage' element={<ConferencePage/>}/>
         <Route path='/termsandconditions' element={<TermsPage/>}/>
-        <Route path='gallery' element={<GalleryPage/>}/>
+        <Route path='/gallery' element={<GalleryPage/>}/>
+        <Route path='/webinars' element={<WebinarPage/>}/>
+        <Route path='/submitmanuscripts' element={<ManuscriptSubmission/>}/>
+        <Route path='/publications' element={<PublicationsPage/>}/>
 
 
         {/* admin routes */}

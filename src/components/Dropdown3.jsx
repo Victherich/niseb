@@ -1,3 +1,5 @@
+
+
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Fade } from "react-awesome-reveal";
@@ -9,64 +11,114 @@ const Wrapper = styled.div`
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
   user-select: none;
+  z-index:9999999999999999;
 `;
+
+// const Trigger = styled.button`
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 5px;
+//   padding: 5px 14px;
+//   font-size: 14px;
+//   border-radius: 10px;
+//   background:transparent;
+// //   background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+//   box-shadow: 0 6px 18px rgba(31, 41, 55, 0.08);
+// //   border: 1px solid rgba(99, 102, 241, 0.12);
+// border: 1px solid transparent;
+//   cursor: pointer;
+//   min-width: 160px;
+//   transition: transform 220ms ease, box-shadow 220ms ease;
+
+//   &:hover {
+//     transform: translateY(-2px);
+//     box-shadow: 0 12px 28px rgba(31, 41, 55, 0.12);
+//   }
+
+//   &:focus {
+//     // outline: 3px solid rgba(99, 102, 241, 0.14);
+//   }
+// `;
+
+// const Label = styled.span`
+//   flex: 1;
+//   text-align: left;
+//   font-weight: bold;
+//   color: white;
+//   font-size: 1rem;
+// `;
+
+// const Caret = styled.span`
+//   display: inline-block;
+//   width: 12px;
+//   height: 12px;
+//   transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
+//   transition: transform 320ms cubic-bezier(.22, 1, .36, 1);
+//   opacity: 1;
+//   color:white;
+// `;
+
+
 
 const Trigger = styled.button`
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 7px 14px;
+  gap: 2px; /* reduce space between text & arrow */
+  padding: 5px 14px;
   font-size: 14px;
   border-radius: 10px;
-  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  background: transparent;
   box-shadow: 0 6px 18px rgba(31, 41, 55, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.12);
+  border: 1px solid transparent;
   cursor: pointer;
-  min-width: 160px;
+  min-width: 80px;
   transition: transform 220ms ease, box-shadow 220ms ease;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(31, 41, 55, 0.12);
   }
-
-  &:focus {
-    outline: 3px solid rgba(99, 102, 241, 0.14);
-  }
 `;
 
 const Label = styled.span`
-  flex: 1;
-  text-align: left;
-  font-weight: bold;
-  color: green;
+  font-weight: 500;
+  color: white;
   font-size: 1rem;
+  white-space: nowrap; /* keeps text + arrow tight */
 `;
 
 const Caret = styled.span`
-  display: inline-block;
-  width: 12px;
-  height: 12px;
+  display: inline-flex;
+  align-items: center; /* keeps arrow vertically centered with text */
+  margin-left: 4px;
+  width: 16px;   /* increased from 12px */
+  height: 16px;  /* increased from 12px */
   transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
   transition: transform 320ms cubic-bezier(.22, 1, .36, 1);
-  opacity: 0.9;
+  color: white;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
+
+
+
 
 const Menu = styled.ul`
   position: absolute;
   top: ${({ placement }) => (placement === "top" ? "auto" : "calc(100% + 12px)")};
   bottom: ${({ placement }) => (placement === "top" ? "calc(100% + 12px)" : "auto")};
   right: 0;
-  width: 200px;
+  width: 250px;
   margin: 0;
   padding: 10px;
   list-style: none;
   border-radius: 14px;
   background: linear-gradient(180deg, #ffffff, #fbfdff);
-  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.2);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.3);
   border: 1px solid rgba(15, 23, 42, 0.04);
- 
-  z-index: 1000;
+  z-index: 10009999999999999;
 `;
 
 const Item = styled.li`
@@ -76,8 +128,9 @@ const Item = styled.li`
   padding: 10px 12px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 14px;
   transition: background 160ms ease, transform 160ms ease;
+ 
 
   &:hover,
   &[data-focused="true"] {
@@ -94,10 +147,11 @@ const Item = styled.li`
   }
 `;
 
-export default function BeautifulDropdown({
-  label = "MEMBERSHIP",
+export default function BeautifulDropdown3({
+  label = "Publications",
   animationDuration = 600,
   placement = "bottom",
+  color, fontSize
 }) {
   const [open, setOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -105,14 +159,9 @@ export default function BeautifulDropdown({
   const itemsRef = useRef([]);
 
   const options = [
-    { label: `MEMBER LOGIN`, href: "/userlogin" },
-    { label: `ADMIN LOGIN`, href: "/admindashboard" },
-    { label: `EDITOR / REVIEWER LOGIN`, href: "/admindashboard" },
-    { label: "BOARD OF TRUSTEES", href: "/bot" },
-    { label: "NATIONAL EXECUTIVES", href: "/ne" },
-    { label: "FELLOW", href: "/fellow" },
-    { label: "NEW MEMBER", href: "/membership" },
-    { label: "RENEW MEMBERSHIP", href: "/renewmembership" },
+
+    { label: "PUBLICATIONS", href: "/publications" },
+    { label: "SUBMIT MANUSCRIPT", href: "/submitmanuscripts" },
   ];
 
   useEffect(() => {
@@ -165,18 +214,19 @@ export default function BeautifulDropdown({
         aria-expanded={open}
         aria-controls="beautiful-dropdown-menu"
       >
-        <Label>{label}</Label>
-        <Caret open={open} aria-hidden>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M6 9l6 6 6-6"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Caret>
+        <Label style={{color:color, fontSize:fontSize,}}>{label}</Label>
+      <Caret open={open} aria-hidden style={{color:color}}>
+  <svg viewBox="0 0 24 24" fill="none">
+    <path
+      d="M6 9l6 6 6-6"
+      stroke="currentColor"
+      strokeWidth="5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+</Caret>
+
       </Trigger>
 
       {open && (

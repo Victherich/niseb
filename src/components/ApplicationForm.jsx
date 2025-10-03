@@ -449,7 +449,8 @@ export default function ApplicationForm() {
     // If available → proceed with payment
     const paystack = new PaystackPop();
     paystack.newTransaction({
-      key: payStackTestKey,
+      // key: payStackTestKey,
+      key: payStackLiveKey,
       amount: Number(amount) * 100,
       email,
       firstname: formData.surname,
