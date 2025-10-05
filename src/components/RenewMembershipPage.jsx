@@ -165,10 +165,10 @@ export default function RenewMembershipPage() {
           <p><b>SOCIETY FOR EXPERIMENTAL BIOLOGY OF NIGERIA</b><br />
           United Bank for Africa (UBA)<br />
           Acct.: <b>2213930226</b></p>
-          <p>
+          {/* <p>
             After payment, Teller or Bank transfer transactions should be sent to 
             <b> 08037802662 (WhatsApp)</b>, Dr. Omowumi Kayode for issuance of receipts.
-          </p>
+          </p> */}
         </Fade>
       </Section>
 
@@ -177,7 +177,7 @@ export default function RenewMembershipPage() {
           <h2>Important Reminders</h2>
           <ul>
             <li>Members who have not paid their annual dues backlog from 2020 till date are reminded to pay up.</li>
-            <li>NISEB Financial Year started in January 2023.</li>
+            {/* <li>NISEB Financial Year started in January 2023.</li> */}
             <li>Members are encouraged to pay their annual dues as at when due.</li>
           </ul>
         </Fade>

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Fade, Slide } from 'react-awesome-reveal';
-import { FaUserCircle, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaUserCircle, FaPhone, FaEnvelope, FaPiggyBank } from 'react-icons/fa';
 
 // Import local or placeholder images
 import HeroImage from '../Images/p2.jpg'; // Replace with a real image of scientists/editors
@@ -162,13 +162,13 @@ const JournalImageWrapper = styled.div`
 `;
 
 const EditorName = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   color: #ffa500;
   margin-bottom: 0.5rem;
 `;
 
 const JournalTitle = styled.h4`
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   color: #008000;
   margin-bottom: 0.5rem;
@@ -193,49 +193,101 @@ const SocialLink = styled.a`
 `;
 
 // Data for the editors
-const editors = [
-  {
-    journal: 'BIOKEMISTRI',
-    issn: 'ISSN 0795-8080',
-    name: 'Dr. Kudirat Oluwatosin Shittu',
-    phone: '+2348033883658',
-    email: 'biokemistri.journal@gmail.com',
-  },
-  {
-    journal: 'AFRICAN SCIENTIST',
-    issn: 'ISSN 1595-4881',
-    name: 'Prof. Daniel Olorunfemi',
-    phone: '+234 802 337 2455',
-    email: 'nisebpublications@gmail.com',
-  },
-  {
-    journal: 'BIOSCIENCE RESEARCH JOURNAL',
-    issn: 'ISSN 0795-8072',
-    name: 'Prof. M. A. Belewu',
-    phone: '+2348035817941',
-    email: 'milkyinka@yahoo.com',
-    alternateEmail: 'mabel@unilorin.edu.ng',
-  },
-  {
-    journal: 'NISEB JOURNAL',
-    issn: 'ISSN 1595-6938',
-    name: 'Prof. C. C. Osubor',
-    phone: '+2348023697783',
-    email: 'ccosubor@uniben.edu.ng',
-  },
-  {
-    journal: 'African Journal of General Agriculture',
-    name: 'Prof. O. O. Fafioye',
-    phone: '+234 803 717 2255',
-    email: 'fafioye.oyebamiji@oouagoiwoye.edu.ng',
-  },
-  {
-    name: 'Dr. Petu-Ibikunle',
-    phone: '+2347032693482',
-    email: 'pibikunle@noun.edu.ng',
-    alternateEmail: 'kunlepetu@gmail.com',
-  },
-];
+// const editors = [
+//   {
+//     journal: 'BIOKEMISTRI',
+//     issn: 'ISSN 0795-8080',
+//     name: 'Dr. Kudirat Oluwatosin Shittu',
+//     phone: '+2348033883658',
+//     email: 'biokemistri.journal@gmail.com',
+//   },
+//   {
+//     journal: 'AFRICAN SCIENTIST',
+//     issn: 'ISSN 1595-4881',
+//     name: 'Prof. Daniel Olorunfemi',
+//     phone: '+234 802 337 2455',
+//     email: 'nisebpublications@gmail.com',
+//   },
+//   {
+//     journal: 'BIOSCIENCE RESEARCH JOURNAL',
+//     issn: 'ISSN 0795-8072',
+//     name: 'Prof. M. A. Belewu',
+//     phone: '+2348035817941',
+//     email: 'milkyinka@yahoo.com',
+//     alternateEmail: 'mabel@unilorin.edu.ng',
+//   },
+//   {
+//     journal: 'NISEB JOURNAL',
+//     issn: 'ISSN 1595-6938',
+//     name: 'Prof. C. C. Osubor',
+//     phone: '+2348023697783',
+//     email: 'ccosubor@uniben.edu.ng',
+//   },
+//   {
+//     journal: 'African Journal of General Agriculture',
+//     name: 'Prof. O. O. Fafioye',
+//     phone: '+234 803 717 2255',
+//     email: 'fafioye.oyebamiji@oouagoiwoye.edu.ng',
+//   },
+//   {
+//     name: 'Dr. Petu-Ibikunle',
+//     phone: '+2347032693482',
+//     email: 'pibikunle@noun.edu.ng',
+//     alternateEmail: 'kunlepetu@gmail.com',
+//   },
+// ];
+
+
+
+
+
+  const editors = [
+    {
+      title: "BIOKEMISTRI (ISSN 0795-8080)",
+      editor: "Prof. Kudirat Oluwatosin Shittu",
+      phone: "08033883658",
+      email: "biokemistri.journal@gmail.com",
+      bank: "2343200950 UBA SEBN BIOKEMISTRI"
+    },
+    {
+      title: "AFRICAN SCIENTIST (ISSN 1595 4881)",
+      editor: "Prof. Daniel Olorunfemi",
+      phone: "+234 802 337 2455",
+      email: "nisebpublications@gmail.com",
+      bank: "2343204271 UBA SEBN AFRICAN SCIENTIST"
+    },
+    {
+      title: "BIOSCIENCE RESEARCH JOURNAL (ISSN 0795 8072)",
+      editor: "Prof. Adedoyin Igunnu",
+      phone: "",
+      email: "doyinigunnu@yahoo.com",
+      bank: "2343199441 UBA SEBN BIOSCIENCE RESEARCH JOURNAL"
+    },
+    {
+      title: "NISEB JOURNAL (ISSN 1595-6938)",
+      editor: "Dr Abolanle Kayode",
+      phone: "08038272670",
+      email: "kayodeab@babcock.edu.ng",
+      bank: "2343196756 UBA SEBN JOURNAL (NISEB Journal)"
+    },
+    {
+      title: "International Journal of Health and Biomedical Sciences (IJHBS)",
+      editor: "Prof. Taofik Olatunde Uthman",
+      phone: "+234 803 393 9464",
+      email: "taosun77@yahoo.com",
+      bank: "2343187385 UBA SEBN INTER JOUR OF BIOMEDICAL AND HEALTH SCI"
+    },
+    {
+      title: "African Journal of General Agriculture (AJGA)",
+      editor: "Prof. Olalekan Adeyemi",
+      phone: "+234 8037159452",
+      email: "adeyemi.olalekan@fupre.edu.ng",
+      bank: "2343202442 UBA SEBN AFRICAN JOURNAL OF GENERAL AGRICULTURE"
+    }
+  ];
+
+
+
 
 const EditorsPage = () => {
   return (
@@ -280,18 +332,18 @@ const EditorsPage = () => {
                     <img src={JournalImage} alt="Journal Cover" />
                   </JournalImageWrapper>
                 </Slide>
-                {editor.journal && (
+                {editor.title && (
                   <Fade duration={1000} delay={index * 150 + 200} triggerOnce={false}>
-                    <JournalTitle>{editor.journal}</JournalTitle>
+                    <JournalTitle>{editor.title}</JournalTitle>
                   </Fade>
                 )}
-                {editor.issn && (
+                {/* {editor.issn && (
                   <Fade duration={1000} delay={index * 150 + 400} triggerOnce={false}>
                     <p>({editor.issn})</p>
                   </Fade>
-                )}
+                )} */}
                 <Fade duration={1000} delay={index * 150 + 600} triggerOnce={false}>
-                  <EditorName>{editor.name}</EditorName>
+                  <EditorName>{editor.editor}</EditorName>
                 </Fade>
                 {editor.phone && (
                   <Fade duration={1000} delay={index * 150 + 800} triggerOnce={false}>
@@ -312,6 +364,14 @@ const EditorsPage = () => {
                     <EditorInfo>
                       <FaEnvelope /> <SocialLink href={`mailto:${editor.alternateEmail}`}>{editor.alternateEmail}</SocialLink>
                     </EditorInfo>
+                  </Fade>
+                )}
+                  {editor.bank && (
+                  <Fade duration={1000} delay={index * 150 + 1000} triggerOnce={false}>
+                    <p>Bank Detail:</p>
+                    <JournalTitle style={{fontSize:"0.9rem"}}>
+                      <SocialLink>{editor.bank}</SocialLink>
+                    </JournalTitle>
                   </Fade>
                 )}
               </EditorCard>

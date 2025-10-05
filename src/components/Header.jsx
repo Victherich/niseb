@@ -320,7 +320,7 @@ useEffect(() => {
       <BeautifulDropdown2 color={"white"} fontSize={"1rem"}/>
          <NavLink onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Gallery</NavLink>
       <NavLink onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Webinars</NavLink>
-      <BeautifulDropdown3 color={"white"} fontSize={"1rem"}/>
+      {/* <BeautifulDropdown3 color={"white"} fontSize={"1rem"}/> */}
       
         <NavLink onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Contact Us</NavLink>
       
@@ -348,7 +348,7 @@ useEffect(() => {
            <NavLink2 onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{marginTop:"20px"}}>Gallery</NavLink2>
       <NavLink2 onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} >Webinars</NavLink2>
       
-    <BeautifulDropdown3 color={"green"} fontSize={"1rem"}/>
+    {/* <BeautifulDropdown3 color={"green"} fontSize={"1rem"}/> */}
       <NavLink2 onClick={() => handleNavLinkClick('/contactus')} className={isActive('/contactus') ? 'active' : ''} >Contact Us</NavLink2>
       
    

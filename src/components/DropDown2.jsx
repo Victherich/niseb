@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Fade } from "react-awesome-reveal";
 import { FaUser } from "react-icons/fa";
+import BeautifulDropdown3 from "./Dropdown3";
 
 const Wrapper = styled.div`
   position: relative;
@@ -147,7 +148,7 @@ const Item = styled.li`
 `;
 
 export default function BeautifulDropdown2({
-  label = "Our Allies",
+  label = "Our Journals",
   animationDuration = 600,
   placement = "bottom",
   color, fontSize
@@ -239,6 +240,7 @@ export default function BeautifulDropdown2({
           direction="up"
         >
           <Menu id="beautiful-dropdown-menu" role="menu" placement={placement}>
+            <BeautifulDropdown3/>
             {options.map((opt, i) => (
               <Item
                 key={i}

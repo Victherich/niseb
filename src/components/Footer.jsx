@@ -145,9 +145,16 @@ const Footer = () => {
         <FooterSection>
           <h4>Secretariat</h4>
           <ContactInfo>
-            <p>Department of Biochemistry</p>
+
+            <p>
+               Department of Biochemistry, 
+              <br/>University of Benin, 
+              <br/>PMB 1154, Benin City, 
+              <br/>Edo State, Nigeria
+            </p>
+            {/* <p>Department of Biochemistry</p>
             <p>University of Ilorin,</p>
-            <p>Ilorin, Nigeria. 240003</p>
+            <p>Ilorin, Nigeria. 240003</p> */}
             <p>TEL: {/* +2348036910988,  */} 09162035216, 
               08034804373, 
               08062075089, 

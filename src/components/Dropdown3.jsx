@@ -12,6 +12,7 @@ const Wrapper = styled.div`
     Roboto, "Helvetica Neue", Arial;
   user-select: none;
   z-index:9999999999999999;
+  width:230px;
 `;
 
 // const Trigger = styled.button`
@@ -73,6 +74,7 @@ const Trigger = styled.button`
   cursor: pointer;
   min-width: 80px;
   transition: transform 220ms ease, box-shadow 220ms ease;
+  width:100%;
 
   &:hover {
     transform: translateY(-2px);
@@ -82,7 +84,8 @@ const Trigger = styled.button`
 
 const Label = styled.span`
   font-weight: 500;
-  color: white;
+  color: green;
+  font-weight:bold;
   font-size: 1rem;
   white-space: nowrap; /* keeps text + arrow tight */
 `;
@@ -95,7 +98,7 @@ const Caret = styled.span`
   height: 16px;  /* increased from 12px */
   transform: ${({ open }) => (open ? "rotate(180deg)" : "rotate(0deg)")};
   transition: transform 320ms cubic-bezier(.22, 1, .36, 1);
-  color: white;
+  color: green;
   svg {
     width: 100%;
     height: 100%;
@@ -109,7 +112,7 @@ const Menu = styled.ul`
   position: absolute;
   top: ${({ placement }) => (placement === "top" ? "auto" : "calc(100% + 12px)")};
   bottom: ${({ placement }) => (placement === "top" ? "calc(100% + 12px)" : "auto")};
-  right: 0;
+  right: 0px;
   width: 250px;
   margin: 0;
   padding: 10px;
@@ -236,7 +239,9 @@ export default function BeautifulDropdown3({
           triggerOnce={false}
           direction="up"
         >
+         
           <Menu id="beautiful-dropdown-menu" role="menu" placement={placement}>
+         
             {options.map((opt, i) => (
               <Item
                 key={i}
@@ -253,6 +258,7 @@ export default function BeautifulDropdown3({
                 <a href={opt.href}>{opt.label}</a>
               </Item>
             ))}
+
           </Menu>
         </Fade>
       )}
