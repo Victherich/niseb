@@ -165,9 +165,11 @@ export default function MembershipPage() {
           <h2>Application Procedure</h2>
           <ol>
             <li>Click the "Application Form" link below and fill the form.</li>
-            <li>After successful application, make a bank payment to the account below:</li>
+            <li>Proceed to the paystack payment.</li>
+             <li>After succcessful payment, you will receive an automatic email conataining your details and your membership certificate.</li>
+              <li>You can login to your dashboard using your email and your provided password during registration.</li>
           </ol>
-          <p><b>Account Details</b></p>
+          {/* <p><b>Account Details</b></p>
           <p>
             Society for Experimental Biology of Nigeria (BOT)<br />
             United Bank for Africa<br />
@@ -179,7 +181,7 @@ export default function MembershipPage() {
             <li>Dr. Adetitun – 08036910988 / adetitun.do@gmail.com</li>
             <li>Dr. Kayode (NEC) – 08037802662</li>
           </ul>
-          <p>Verification usually takes 0 - 48hrs. After verification, a unique number will be sent to your email (your pass code).</p>
+          <p>Verification usually takes 0 - 48hrs. After verification, a unique number will be sent to your email (your pass code).</p> */}
         </Fade>
       </Section>
 

@@ -199,10 +199,10 @@ const UserDashboard = () => {
   const renderContent = () => {
     switch (activeMenu) {
       case 'profile':
-        return <UserDashboardPage userId={userInfo.id}/>;
+        return <UserDashboardPage userId={userInfo.id} handleMenuClick={handleMenuClick}/>;
 
            case 'cert':
-        return <CertificatePage userId={userInfo.id}/>;
+        return <CertificatePage userId={userInfo.id} />;
        
         // case 'usersignup':
         // return <UserSignup/>;

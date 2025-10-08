@@ -1,7 +1,223 @@
 
+// import React, { useEffect, useState, useContext } from "react";
+// import styled from "styled-components";
+// import { FaUserShield, FaEnvelope, FaPhone, FaClock, FaArrowRight, FaArrowCircleLeft, FaArrowLeft } from "react-icons/fa";
+// import { Context } from "./Context";
+
+// /* ========================= Styled Components ========================= */
+
+// const PageContainer = styled.div`
+//   background-color: #f0fdf4;
+//   min-height: 100vh;
+//   padding: 2rem 1rem;
+//   font-family: "Arial", sans-serif;
+//   color: #333;
+//   padding-top:100px;
+// `;
+
+// const ContentWrapper = styled.div`
+//   max-width: 1100px;
+//   margin: 0 auto;
+// `;
+
+// const SectionTitle = styled.h1`
+//   font-size: clamp(1.5rem, 4vw, 2.5rem);
+//   text-align: center;
+//   margin-bottom: 2rem;
+//   color: #008000;
+//   border-bottom: 3px solid #ffa500;
+//   display: inline-block;
+//   padding-bottom: 0.5rem;
+// `;
+
+// const TableWrapper = styled.div`
+//    overflow-x: scroll;
+//   border-radius: 12px;
+//   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+//   -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+
+//   @media(max-width:420px){
+ 
+//   width:320px;
+//   }
+// `;
+
+
+
+// const AdminTable = styled.table`
+//   width: 100%;
+//   min-width: 720px; /* prevent table from collapsing too much */
+//   border-collapse: collapse;
+//   background: white;
+
+//   th, td {
+//     padding: 0.85rem 1rem;
+//     text-align: left;
+//     white-space: nowrap; /* prevents breaking in awkward places */
+//   }
+
+//   th {
+//     background-color: #008000;
+//     color: white;
+//     font-weight: bold;
+//     text-transform: uppercase;
+//     font-size: 0.85rem;
+//     letter-spacing: 0.5px;
+//     position: sticky;
+//     top: 0;
+//     z-index: 2;
+//   }
+
+//   tbody tr {
+//     border-bottom: 1px solid #e5e7eb;
+//     transition: background 0.2s;
+//   }
+
+//   tbody tr:hover {
+//     background-color: #f9fafb;
+//   }
+
+//   td {
+//     font-size: 0.95rem;
+//     word-break: break-word; /* wrap long emails or names */
+//     max-width: 220px;       /* prevent super long strings from breaking layout */
+//   }
+
+//   @media (max-width: 768px) {
+//     th, td {
+//       font-size: 0.8rem;
+//       padding: 0.6rem;
+//     }
+//     td {
+//       max-width: 160px;
+//     }
+//   }
+
+//   @media (max-width: 480px) {
+//     th, td {
+//       font-size: 0.75rem;
+//       padding: 0.5rem;
+//     }
+//     td {
+//       max-width: 120px;
+//     }
+//   }
+// `;
+
+
+// const RoleBadge = styled.span`
+//   background: #ffa500;
+//   color: #fff;
+//   font-weight: bold;
+//   padding: 0.3rem 0.75rem;
+//   border-radius: 999px;
+//   font-size: 0.8rem;
+// `;
+
+// const ErrorMsg = styled.div`
+//   color: red;
+//   text-align: center;
+//   font-size: 1.1rem;
+//   margin-top: 2rem;
+// `;
+
+// const LoadingMsg = styled.div`
+//   color: #008000;
+//   text-align: center;
+//   font-size: 1.2rem;
+//   margin-top: 2rem;
+//   font-weight: bold;
+// `;
+
+// /* ========================= Component ========================= */
+
+// const AdminListPage = () => {
+//   const [admins, setAdmins] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+
+//   const {domain} =useContext(Context);
+
+//   useEffect(() => {
+//     fetch(`${domain}/get_all_admin.php`) // 🔹 Change URL if hosted elsewhere
+//       .then((res) => res.json())
+//       .then((data) => {
+//         if (data.success) {
+//           setAdmins(data.admins);
+//         } else {
+//           setError(data.error || "Failed to fetch admins.");
+//         }
+//         setLoading(false);
+//       })
+//       .catch((err) => {
+//         setError("Error connecting to server: " + err.message);
+//         setLoading(false);
+//       });
+//   }, []);
+
+//   return (
+//     <PageContainer>
+//       <ContentWrapper>
+//         <SectionTitle>All Admins</SectionTitle>
+
+//         {loading && <LoadingMsg>Loading admins...</LoadingMsg>}
+//         {error && <ErrorMsg>{error}</ErrorMsg>}
+//         <p style={{width:"100%", textAlign:"center"}}><FaArrowLeft/> (Scroll) <FaArrowRight/></p>
+//         {!loading && !error && admins.length > 0 && (
+//           <TableWrapper>
+//             <AdminTable>
+//               <thead>
+//                 <tr>
+//                   <th><FaUserShield /> ID</th>
+//                   <th>Name</th>
+//                   <th><FaEnvelope /> Email</th>
+//                   <th><FaPhone /> Phone</th>
+//                   <th>Role</th>
+//                   <th><FaClock /> Created</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {admins.map((admin) => (
+//                   <tr key={admin.id}>
+//                     <td>{admin.id}</td>
+//                     <td>{admin.name}</td>
+//                     <td>{admin.email}</td>
+//                     <td>{admin.phone}</td>
+//                     <td>
+//                       <RoleBadge>{admin.role}</RoleBadge>
+//                     </td>
+//                     <td>{new Date(admin.created_at).toLocaleString()}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </AdminTable>
+//           </TableWrapper>
+//         )}
+
+//         {!loading && !error && admins.length === 0 && (
+//           <ErrorMsg>No admins found.</ErrorMsg>
+//         )}
+//       </ContentWrapper>
+//     </PageContainer>
+//   );
+// };
+
+// export default AdminListPage;
+
+
+
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import { FaUserShield, FaEnvelope, FaPhone, FaClock, FaArrowRight, FaArrowCircleLeft, FaArrowLeft } from "react-icons/fa";
+import {
+  FaUserShield,
+  FaEnvelope,
+  FaPhone,
+  FaClock,
+  FaArrowRight,
+  FaArrowLeft,
+  FaTrashAlt
+} from "react-icons/fa";
+import Swal from "sweetalert2";
 import { Context } from "./Context";
 
 /* ========================= Styled Components ========================= */
@@ -12,7 +228,7 @@ const PageContainer = styled.div`
   padding: 2rem 1rem;
   font-family: "Arial", sans-serif;
   color: #333;
-  padding-top:100px;
+  padding-top: 100px;
 `;
 
 const ContentWrapper = styled.div`
@@ -31,29 +247,27 @@ const SectionTitle = styled.h1`
 `;
 
 const TableWrapper = styled.div`
-   overflow-x: scroll;
+  overflow-x: scroll;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+  -webkit-overflow-scrolling: touch;
 
-  @media(max-width:420px){
- 
-  width:320px;
+  @media (max-width: 420px) {
+    width: 320px;
   }
 `;
 
-
-
 const AdminTable = styled.table`
   width: 100%;
-  min-width: 720px; /* prevent table from collapsing too much */
+  min-width: 720px;
   border-collapse: collapse;
   background: white;
 
-  th, td {
+  th,
+  td {
     padding: 0.85rem 1rem;
     text-align: left;
-    white-space: nowrap; /* prevents breaking in awkward places */
+    white-space: nowrap;
   }
 
   th {
@@ -79,12 +293,13 @@ const AdminTable = styled.table`
 
   td {
     font-size: 0.95rem;
-    word-break: break-word; /* wrap long emails or names */
-    max-width: 220px;       /* prevent super long strings from breaking layout */
+    word-break: break-word;
+    max-width: 220px;
   }
 
   @media (max-width: 768px) {
-    th, td {
+    th,
+    td {
       font-size: 0.8rem;
       padding: 0.6rem;
     }
@@ -94,7 +309,8 @@ const AdminTable = styled.table`
   }
 
   @media (max-width: 480px) {
-    th, td {
+    th,
+    td {
       font-size: 0.75rem;
       padding: 0.5rem;
     }
@@ -104,7 +320,6 @@ const AdminTable = styled.table`
   }
 `;
 
-
 const RoleBadge = styled.span`
   background: #ffa500;
   color: #fff;
@@ -112,6 +327,24 @@ const RoleBadge = styled.span`
   padding: 0.3rem 0.75rem;
   border-radius: 999px;
   font-size: 0.8rem;
+`;
+
+const ActionButton = styled.button`
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  &:hover {
+    background-color: #b91c1c;
+  }
 `;
 
 const ErrorMsg = styled.div`
@@ -131,29 +364,74 @@ const LoadingMsg = styled.div`
 
 /* ========================= Component ========================= */
 
-const AdminListPage = () => {
+const AdminListPage = ({adminInfo}) => {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { domain } = useContext(Context);
 
-  const {domain} =useContext(Context);
 
-  useEffect(() => {
-    fetch(`${domain}/get_all_admin.php`) // 🔹 Change URL if hosted elsewhere
+  console.log(adminInfo)
+
+  // Fetch all admins
+  const fetchAdmins = () => {
+    setLoading(true);
+    fetch(`${domain}/get_all_admin.php`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          setAdmins(data.admins);
-        } else {
-          setError(data.error || "Failed to fetch admins.");
-        }
+        if (data.success) setAdmins(data.admins);
+        else setError(data.error || "Failed to fetch admins.");
         setLoading(false);
       })
       .catch((err) => {
         setError("Error connecting to server: " + err.message);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchAdmins();
   }, []);
+
+  // Delete admin
+  const handleDelete = async (adminId) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action will permanently delete this admin.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    Swal.fire({
+      text: "Deleting admin...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    try {
+      const res = await fetch(`${domain}/delete_admin.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: adminId }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Deleted!", "Admin has been removed successfully.", "success");
+        setAdmins((prev) => prev.filter((a) => a.id !== adminId));
+      } else {
+        Swal.fire("Error", data.error || "Failed to delete admin.", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Server error: " + err.message, "error");
+    }
+  };
 
   return (
     <PageContainer>
@@ -162,7 +440,10 @@ const AdminListPage = () => {
 
         {loading && <LoadingMsg>Loading admins...</LoadingMsg>}
         {error && <ErrorMsg>{error}</ErrorMsg>}
-        <p style={{width:"100%", textAlign:"center"}}><FaArrowLeft/> (Scroll) <FaArrowRight/></p>
+        <p style={{ width: "100%", textAlign: "center" }}>
+          <FaArrowLeft /> (Scroll) <FaArrowRight />
+        </p>
+
         {!loading && !error && admins.length > 0 && (
           <TableWrapper>
             <AdminTable>
@@ -174,6 +455,7 @@ const AdminListPage = () => {
                   <th><FaPhone /> Phone</th>
                   <th>Role</th>
                   <th><FaClock /> Created</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -183,10 +465,13 @@ const AdminListPage = () => {
                     <td>{admin.name}</td>
                     <td>{admin.email}</td>
                     <td>{admin.phone}</td>
-                    <td>
-                      <RoleBadge>{admin.role}</RoleBadge>
-                    </td>
+                    <td><RoleBadge>{admin.role}</RoleBadge></td>
                     <td>{new Date(admin.created_at).toLocaleString()}</td>
+                    <td>
+                      {adminInfo.role==="Admin"&&admin.email!=="info@nisebnigeria.com"&&<ActionButton onClick={() => handleDelete(admin.id)}>
+                        <FaTrashAlt /> Delete
+                      </ActionButton>}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -203,3 +488,4 @@ const AdminListPage = () => {
 };
 
 export default AdminListPage;
+

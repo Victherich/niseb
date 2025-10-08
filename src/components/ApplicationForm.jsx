@@ -292,6 +292,7 @@ import heroBg from "../Images/appliationform.jpg";
 import { Context } from "./Context";
 import { useNavigate } from "react-router-dom";
 import MembershipInfo from "./MembershipInfo";
+import { jsPDF } from "jspdf";
 
 const PageWrapper = styled.div`
   font-family: Inter, ui-sans-serif, system-ui;
@@ -407,11 +408,111 @@ export default function ApplicationForm() {
     });
   };
 
-  const handleSubmit = async (e) => {
+//   const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   const { email, confirmEmail, password, confirmPassword, membershipCategory } = formData;
+
+//   if (email !== confirmEmail) {
+//     Swal.fire("Error", "Emails do not match!", "error");
+//     return;
+//   }
+//   if (password !== confirmPassword) {
+//     Swal.fire("Error", "Passwords do not match!", "error");
+//     return;
+//   }
+//   if (password.length < 6) {
+//     Swal.fire("Error", "Passwords must be at least 6 characters!", "error");
+//     return;
+//   }
+
+//   const amount = membershipFees[membershipCategory];
+//   if (!amount) {
+//     Swal.fire("Error", "Please select a membership category.", "error");
+//     return;
+//   }
+
+//   try {
+//     Swal.fire({ text: "Checking email...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+//     const res = await fetch(`${domain}/check_user.php?email=${encodeURIComponent(email)}`);
+//     const check = await res.json();
+
+//     if (!check.success) {
+//       Swal.fire("Error", check.message || "Server error.", "error");
+//       return;
+//     }
+//     if (check.exists) {
+//       Swal.fire("Error", "This email is already registered. Please login instead.", "error");
+//       return;
+//     }
+
+//     // If available → proceed with payment
+//     const paystack = new PaystackPop();
+//     paystack.newTransaction({
+//       key: payStackTestKey,
+//       // key: payStackLiveKey,
+//       amount: Number(amount) * 100,
+//       email,
+//       firstname: formData.surname,
+//       phone: formData.mobile,
+//       onSuccess: async (transaction) => {
+//         Swal.fire({ text: "Please wait..." });
+//         Swal.showLoading();
+
+//         try {
+//           const response = await fetch(`${domain}/user_signup.php`, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify({
+//               ...formData,
+//               reference: transaction.reference,
+//               amount,
+//             }),
+//           });
+//           const result = await response.json();
+
+//           if (result.success) {
+//             Swal.fire("Success", "Payment and registration successful! Please check your email.", "success");
+//               // Send the certificate email
+//   generateAndSendCertificate(
+//     {
+//       surname: formData.surname,
+//       othername: formData.othername,
+//       institution: formData.institution,
+//       id: result.user_id, // ensure your PHP returns user_id
+//       membership_expiry: result.membership_expiry, // e.g. +1 year
+//       email: formData.email,
+//     }
+//   );
+//             // navigate("/userlogin");
+//             setFormData({});
+//           } else {
+//             Swal.fire("Error", result.error || "Something went wrong!", "error");
+//           }
+//         } catch (err) {
+//           Swal.fire("Error", "Server error. Try again later.", "error");
+//           console.error(err);
+//         }
+//       },
+//       onCancel: () => Swal.fire("Cancelled", "You cancelled the payment.", "info"),
+//       onError: (error) => Swal.fire("Payment Failed", error.message, "error"),
+//     });
+
+//   } catch (error) {
+//     Swal.fire("Error", "Could not verify email. Try again later.", "error");
+//     console.error(error);
+//   }
+// };
+
+
+
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   const { email, confirmEmail, password, confirmPassword, membershipCategory } = formData;
 
+  // --- Basic Validation ---
   if (email !== confirmEmail) {
     Swal.fire("Error", "Emails do not match!", "error");
     return;
@@ -432,35 +533,61 @@ export default function ApplicationForm() {
   }
 
   try {
-    Swal.fire({ text: "Checking email...", allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    // --- Step 1: Check if email exists ---
+    Swal.fire({
+      text: "Checking email availability...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
 
     const res = await fetch(`${domain}/check_user.php?email=${encodeURIComponent(email)}`);
     const check = await res.json();
 
     if (!check.success) {
-      Swal.fire("Error", check.message || "Server error.", "error");
+      Swal.fire("Error", check.message || "Server error while checking email.", "error");
       return;
     }
     if (check.exists) {
-      Swal.fire("Error", "This email is already registered. Please login instead.", "error");
+      Swal.fire("Error", "This email is already registered. Please log in instead.", "error");
       return;
     }
 
-    // If available → proceed with payment
+    // --- Step 2: Proceed with Paystack payment ---
     const paystack = new PaystackPop();
     paystack.newTransaction({
       // key: payStackTestKey,
       key: payStackLiveKey,
-      amount: Number(amount) * 100,
+      amount: Number(amount) * 100, // in kobo
       email,
       firstname: formData.surname,
       phone: formData.mobile,
+
       onSuccess: async (transaction) => {
-        Swal.fire({ text: "Please wait..." });
+        Swal.fire({
+          text: "Verifying payment with Paystack...",
+          allowOutsideClick: false,
+        });
         Swal.showLoading();
 
         try {
-          const response = await fetch(`${domain}/user_signup.php`, {
+          // --- Step 3: Verify payment with backend ---
+          const verifyRes = await fetch(`${domain}/verify_payment.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ reference: transaction.reference }),
+          });
+
+          const verifyData = await verifyRes.json();
+
+          if (!verifyData.success) {
+            Swal.fire("Error", verifyData.message || "Payment verification failed!", "error");
+            return;
+          }
+
+          // --- Step 4: Proceed with user registration ---
+          Swal.update({ text: "Creating your account..." });
+
+          const signupRes = await fetch(`${domain}/user_signup.php`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -469,29 +596,136 @@ export default function ApplicationForm() {
               amount,
             }),
           });
-          const result = await response.json();
 
-          if (result.success) {
-            Swal.fire("Success", "Payment and registration successful! Please check your email.", "success");
-            navigate("/userlogin");
+          const signupResult = await signupRes.json();
+
+          if (signupResult.success) {
+            Swal.fire(
+              "Success",
+              "Payment and registration successful! Generating your certificate...",
+              "success"
+            );
+
+            // --- Step 5: Generate and send certificate ---
+            await generateAndSendCertificate({
+              surname: formData.surname,
+              othername: formData.othername,
+              institution: formData.institution,
+              id: signupResult.user_id, // ensure backend returns user_id
+              membership_expiry: signupResult.membership_expiry, // e.g., +1 year
+              email: formData.email,
+            });
+
+            // --- Step 6: Done ---
+            Swal.fire(
+              "Completed",
+              "Your certificate has been sent to your email!",
+              "success"
+            );
+
             setFormData({});
+            // navigate("/userlogin");
           } else {
-            Swal.fire("Error", result.error || "Something went wrong!", "error");
+            Swal.fire("Error", signupResult.error || "Signup failed!", "error");
           }
         } catch (err) {
-          Swal.fire("Error", "Server error. Try again later.", "error");
           console.error(err);
+          Swal.fire("Error", "Server verification error. Try again later.", "error");
         }
       },
+
       onCancel: () => Swal.fire("Cancelled", "You cancelled the payment.", "info"),
       onError: (error) => Swal.fire("Payment Failed", error.message, "error"),
     });
-
   } catch (error) {
-    Swal.fire("Error", "Could not verify email. Try again later.", "error");
     console.error(error);
+    Swal.fire("Error", "Something went wrong. Please try again later.", "error");
   }
 };
+
+
+
+const generateAndSendCertificate = async (user) => {
+  const { surname, othername, institution, id, membership_expiry, email } = user;
+
+  const fullName = `${surname?.toUpperCase() || ""} ${othername?.toUpperCase() || ""}`;
+  // const expiryDate = new Date(membership_expiry).toLocaleDateString();
+  const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+
+  const issueDate = new Date().toLocaleDateString();
+
+  const img = new Image();
+  img.src = "/certificate_template.png";
+  img.crossOrigin = "Anonymous";
+
+  img.onload = async () => {
+    const doc = new jsPDF("p", "mm", "a4");
+
+    // Background
+    doc.addImage(img, "PNG", 0, 0, 210, 297);
+
+    // Text
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text(fullName, 105, 143, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    doc.text(institution, 105, 165, { align: "center" });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(id.toString(), 119, 183, { align: "center" });
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
+
+    // doc.setFont("helvetica", "normal");
+    // doc.setFontSize(12);
+    // doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
+
+    // Convert PDF to Blob and send to backend
+    const pdfBlob = doc.output("blob");
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("fullname", fullName);
+    formData.append("certificate", pdfBlob, `${fullName}_certificate.pdf`);
+
+    Swal.fire({text:"Sending your Certificate...", allowOutsideClick:false});
+    Swal.showLoading();
+
+    try {
+      const res = await fetch(`${domain}/send_certificate.php`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (result.success) {
+
+         Swal.fire({text:"Certificate sent to your email ✅"});
+        console.log("Certificate sent to your email ✅");
+        navigate('/userlogin')
+      } else {
+         Swal.fire({text:`Error sending email:, ${result.error}`});
+        console.error("Error sending email:", result.error);
+      }
+    } catch (err) {
+       Swal.fire({text:`Network error while sending certificate:, ${err}`});
+      console.error("Network error while sending certificate:", err);
+    }finally{
+      // Swal.close();
+    }
+  };
+};
+
+
 
 
   return (

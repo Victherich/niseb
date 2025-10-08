@@ -1211,52 +1211,103 @@ export default function CertificatePage({ userId }) {
   }, [domain, userId]);
 
   /* ------------------ Handle Paystack Payment ------------------ */
-  const handlePayment = () => {
-    if (!user) return;
+  // const handlePayment = () => {
+  //   if (!user) return;
 
-    const amount = 5000; // NGN 5000
-    const paystack = new PaystackPop();
+  //   const amount = 5000; // NGN 5000
+  //   const paystack = new PaystackPop();
 
-    paystack.newTransaction({
-      key: payStackLiveKey,
-        //  key: payStackTestKey,
-      amount: amount * 100, // kobo
-      email: user.email,
-      firstname: user.surname,
-      phone: user.mobile,
-      onSuccess: async (transaction) => {
-        // Swal.fire({ title: "Verifying...", text: "Please wait" });
-        // Swal.showLoading();
-         generateCertificate();
+  //   paystack.newTransaction({
+  //     key: payStackLiveKey,
+  //       //  key: payStackTestKey,
+  //     amount: amount * 100, // kobo
+  //     email: user.email,
+  //     firstname: user.surname,
+  //     phone: user.mobile,
+  //     onSuccess: async (transaction) => {
+   
+  //        generateCertificate();
 
-        // try {
-        //   const res = await fetch(`${domain}/save_payment.php`, {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //       user_id: user.id,
-        //       reference: transaction.reference,
-        //       amount,
-        //       purpose: "certificate",
-        //     }),
-        //   });
 
-        //   const data = await res.json();
-        //   if (data.success) {
-        //     Swal.close();
-        //     generateCertificate(); // 👈 only generate after successful payment
-        //   } else {
-        //     Swal.fire("Error", data.error || "Payment not saved", "error");
-        //   }
-        // } catch (err) {
-        //   Swal.fire("Error", "Network error: " + err.message, "error");
-        // }
-      },
-      onCancel: () => {
-        Swal.fire("Cancelled", "Payment was cancelled", "info");
-      },
-    });
-  };
+  //     },
+  //     onCancel: () => {
+  //       Swal.fire("Cancelled", "Payment was cancelled", "info");
+  //     },
+  //   });
+  // };
+
+const handlePayment = async () => {
+  if (!user) {
+    Swal.fire("Error", "User not found. Please log in first.", "error");
+    return;
+  }
+
+  const amount = 5000; // NGN 5000
+  const paystack = new PaystackPop();
+
+  paystack.newTransaction({
+    key: payStackLiveKey,
+    // key: payStackTestKey,
+    amount: amount * 100, // convert to kobo
+    email: user.email,
+    firstname: user.surname,
+    phone: user.mobile,
+
+    onSuccess: async (transaction) => {
+      Swal.fire({
+        text: "Verifying payment with Paystack...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      try {
+        // --- Step 1: Verify payment with backend ---
+        const verifyRes = await fetch(`${domain}/verify_payment.php`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reference: transaction.reference }),
+        });
+
+        const verifyData = await verifyRes.json();
+
+        if (!verifyData.success) {
+          Swal.fire("Error", verifyData.message || "Payment verification failed!", "error");
+          return;
+        }
+
+        // --- Step 2: Payment verified successfully ---
+        Swal.fire({
+          icon: "success",
+          title: "Payment Verified!",
+          text: "Generating your certificate...",
+          allowOutsideClick: false,
+        });
+        Swal.showLoading();
+
+        // --- Step 3: Generate & send certificate ---
+        await generateCertificate();
+
+        Swal.fire("Success", "Your certificate has been generated!", "success");
+
+      } catch (error) {
+        console.error(error);
+        Swal.fire("Error", "Could not verify payment. Please contact support.", "error");
+      }
+    },
+
+    onCancel: () => {
+      Swal.fire("Cancelled", "Payment was cancelled by user.", "info");
+    },
+
+    onError: (error) => {
+      console.error(error);
+      Swal.fire("Payment Failed", error.message || "Something went wrong during payment.", "error");
+    },
+  });
+};
+
+
+
 
   /* ------------------ Generate Certificate ------------------ */
   const generateCertificate = () => {
@@ -1266,7 +1317,15 @@ export default function CertificatePage({ userId }) {
     const fullName = `${surname?.toUpperCase() || ""} ${
       othername?.toUpperCase() || ""
     }`;
-    const expiryDate = new Date(membership_expiry).toLocaleDateString();
+    // const expiryDate = new Date(membership_expiry).toLocaleDateString();
+
+      const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
+
+
     const issueDate = new Date().toLocaleDateString();
 
     const img = new Image();
@@ -1323,7 +1382,7 @@ export default function CertificatePage({ userId }) {
         margin: "100px",
       }}
     >
-      Download Certificate
+    Click here to Generate Your Certificate
     </button>
   );
 }

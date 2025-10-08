@@ -159,10 +159,10 @@ export default function BeautifulDropdown2({
   const itemsRef = useRef([]);
 
   const options = [
-    { label: `AJGA - JOURNAL`, href: "https://www.ajga-journal.org/aboutus" },
+    { label: `AJGA - JOURNAL`, href: "https://www.ajga-journal.org" },
     { label: "AFSJ – A NISEB PUBLICATION", href: "https://africanscientistjournal.org/" },
-    { label: "BIOLINE INTERNATIONAL", href: "https://www.bioline.org.br/" },
-    { label: "AUTHORS GUIDE - IJBHS", href: "https://ijbhs.org/authors-guide/" },
+    // { label: "BIOLINE INTERNATIONAL", href: "https://www.bioline.org.br/" },
+    { label: "AUTHORS GUIDE - IJBHS", href: "https://ijbhs.org" },
     // { label: "New Member", href: "/membership" },
     // { label: "Renew Membership", href: "/renewmembership" },
   ];

@@ -205,7 +205,7 @@ const AdminDashboard = () => {
         return <UserListPage/>;
 
          case 'alladmin':
-        return <AdminListPage/>;
+        return <AdminListPage adminInfo={adminInfo}/>;
 
            case 'manuscripts':
         return <Manuscripts/>;

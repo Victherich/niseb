@@ -6,6 +6,7 @@ import { FaUser, FaEnvelope, FaPhone, FaCreditCard, FaSignOutAlt, FaClock, FaArr
 import PaymentModal from "./PaymentModal";
 import Swal from "sweetalert2";
 import UpdateProfileModal from "./UpdateProfileModal";
+import CertificatePage from "./CertificatePage";
 
 /* ---------------- Styled Components ---------------- */
 const PageContainer = styled.div`
@@ -108,7 +109,7 @@ text-align:center;
 
 
 /* ---------------- Component ---------------- */
-const UserDashboardPage = ({ userId }) => {
+const UserDashboardPage = ({ userId, handleMenuClick }) => {
   const { domain } = useContext(Context);
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -182,9 +183,12 @@ const handlePayment = () => {
           <ButtonRow>
             <Button bg="#ffa500" onClick={()=>setShowUpdate(true)}>Update Profile</Button>
             <Button bg="#008000" onClick={handlePayment}><FaCreditCard />Due Payment</Button>
+              <Button bg="#008000" onClick={()=>handleMenuClick('cert')}>Generate Certificate</Button>
             {/* <Button bg="red"><FaSignOutAlt /> Logout</Button> */}
           </ButtonRow>
+
         </Section>
+        
 
         {/* Transactions */}
         <Section>
