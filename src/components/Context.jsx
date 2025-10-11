@@ -38,6 +38,7 @@ const ContextProvider = ({ children }) => {
   const dollarRate = 1600;
   const payStackTestKey = "pk_test_60e1f53bba7c80b60029bf611a26a66a9a22d4e4";
   const payStackLiveKey = "pk_live_97c6ecd55b15f2d30a0903f69084bbacc042de40";
+    // const payStackLiveKey = "pk_test_60e1f53bba7c80b60029bf611a26a66a9a22d4e4";
 
  
 

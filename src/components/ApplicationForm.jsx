@@ -775,7 +775,7 @@ const handleSubmit = async (e) => {
   <option value="">...Choose...</option>
   {membershipFees.map((item) => (
     <option key={item.id} value={item.id}>
-      {item.name} ({item.currency} {item.amount})
+      {item.name} 
     </option>
   ))}
 </select>

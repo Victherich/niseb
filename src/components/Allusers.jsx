@@ -491,6 +491,7 @@ const UserListPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
+  const {membershipFees}=useContext(Context);
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -565,7 +566,7 @@ const UserListPage = () => {
             </Button>
           )}
 
-          <FilterSelect>
+          {/* <FilterSelect>
             <option value="all">All Memberships</option>
             <option value="student">Students</option>
             <option value="fullmember">Full Members</option>
@@ -574,7 +575,7 @@ const UserListPage = () => {
             <option value="foreign (undergraduate)">Foreign (undergraduate)</option>
             <option value="foreign (graduate)">Foreign (graduate)</option>
             <option value="foreign (fullmember)">Foreign (fullmember) </option>
-          </FilterSelect>
+          </FilterSelect> */}
         </SearchWrapper>
         
         {loading && <LoadingMsg>Loading users...</LoadingMsg>}
@@ -591,7 +592,7 @@ const UserListPage = () => {
                     <th><FaEnvelope /> Email</th>
                     <th><FaPhone /> Mobile</th>
                     <th><FaClock /> Membership</th>
-                    <th><FaClock /> Status</th>
+                    {/* <th><FaClock /> Status</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -605,9 +606,12 @@ const UserListPage = () => {
                       <td>{u.email}</td>
                       <td>{u.mobile}</td>
                       <td>
-                        {u.membershipCategory ? u.membershipCategory.charAt(0).toUpperCase() + u.membershipCategory.slice(1).toLowerCase() : ""}
+                       {
+    membershipFees.find(item => item.id === Number(u.membershipCategory))?.name 
+    || "None"
+  }
                       </td>
-                      <td>
+                      {/* <td>
                         {(() => {
                           if (!u.membership_expiry) {
                             return <span style={{ background: "#d1d5db", color: "#111", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>No expiry</span>;
@@ -620,7 +624,7 @@ const UserListPage = () => {
                             return <span style={{ background: "red", color: "white", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>Expired</span>;
                           }
                         })()}
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>

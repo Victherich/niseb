@@ -64,7 +64,7 @@ const UserDetailModal = ({ user, onClose }) => {
         ))} */}
 
    {Object.entries(user)
-  .filter(([key]) => !['password', 'mailbag', 'postcode'].includes(key))
+  .filter(([key]) => !['password', 'membership_start', 'membership_expiry'].includes(key))
   .map(([key, value]) => (
     <UserDetailRow key={key}>
       <strong>{key.toLocaleUpperCase()}: </strong> {value || "—"}
