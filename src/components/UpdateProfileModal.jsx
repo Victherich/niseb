@@ -252,7 +252,7 @@ const UpdateProfileModal = ({ user, onClose, onUpdated }) => {
         {Object.keys(formData).map((key) => {
           // Exclude certain fields like `id` or `created_at` from form
           if (key === 'email' || key === 'id' || key === 'created_at' || key === 'password' || key === 'membership_start' || key === 'membership_expiry'|| key === 'membershipCategory'
-            || key === 'mailbag' || key === 'postcode'
+            // || key === 'mailbag' || key === 'postcode'
           ) {
             return null; // Don't render these fields
           }

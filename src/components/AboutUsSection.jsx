@@ -120,7 +120,7 @@ const About = () => {
       </Zoom>
       <Slide direction="down" duration={3000} triggerOnce={false}>
         <IntroText>
-          We are the Society for Experimental Biology of Nigeria (NISEB). We help create extraordinary connections between scientists and disciplines!
+          We are the Society for Experimental Biology of Nigeria (NISEB). Breaking barriers amongst experimental biologists.
         </IntroText>
       </Slide>
 

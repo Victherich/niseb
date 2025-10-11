@@ -5,7 +5,7 @@ import bot from  '../Images/bot.jpg'
 import nisebLogo from '../Images/nisebLogo.png'
 import chairman from '../Images2/chairman.jpg'
 import member7 from '../Images2/member 7.jpg'
-import sec from '../Images2/Sec.jpg'
+import sec from '../Images2/sec2.jpeg'
 import member1 from '../Images2/member 1.jpg'
 import member3 from '../Images2/member 3.jpg'
 import member4 from '../Images2/member 4.jpg'
@@ -13,6 +13,7 @@ import proftiaga from '../Images2/Prof. Taiga, Akpovughaye.jpg'
 import member5 from '../Images2/member 5.jpg'
 import member6 from '../Images2/member 6.jpg'
 import member2 from '../Images2/member 2.jpg'
+import member8 from '../Images2/member 8.jpeg'
 
 
 const Hero = styled.section`
@@ -140,7 +141,7 @@ const Card = styled.div`
 const members1 = [
     {
     name: "Prof. Oyebamiji O. Fafioye",
-    role: "CHAIRMAN, BOT",
+    role: "AG. CHAIRMAN, BOT",
     desc: "...",
     img: member2,
   },
@@ -159,15 +160,15 @@ const members1 = [
 const members = [
    {
     name: "Prof. Clement Bewaji",
-    role: "MEMBER",
+    role: "IMMEDIATE PAST BOT SECRETARY",
     desc: "...",
     img: member7,
   },
 
   {
-    name: "Prof. M.T Yakubu",
-    role: "SECRETARY, BOT",
-    desc: "FNSBMB, FNISEB, FAS",
+    name: "Prof. Musa T. Yakubu",
+    role: "BOT SECRETARY",
+    desc: "FNISEB, FNSBMB, FAS",
     img: sec,
   },
   {
@@ -201,10 +202,17 @@ const members = [
     img: member5,
   },
   {
-    name: "Prof. Kunle Petu",
+    name: "Dr. Kunle Petu",
     role: "MEMBER",
     desc: "...",
     img: member6,
+  },
+
+  {
+    name: "Prof. Adenike Oladiji",
+    role: "MEMBER",
+    desc: "...",
+    img: member8,
   },
 
 ];

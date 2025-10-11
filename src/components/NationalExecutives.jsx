@@ -193,7 +193,7 @@ const Card = styled.div`
 const members = [
 
    {
-    name: "Prof. Ehimwenma Omoreghie",
+    name: "Prof. Ehimwenma Omoregie",
     role: "PRESIDENT",
     // desc: "University of Benin, Nigeria",
     img: p3,
@@ -220,13 +220,13 @@ const members = [
  
   {
     name: "Dr. Sylvester Obaika Uanseoje",
-    role: "SECRETARY GENERAL",
+    role: "SECRETARY",
     // desc: "University of Ilorin, Nigeria | Environmental Microbiology",
     img: sec,
   },
 
   {
-    name: "Prof. Oluba Micheal",
+    name: "Prof. Olarewaju Oluba",
     role: "ASSISTANT SECRETARY",
     // desc: "Landmark University, Omu-Aran, Kwara State, Nigeria | Nutritional Biochemistry and Agricultural Biotechnology",
     img: p1,

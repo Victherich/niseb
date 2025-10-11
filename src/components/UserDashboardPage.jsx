@@ -110,7 +110,7 @@ text-align:center;
 
 /* ---------------- Component ---------------- */
 const UserDashboardPage = ({ userId, handleMenuClick }) => {
-  const { domain } = useContext(Context);
+  const { domain, membershipFees } = useContext(Context);
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,16 +140,16 @@ const UserDashboardPage = ({ userId, handleMenuClick }) => {
 
 
 const handlePayment = () => {
-  const expiryDate = new Date(user.membership_expiry); // "2026-08-28"
+  // const expiryDate = new Date(user.membership_expiry); // "2026-08-28"
   
-  if (expiryDate.getTime() < Date.now()) {
+  // if (expiryDate.getTime() < Date.now()) {
     setIsOpen(true);
-  } else {
-    Swal.fire({
-      text: "Your Membership is still Active",
-      icon: "info"
-    });
-  }
+  // } else {
+  //   Swal.fire({
+  //     text: "Your Membership is still Active",
+  //     icon: "info"
+  //   });
+  // }
 };
 
 
@@ -171,18 +171,25 @@ const handlePayment = () => {
             <p><FaUser /> <strong>Name:</strong> {user.surname} {user.othername}</p>
             <p><FaEnvelope /> <strong>Email:</strong> {user.email}</p>
             <p><FaPhone /> <strong>Mobile:</strong> {user.mobile}</p>
-            <p><FaClock /> <strong>Membership:</strong> {user.membershipCategory || "None"}</p>
-            <p><FaCalendar /> <strong>Membership next due date:</strong> {user.membership_expiry || "None"}</p>
-            <p><strong>Status:</strong> 
+           <p>
+  <FaClock /> <strong>Membership:</strong>{" "}
+  {
+    membershipFees.find(item => item.id === Number(user.membershipCategory))?.name 
+    || "None"
+  }
+</p>
+
+            {/* <p><FaCalendar /> <strong>Membership Expiry Date:</strong> {user.membership_expiry || "None"}</p> */}
+            {/* <p><strong>Status:</strong> 
               {user.membership_expiry ? (
                 <StatusBadge active={isActive}>{isActive ? "Active" : "Expired"}</StatusBadge>
               ) : "No Membership"}
-            </p>
+            </p> */}
           </UserInfoRow>
 
           <ButtonRow>
             <Button bg="#ffa500" onClick={()=>setShowUpdate(true)}>Update Profile</Button>
-            <Button bg="#008000" onClick={handlePayment}><FaCreditCard />Due Payment</Button>
+            <Button bg="#008000" onClick={handlePayment}><FaCreditCard />Pay Annual Due</Button>
               <Button bg="#008000" onClick={()=>handleMenuClick('cert')}>Generate Certificate</Button>
             {/* <Button bg="red"><FaSignOutAlt /> Logout</Button> */}
           </ButtonRow>
@@ -205,6 +212,7 @@ const handlePayment = () => {
                   <th>Reference</th>
                   <th>Amount</th>
                   <th>Status</th>
+                  <th>Description</th>
                   <th>Payment Date</th>
                 </tr>
               </thead>
@@ -216,6 +224,7 @@ const handlePayment = () => {
                       <td>{t.reference}</td>
                       <td>NGN {parseInt(t.amount).toLocaleString()}</td>
                       <td>{t.status}</td>
+                       <td>{t.description}</td>
                       <td>{new Date(t.payment_date).toLocaleDateString()}</td>
                     </tr>
                   ))

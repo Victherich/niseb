@@ -120,8 +120,9 @@ const fellows = [
   "Prof Akpovughaye Taiga",
   "Prof Bamidele Owoyele",
   "Prof Musa Toyin Yakubu",
-  "Prof Fafioye",
-  "Prof Obaleye"
+  // "Prof Fafioye",
+  // "Prof Obaleye"
+  "Prof Chukwu Onyeneke"
 ];
 
 

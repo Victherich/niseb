@@ -1185,12 +1185,47 @@ import { jsPDF } from "jspdf";
 import Swal from "sweetalert2";
 import PaystackPop from "@paystack/inline-js";
 import { Context } from "./Context";
+import styled from "styled-components";
+
+
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin: 10px 0 20px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  outline: none;
+  transition: 0.2s;
+
+  &:focus {
+    border-color: #1b5e20;
+    background: #fff;
+  }
+`;
+
+
 
 export default function CertificatePage({ userId }) {
-  const { domain, payStackLiveKey, payStackTestKey } = useContext(Context);
+  const { domain, payStackLiveKey, payStackTestKey, generateAndSendCertificate } = useContext(Context);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+console.log(user)
+
+
+  const [selectedYear, setSelectedYear] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+
+  const currentYear = 2050;
+  // const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let y = 1990; y <= currentYear; y++) years.push(y);
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -1242,6 +1277,11 @@ const handlePayment = async () => {
     return;
   }
 
+  if (!selectedYear) {
+    Swal.fire({text:"Please select year."});
+    return;
+  }
+
   const amount = 5000; // NGN 5000
   const paystack = new PaystackPop();
 
@@ -1284,10 +1324,43 @@ const handlePayment = async () => {
         });
         Swal.showLoading();
 
-        // --- Step 3: Generate & send certificate ---
-        await generateCertificate();
 
-        Swal.fire("Success", "Your certificate has been generated!", "success");
+
+          // 2️⃣ Save payment
+          const saveRes = await fetch(`${domain}/save_payment.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_id: user.id,
+              reference: transaction.reference,
+              amount,
+              membership: user.membershipCategory,
+              description: `Certificate generation for ${selectedYear}`,
+              
+            }),
+          });
+          const saveData = await saveRes.json();
+
+          if (!saveData.success) {
+            Swal.fire("Error", saveData.error || "Failed to save payment", "error");
+            setIsProcessing(false);
+            return;
+          }
+
+
+
+        // --- Step 3: Generate & send certificate ---
+        // await generateCertificate();
+          await generateAndSendCertificate({
+              surname:  user.surname,
+              othername: user.othername,
+              institution: user.institution,
+              id: user.id, // ensure backend returns user_id
+              membership_expiry: selectedYear, // e.g., +1 year
+              email: user.email,
+            });
+
+        Swal.fire("Success", "Your certificate has been generated and sent to your email!", "success");
 
       } catch (error) {
         console.error(error);
@@ -1310,67 +1383,88 @@ const handlePayment = async () => {
 
 
   /* ------------------ Generate Certificate ------------------ */
-  const generateCertificate = () => {
-    const { surname, othername, institution, id, membership_expiry } = user;
+//   const generateCertificate = () => {
+//     const { surname, othername, institution, id, membership_expiry } = user;
 
-    const certId = id.toString();
-    const fullName = `${surname?.toUpperCase() || ""} ${
-      othername?.toUpperCase() || ""
-    }`;
-    // const expiryDate = new Date(membership_expiry).toLocaleDateString();
+//     const certId = id.toString();
+//     const fullName = `${surname?.toUpperCase() || ""} ${
+//       othername?.toUpperCase() || ""
+//     }`;
+//     // const expiryDate = new Date(membership_expiry).toLocaleDateString();
 
-      const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
+//       const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
+//   day: "2-digit",
+//   month: "long",
+//   year: "numeric",
+// });
 
 
-    const issueDate = new Date().toLocaleDateString();
+//     const issueDate = new Date().toLocaleDateString();
 
-    const img = new Image();
-    img.src = "/certificate_template.png"; // must be in /public
-    img.crossOrigin = "Anonymous";
+//     const img = new Image();
+//     img.src = "/certificate_template.png"; // must be in /public
+//     img.crossOrigin = "Anonymous";
 
-    img.onload = () => {
-      const doc = new jsPDF("p", "mm", "a4");
+//     img.onload = () => {
+//       const doc = new jsPDF("p", "mm", "a4");
 
-      // background
-      doc.addImage(img, "PNG", 0, 0, 210, 297);
+//       // background
+//       doc.addImage(img, "PNG", 0, 0, 210, 297);
 
-      // text
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
-      doc.text(fullName, 105, 143, { align: "center" });
+//       // text
+//       doc.setFont("helvetica", "bold");
+//       doc.setFontSize(20);
+//       doc.text(fullName, 105, 143, { align: "center" });
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.text(institution, 105, 165, { align: "center" });
+//       doc.setFont("helvetica", "normal");
+//       doc.setFontSize(12);
+//       doc.text(institution, 105, 165, { align: "center" });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.text(certId, 119, 183, { align: "center" });
+//       doc.setFont("helvetica", "bold");
+//       doc.setFontSize(16);
+//       doc.text(certId, 119, 183, { align: "center" });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
+//       doc.setFont("helvetica", "bold");
+//       doc.setFontSize(14);
+//       doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
+//       doc.setFont("helvetica", "normal");
+//       doc.setFontSize(12);
+//       doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
 
-      // open PDF in new tab
-      const pdfUrl = doc.output("bloburl");
-      window.open(pdfUrl, "_blank");
-    };
+//       // open PDF in new tab
+//       const pdfUrl = doc.output("bloburl");
+//       window.open(pdfUrl, "_blank");
+//     };
 
-    img.onerror = () => {
-      Swal.fire("Error", "Failed to load certificate template image", "error");
-    };
-  };
+//     img.onerror = () => {
+//       Swal.fire("Error", "Failed to load certificate template image", "error");
+//     };
+//   };
 
   return (
-    <button
+  <div
+  style={{
+    padding:"50px",
+
+  }}>
+          <label>
+          Select the year you want to generate certificate for:
+          <Select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            disabled={isProcessing}
+          >
+            <option value="">-- Select Year --</option>
+            {years.map((y) => (
+              <option key={y} value={y}>
+                {y}
+              </option>
+            ))}
+          </Select>
+        </label>
+
+         <button
       onClick={handlePayment}
       style={{
         background: "green",
@@ -1379,10 +1473,12 @@ const handlePayment = async () => {
         borderRadius: "8px",
         border: "none",
         cursor: "pointer",
-        margin: "100px",
+        // margin: "100px",
       }}
     >
     Click here to Generate Your Certificate
     </button>
+  </div>
+   
   );
 }

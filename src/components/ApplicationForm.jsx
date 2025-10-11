@@ -384,29 +384,48 @@ const SubmitButton = styled.button`
 
 export default function ApplicationForm() {
   const [formData, setFormData] = useState({});
-  const {domain, dollarRate, payStackTestKey, payStackLiveKey} = useContext(Context);
+  const {domain, dollarRate, payStackTestKey, payStackLiveKey, generateAndSendCertificate, membershipFees} = useContext(Context);
   const navigate = useNavigate();
+
 
 
   
 
-  const membershipFees = {
-    student: 5000,
-    fullmember: 10000,
-    fellow: 20000,
-    corporate: 50000,
-    "foreign (undergraduate)": 10*dollarRate,
-    "foreign (graduate)": 20*dollarRate,
-    "foreign (fullmember)": 50*dollarRate,
-  };
 
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: type === "checkbox" ? checked : value,
+  //   });
+  // };
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
+  const { name, value, type, checked } = e.target;
+
+  // Basic form update
+  let updatedValue = type === "checkbox" ? checked : value;
+  let updatedForm = { ...formData, [name]: updatedValue };
+
+  // 💡 When membership category changes, find the amount automatically
+  if (name === "membershipCategory") {
+    const selectedId = Number(value);
+    const selected = membershipFees.find((item) => item.id === selectedId);
+    if (selected) {
+      updatedForm.amount = selected.amount;
+      updatedForm.membershipName = selected.name; // optional: if you also want to store the category name
+    } else {
+      updatedForm.amount = "";
+      updatedForm.membershipName = "";
+    }
+  }
+
+  setFormData(updatedForm);
+};
+
+
+
+
 
 //   const handleSubmit = async (e) => {
 //   e.preventDefault();
@@ -505,12 +524,10 @@ export default function ApplicationForm() {
 //   }
 // };
 
-
-
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const { email, confirmEmail, password, confirmPassword, membershipCategory } = formData;
+  const { email, confirmEmail, password, confirmPassword, membershipCategory, amount } = formData;
 
   // --- Basic Validation ---
   if (email !== confirmEmail) {
@@ -526,7 +543,7 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  const amount = membershipFees[membershipCategory];
+  // const amount = membershipFees[membershipCategory];
   if (!amount) {
     Swal.fire("Error", "Please select a membership category.", "error");
     return;
@@ -612,8 +629,9 @@ const handleSubmit = async (e) => {
               othername: formData.othername,
               institution: formData.institution,
               id: signupResult.user_id, // ensure backend returns user_id
-              membership_expiry: signupResult.membership_expiry, // e.g., +1 year
+              membership_expiry: null, // e.g., +1 year
               email: formData.email,
+              navigate
             });
 
             // --- Step 6: Done ---
@@ -645,85 +663,85 @@ const handleSubmit = async (e) => {
 
 
 
-const generateAndSendCertificate = async (user) => {
-  const { surname, othername, institution, id, membership_expiry, email } = user;
+// const generateAndSendCertificate = async (user) => {
+//   const { surname, othername, institution, id, membership_expiry, email } = user;
 
-  const fullName = `${surname?.toUpperCase() || ""} ${othername?.toUpperCase() || ""}`;
-  // const expiryDate = new Date(membership_expiry).toLocaleDateString();
-  const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
+//   const fullName = `${surname?.toUpperCase() || ""} ${othername?.toUpperCase() || ""}`;
+//   // const expiryDate = new Date(membership_expiry).toLocaleDateString();
+//   const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
+//   day: "2-digit",
+//   month: "long",
+//   year: "numeric",
+// });
 
-  const issueDate = new Date().toLocaleDateString();
+//   const issueDate = new Date().toLocaleDateString();
 
-  const img = new Image();
-  img.src = "/certificate_template.png";
-  img.crossOrigin = "Anonymous";
+//   const img = new Image();
+//   img.src = "/certificate_template.png";
+//   img.crossOrigin = "Anonymous";
 
-  img.onload = async () => {
-    const doc = new jsPDF("p", "mm", "a4");
+//   img.onload = async () => {
+//     const doc = new jsPDF("p", "mm", "a4");
 
-    // Background
-    doc.addImage(img, "PNG", 0, 0, 210, 297);
+//     // Background
+//     doc.addImage(img, "PNG", 0, 0, 210, 297);
 
-    // Text
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.text(fullName, 105, 143, { align: "center" });
+//     // Text
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(20);
+//     doc.text(fullName, 105, 143, { align: "center" });
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text(institution, 105, 165, { align: "center" });
+//     doc.setFont("helvetica", "normal");
+//     doc.setFontSize(12);
+//     doc.text(institution, 105, 165, { align: "center" });
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text(id.toString(), 119, 183, { align: "center" });
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(16);
+//     doc.text(id.toString(), 119, 183, { align: "center" });
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(14);
+//     doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
 
-    // doc.setFont("helvetica", "normal");
-    // doc.setFontSize(12);
-    // doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
+//     // doc.setFont("helvetica", "normal");
+//     // doc.setFontSize(12);
+//     // doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
 
-    // Convert PDF to Blob and send to backend
-    const pdfBlob = doc.output("blob");
+//     // Convert PDF to Blob and send to backend
+//     const pdfBlob = doc.output("blob");
 
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("fullname", fullName);
-    formData.append("certificate", pdfBlob, `${fullName}_certificate.pdf`);
+//     const formData = new FormData();
+//     formData.append("email", email);
+//     formData.append("fullname", fullName);
+//     formData.append("certificate", pdfBlob, `${fullName}_certificate.pdf`);
 
-    Swal.fire({text:"Sending your Certificate...", allowOutsideClick:false});
-    Swal.showLoading();
+//     Swal.fire({text:"Sending your Certificate...", allowOutsideClick:false});
+//     Swal.showLoading();
 
-    try {
-      const res = await fetch(`${domain}/send_certificate.php`, {
-        method: "POST",
-        body: formData,
-      });
+//     try {
+//       const res = await fetch(`${domain}/send_certificate.php`, {
+//         method: "POST",
+//         body: formData,
+//       });
 
-      const result = await res.json();
-      if (result.success) {
+//       const result = await res.json();
+//       if (result.success) {
 
-         Swal.fire({text:"Certificate sent to your email ✅"});
-        console.log("Certificate sent to your email ✅");
-        navigate('/userlogin')
-      } else {
-         Swal.fire({text:`Error sending email:, ${result.error}`});
-        console.error("Error sending email:", result.error);
-      }
-    } catch (err) {
-       Swal.fire({text:`Network error while sending certificate:, ${err}`});
-      console.error("Network error while sending certificate:", err);
-    }finally{
-      // Swal.close();
-    }
-  };
-};
+//          Swal.fire({text:"Certificate sent to your email ✅"});
+//         console.log("Certificate sent to your email ✅");
+//         navigate('/userlogin')
+//       } else {
+//          Swal.fire({text:`Error sending email:, ${result.error}`});
+//         console.error("Error sending email:", result.error);
+//       }
+//     } catch (err) {
+//        Swal.fire({text:`Network error while sending certificate:, ${err}`});
+//       console.error("Network error while sending certificate:", err);
+//     }finally{
+//       // Swal.close();
+//     }
+//   };
+// };
 
 
 
@@ -743,7 +761,7 @@ const generateAndSendCertificate = async (user) => {
           {/* Membership Category */}
           <FormGroup>
             <label>Membership Category *</label>
-            <select name="membershipCategory" required onChange={handleChange}>
+            {/* <select name="membershipCategory" required onChange={handleChange}>
               <option value="">...Choose...</option>
               <option value="student">Student Membership</option>
               <option value="fullmember">Full Membership</option>
@@ -752,7 +770,16 @@ const generateAndSendCertificate = async (user) => {
               <option value="foreign (undergraduate)">Foreign Membership (Undergraduate)</option>
               <option value="foreign (graduate)">Foreign Membership (Graduate Student)</option>
               <option value="foreign (fullmember)">Foreign Membership (Full Member)</option>
-            </select>
+            </select> */}
+                <select name="membershipCategory" required onChange={handleChange}>
+  <option value="">...Choose...</option>
+  {membershipFees.map((item) => (
+    <option key={item.id} value={item.id}>
+      {item.name} ({item.currency} {item.amount})
+    </option>
+  ))}
+</select>
+
           </FormGroup>
 
           {/* Title */}
@@ -800,6 +827,17 @@ const generateAndSendCertificate = async (user) => {
 
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <SubmitButton type="submit">Submit Application</SubmitButton>
+
+            {/* <button onClick={()=>generateAndSendCertificate({
+              surname: "test",
+              othername: "test",
+              institution: "test",
+              id: "test", // ensure backend returns user_id
+              membership_expiry: null, // e.g., +1 year
+              email: "contactvictorndu@elexdontech.com",
+            })}>
+              test cert generation
+            </button> */}
           </div>
         </form>
       </FormWrapper>

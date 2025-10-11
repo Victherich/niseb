@@ -216,33 +216,34 @@ const faqs = [
   {
     question: "How do I know if my membership application has been accepted?",
     answer:
-      "Once we accept your application, you receive an email confirmation from the NISEB team. We welcome you to NISEB Membership and provide your membership details (including your login details for the members’ area).",
+      "Upon confirmation of payment, certificate is automatically generated and sent to the registered email.",
   },
   {
     question: "How long does it take to process my membership application?",
     answer:
-      "Membership will commence after payment by bank payment or transfer. If you apply for membership and we don't process your application before a deadline, email supports@nisebnigeria.org and be assured that your email will be responded to.",
+      "24 hrs or contact info@nisebnigeria.com",
   },
   {
     question: "When will my membership start / end?",
     answer:
-      "Your membership begins on the day that you make your membership payment. Your expiry date can be found on your membership welcome email.",
+      "January to December of each year",
   },
   {
     question: "I cannot register as a new member because my email address is already in use.",
     answer:
-      "If your email is already in use, you already have a non-member account with us, which we created when you registered for one of our meetings or services. Please don’t create a new profile, but email supports@nisebnigeria.org and we will provide you with your login details. You can then log in and continue your application.",
+      "Use an alternative email or contact info@nisebnigeria.com",
   },
-  {
-    question:
-      "I submitted my membership application but I need to amend/add some information to it. How can I do this?",
-    answer:
-      "Go to the members area on our website and log in. Click on edit your membership application and edit or add information to your application.",
-  },
+  // {
+  //   question:
+  //     "I submitted my membership application but I need to amend/add some information to it. How can I do this?",
+  //   answer:
+  //     "Go to the members area on our website and log in. Click on edit your membership application and edit or add information to your application.",
+  // },
+  
   {
     question: "I can’t log into my member profile as my username or password is not recognised. What can I do?",
     answer:
-      "If you copy and paste your username and password from an email that we sent, be careful not to select any blank spaces before or after as these count as characters and so your login details will be incorrect. If you still have problems logging in, contact supports@nisebnigeria.org and we will help you.",
+      "Follow the forgot password link at the login page. If you still have problems logging in, contact info@nisebnigeria.com and we will help you.",
   },
   {
     question: "How do I apply for membership?",

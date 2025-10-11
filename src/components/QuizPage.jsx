@@ -274,7 +274,7 @@ const QuizPage = () => {
           </Zoom>
           <ContentBlock>
             <Zoom duration={2000} triggerOnce={false}>
-              <SectionTitle>Best Equipment</SectionTitle>
+              <SectionTitle style={{fontSize:"2rem", textAlign:"center"}}>'Basic tools in Experimental Biology</SectionTitle>
             </Zoom>
             <Slide direction="up" duration={3000} triggerOnce={false}>
               <SectionText>

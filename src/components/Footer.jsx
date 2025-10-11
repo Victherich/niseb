@@ -158,7 +158,9 @@ const Footer = () => {
             <p>TEL: {/* +2348036910988,  */} 09162035216, 
               08034804373, 
               08062075089, 
-              08063109301 </p>
+              08063109301,
+              07030496639
+               </p>
             <p>Email: <a href="mailto:info@nisebnigeria.com">info@nisebnigeria.com</a></p>
           </ContactInfo>
           <SocialIcons>
@@ -187,7 +189,7 @@ const Footer = () => {
           <ul>
             <li><a href="/contactus">Help & Contact Us / FAQ</a></li>
             {/* <li><a href="/faq">FAQ</a></li> */}
-            <li><a href="/termsandconditions">Terms & Conditions</a></li>
+            {/* <li><a href="/termsandconditions">Terms & Conditions</a></li> */}
           </ul>
         </FooterSection>
 
