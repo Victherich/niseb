@@ -341,7 +341,9 @@ const ContactUsPage = () => {
                 <ContactCard>
                   <FaMapMarkerAlt />
                   <ContactCardTitle>Address</ContactCardTitle>
-                  <ContactCardText>Department of Biochemistry, University of Ilorin, Ilorin, Nigeria.</ContactCardText>
+                  <ContactCardText>
+                    Department of Biochemistry, University of Benin , Nigeria
+                    </ContactCardText>
                 </ContactCard>
               </Slide>
               <Fade duration={1500} delay={200} triggerOnce={false}>

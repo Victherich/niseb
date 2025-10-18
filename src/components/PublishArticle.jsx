@@ -68,9 +68,12 @@ export default function PublishModal({ show, onClose, manuscript }) {
     volume: "",
     issue: "",
     pages: "",
-    doi: ""
+    doi: "",
+    journal:""
   });
   const [pdfFile, setPdfFile] = useState(null);
+
+  console.log(manuscript)
 
   // Autofill when manuscript changes
   useEffect(() => {
@@ -82,7 +85,8 @@ export default function PublishModal({ show, onClose, manuscript }) {
         volume: "",
         issue: "",
         pages: "",
-        doi: ""
+        doi: "",
+        journal:manuscript.journal||""
       });
     }
   }, [manuscript]);
@@ -97,96 +101,11 @@ export default function PublishModal({ show, onClose, manuscript }) {
     setPdfFile(e.target.files[0]);
   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!pdfFile) {
-//       Swal.fire("Error", "Please upload the final PDF", "error");
-//       return;
-//     }
-
-//     const fd = new FormData();
-//     Object.entries(formData).forEach(([k,v]) => fd.append(k, v));
-//     fd.append("pdf_file", pdfFile);
-
-//     Swal.fire({title: "Publishing...", text: "Please wait", allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-
-//     try {
-//       const res = await fetch("https://nisebnigeria.com/api_niseb/publish_article.php", {
-//         method: "POST",
-//         body: fd
-//       });
-//       const data = await res.json();
-
-//       if (data.success) {
-//         Swal.fire("Success", data.message, "success");
-//         onClose(true); // trigger refresh
-//       } else {
-//         Swal.fire("Error", data.message, "error");
-//       }
-//     } catch (err) {
-//       Swal.fire("Error", "Network error", "error");
-//     }
-//   };
-
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   if (!pdfFile) {
-//     Swal.fire("Error", "Please upload the final PDF", "error");
-//     return;
-//   }
-
-//   // Build FormData (backend expects these keys)
-//   const fd = new FormData();
-//   fd.append("manuscript_id", formData.manuscript_id || "");
-//   fd.append("title", formData.title || "");
-//   fd.append("authors", formData.authors || "");
-//   fd.append("volume", formData.volume || "");
-//   fd.append("issue", formData.issue || "");
-//   fd.append("pages", formData.pages || "");
-//   fd.append("doi", formData.doi || "");
-//   fd.append("pdf_file", pdfFile); // file input
-
-//   Swal.fire({
-//     title: "Publishing...",
-//     text: "Please wait",
-//     allowOutsideClick: false,
-//     didOpen: () => Swal.showLoading(),
-//   });
-
-//   try {
-//     const res = await fetch("https://nisebnigeria.com/api_niseb/publish_article.php", {
-//       method: "POST",
-//       body: fd, // ✅ no headers
-//     });
-
-//     const text = await res.text(); // first read as text
-//     let data;
-//     try {
-//       data = JSON.parse(text);
-//     } catch {
-//       console.error("Invalid JSON from server:", text);
-//       throw new Error("Invalid server response");
-//     }
-
-//     if (data.success) {
-//       Swal.fire("Success", data.message, "success");
-//       if (onClose) onClose(true); // trigger refresh
-//     } else {
-//       Swal.fire("Error", data.message || "Something went wrong", "error");
-//     }
-//   } catch (err) {
-//     console.error("Publish failed:", err);
-//     Swal.fire("Error", "Network error. Could not reach server.", "error");
-//   }
-// };
 
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-//   setLoading(true);
+
 
   Swal.fire({
     title: "Publishing...",
@@ -227,14 +146,14 @@ const handleSubmit = async (e) => {
         }
       });
     } else {
-      Swal.fire("❌ Error", result.message || "Something went wrong.", "error");
+      Swal.fire("Please try again", result.message || "Something went wrong.", "error");
     }
   } catch (err) {
     Swal.close();
-    Swal.fire("❌ Publish Failed", err.message, "error");
+    Swal.fire(" Please try again", err.message, "error");
   }
 
-//   setLoading(false);
+
 };
 
 
@@ -244,28 +163,31 @@ const handleSubmit = async (e) => {
         <Header>Publish Manuscript</Header>
         <form onSubmit={handleSubmit}>
           <Label>Manuscript ID</Label>
-          <Input name="manuscript_id" value={formData.manuscript_id} onChange={handleChange} disabled/>
+          <Input name="manuscript_id" value={formData.manuscript_id} onChange={handleChange} disabled required/>
 
           <Label>Title</Label>
-          <Input name="title" value={formData.title} onChange={handleChange} />
+          <Input name="title" value={formData.title} onChange={handleChange} required/>
 
           <Label>Authors</Label>
-          <Input name="authors" value={formData.authors} onChange={handleChange} />
+          <Input name="authors" value={formData.authors} onChange={handleChange} required/>
 
           <Label>Volume</Label>
-          <Input name="volume" value={formData.volume} onChange={handleChange} />
+          <Input name="volume" value={formData.volume} onChange={handleChange} required/>
 
           <Label>Issue</Label>
-          <Input name="issue" value={formData.issue} onChange={handleChange} />
+          <Input name="issue" value={formData.issue} onChange={handleChange} required/>
 
           <Label>Pages</Label>
-          <Input name="pages" value={formData.pages} onChange={handleChange} />
+          <Input name="pages" value={formData.pages} onChange={handleChange} required/>
 
           <Label>DOI</Label>
-          <Input name="doi" value={formData.doi} onChange={handleChange} />
+          <Input name="doi" value={formData.doi} onChange={handleChange} required/>
+
+           <Label>Journal </Label>
+          <Input name="journal" value={formData.journal} onChange={handleChange} disabled required/>
 
           <Label>Final PDF</Label>
-          <Input type="file" accept="application/pdf" onChange={handleFile} />
+          <Input type="file" accept="application/pdf" onChange={handleFile} required/>
 
           <ButtonRow>
             <Button cancel onClick={() => onClose(false)} type="button">Cancel</Button>

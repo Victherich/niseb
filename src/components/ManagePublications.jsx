@@ -73,7 +73,7 @@ const Card = styled.div`
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  max-width: 300px;
+  // max-width: 300px;
 `;
 
 const CardTitle = styled.h3`
@@ -275,7 +275,8 @@ const handleDelete = async (id) => {
                 Vol. {p.volume}, Issue {p.issue} — Pages {p.pages} <br />
                 <strong>DOI:</strong> {p.doi || "N/A"} <br />
                 <strong>Published:</strong>{" "}
-                {new Date(p.created_at).toLocaleDateString()}
+                {new Date(p.created_at).toLocaleDateString()} <br/>
+                <strong>Journal:</strong> {p.journal}
               </Meta>
 
               <ButtonRow>

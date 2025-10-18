@@ -35,8 +35,18 @@ import GalleryPage from './components/GalleryPage';
 import WebinarPage from './components/WebinarPage';
 import ManuscriptSubmission from './components/ManuscriptSubmission';
 import PublicationsPage from './components/PublicationsPage';
+import PaymentInProgressModal from './components/PaymentInProgressModal';
+import { useSelector } from 'react-redux';
+
 
 function App() {
+
+const paymentType = JSON.parse(localStorage.getItem("niseb_payment_session"));
+console.log(paymentType); // 👉 "payment1"
+const paymentSession = useSelector(state=>state.paymentSession)
+
+
+
   return (
    <BrowserRouter>
    <ScrollToTop/>
@@ -84,6 +94,7 @@ function App() {
         
 
     </Routes>
+{paymentSession&&<PaymentInProgressModal/>}
     <a><img src={wp} alt="logo" className="WhatsAppIcon" onClick={() => window.open("https://wa.me/2349162035216", "_blank")} /></a> 
     <Footer/>
    </BrowserRouter>

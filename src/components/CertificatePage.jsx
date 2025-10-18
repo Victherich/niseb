@@ -1186,6 +1186,8 @@ import Swal from "sweetalert2";
 import PaystackPop from "@paystack/inline-js";
 import { Context } from "./Context";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { setPaymentSession, clearPaymentSession } from "../Features/Slice";
 
 
 
@@ -1218,7 +1220,7 @@ console.log(user)
 
   const [selectedYear, setSelectedYear] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-
+const dispatch = useDispatch();
 
   const currentYear = 2050;
   // const currentYear = new Date().getFullYear();
@@ -1282,6 +1284,10 @@ const handlePayment = async () => {
     return;
   }
 
+       // ✅ Save the session data before the popup opens
+    // localStorage.setItem("niseb_payment_session", JSON.stringify('payment'));
+    dispatch(setPaymentSession("payment"));
+
   const amount = 5000; // NGN 5000
   const paystack = new PaystackPop();
 
@@ -1292,6 +1298,14 @@ const handlePayment = async () => {
     email: user.email,
     firstname: user.surname,
     phone: user.mobile,
+       // ✅ Add your metadata here
+    metadata: {
+      custom_payment_type: "payment3",   // identifies this payment
+      user_id: user.id,
+      membership: user.membershipCategory,
+      description: `Certificate generation for ${selectedYear}`,
+      year: selectedYear,
+    },
 
     onSuccess: async (transaction) => {
       Swal.fire({
@@ -1299,77 +1313,14 @@ const handlePayment = async () => {
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
       });
+      refreshAfter10Seconds();
 
-      try {
-        // --- Step 1: Verify payment with backend ---
-        const verifyRes = await fetch(`${domain}/verify_payment.php`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ reference: transaction.reference }),
-        });
-
-        const verifyData = await verifyRes.json();
-
-        if (!verifyData.success) {
-          Swal.fire("Error", verifyData.message || "Payment verification failed!", "error");
-          return;
-        }
-
-        // --- Step 2: Payment verified successfully ---
-        Swal.fire({
-          icon: "success",
-          title: "Payment Verified!",
-          text: "Generating your certificate...",
-          allowOutsideClick: false,
-        });
-        Swal.showLoading();
-
-
-
-          // 2️⃣ Save payment
-          const saveRes = await fetch(`${domain}/save_payment.php`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              user_id: user.id,
-              reference: transaction.reference,
-              amount,
-              membership: user.membershipCategory,
-              description: `Certificate generation for ${selectedYear}`,
-              
-            }),
-          });
-          const saveData = await saveRes.json();
-
-          if (!saveData.success) {
-            Swal.fire("Error", saveData.error || "Failed to save payment", "error");
-            setIsProcessing(false);
-            return;
-          }
-
-
-
-        // --- Step 3: Generate & send certificate ---
-        // await generateCertificate();
-          await generateAndSendCertificate({
-              surname:  user.surname,
-              othername: user.othername,
-              institution: user.institution,
-              id: user.id, // ensure backend returns user_id
-              membership_expiry: selectedYear, // e.g., +1 year
-              email: user.email,
-            });
-
-        Swal.fire("Success", "Your certificate has been generated and sent to your email!", "success");
-
-      } catch (error) {
-        console.error(error);
-        Swal.fire("Error", "Could not verify payment. Please contact support.", "error");
-      }
-    },
+     },
 
     onCancel: () => {
       Swal.fire("Cancelled", "Payment was cancelled by user.", "info");
+        // localStorage.removeItem("niseb_payment_session");
+        dispatch(clearPaymentSession());
     },
 
     onError: (error) => {
@@ -1382,65 +1333,39 @@ const handlePayment = async () => {
 
 
 
-  /* ------------------ Generate Certificate ------------------ */
-//   const generateCertificate = () => {
-//     const { surname, othername, institution, id, membership_expiry } = user;
-
-//     const certId = id.toString();
-//     const fullName = `${surname?.toUpperCase() || ""} ${
-//       othername?.toUpperCase() || ""
-//     }`;
-//     // const expiryDate = new Date(membership_expiry).toLocaleDateString();
-
-//       const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
-//   day: "2-digit",
-//   month: "long",
-//   year: "numeric",
-// });
 
 
-//     const issueDate = new Date().toLocaleDateString();
+function refreshAfter10Seconds() {
+  setTimeout(() => {
+    // Store a flag in localStorage before reload
+    localStorage.setItem("showPaystackAlert", "true");
 
-//     const img = new Image();
-//     img.src = "/certificate_template.png"; // must be in /public
-//     img.crossOrigin = "Anonymous";
+    // Reload the page
+    window.location.reload();
+  }, 10000);
+}
 
-//     img.onload = () => {
-//       const doc = new jsPDF("p", "mm", "a4");
+// ✅ Then, run this once when the page loads
+window.addEventListener("load", () => {
+  const shouldShowAlert = localStorage.getItem("showPaystackAlert");
 
-//       // background
-//       doc.addImage(img, "PNG", 0, 0, 210, 297);
+  if (shouldShowAlert) {
+    Swal.fire({
+      text: "Verifying payment with Paystack...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
 
-//       // text
-//       doc.setFont("helvetica", "bold");
-//       doc.setFontSize(20);
-//       doc.text(fullName, 105, 143, { align: "center" });
+    // Clear the flag so it doesn't show again on future reloads
+    localStorage.removeItem("showPaystackAlert");
+  }
+});
 
-//       doc.setFont("helvetica", "normal");
-//       doc.setFontSize(12);
-//       doc.text(institution, 105, 165, { align: "center" });
 
-//       doc.setFont("helvetica", "bold");
-//       doc.setFontSize(16);
-//       doc.text(certId, 119, 183, { align: "center" });
 
-//       doc.setFont("helvetica", "bold");
-//       doc.setFontSize(14);
-//       doc.text(`Valid Until: ${expiryDate}`, 105, 220, { align: "center" });
 
-//       doc.setFont("helvetica", "normal");
-//       doc.setFontSize(12);
-//       doc.text(`Issued on: ${issueDate}`, 190, 280, { align: "right" });
 
-//       // open PDF in new tab
-//       const pdfUrl = doc.output("bloburl");
-//       window.open(pdfUrl, "_blank");
-//     };
 
-//     img.onerror = () => {
-//       Swal.fire("Error", "Failed to load certificate template image", "error");
-//     };
-//   };
 
   return (
   <div

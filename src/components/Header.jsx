@@ -4,7 +4,7 @@
 
 
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import 'animate.css';
@@ -14,6 +14,8 @@ import BeautifulDropdown from './DropDown';
 import BeautifulDropdown2 from './DropDown2';
 import { FaUser } from 'react-icons/fa';
 import BeautifulDropdown3 from './Dropdown3';
+import { clearPaymentSession } from '../Features/Slice';
+import { Context } from './Context';
 // import logo from '../Images/logo.png'
 
 // --- Styled Components for the Header ---
@@ -182,6 +184,7 @@ const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location object
+  const {handleClearPaymentSession} = useContext(Context);
 
   const headerRef = useRef(null);
   const logoRef = useRef(null);
@@ -309,7 +312,7 @@ useEffect(() => {
          <img src={niseblogo} alt="Logo" />
          {/* <span className="font-bold text-xl">NISEB</span> */}
       </Logo>
-
+{/* <p onClick={()=>handleClearPaymentSession()}>test</p> */}
       {/* Main navigation for desktop */}
       <Nav ref={navRef}>
         <NavLink onClick={() => handleNavLinkClick('/')} className={isActive('/') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Home</NavLink>

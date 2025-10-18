@@ -110,8 +110,8 @@ text-align:center;
 
 /* ---------------- Component ---------------- */
 const UserDashboardPage = ({ userId, handleMenuClick }) => {
-  const { domain, membershipFees } = useContext(Context);
-  const [user, setUser] = useState(null);
+  const { domain, membershipFees, user, setUser } = useContext(Context);
+  // const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

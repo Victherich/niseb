@@ -142,6 +142,8 @@ import styled from "styled-components";
 import PaystackPop from "@paystack/inline-js";
 import Swal from "sweetalert2";
 import { Context } from "./Context";
+import { useDispatch } from "react-redux";
+import { setPaymentSession, clearPaymentSession } from "../Features/Slice";
 
 /* ===============================
    Styled Components
@@ -156,7 +158,7 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1;
   backdrop-filter: blur(2px);
 `;
 
@@ -247,6 +249,9 @@ const PaymentModal = ({ user, onClose }) => {
 
   const [selectedYear, setSelectedYear] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const dispatch = useDispatch();
+
+  console.log(user);
 
 
   const currentYear = 2050;
@@ -270,116 +275,227 @@ const PaymentModal = ({ user, onClose }) => {
   const amount = getAmountForUserMembership();
   const displayAmount = amount ? Number(amount).toLocaleString() : "0";
 
-  const handlePayment = () => {
-    if (!selectedYear) {
-      Swal.fire("Error", "Please select a year to pay for.", "error");
-      return;
-    }
-    if (!amount || amount <= 0) {
-      Swal.fire("Error", "Invalid membership amount. Please contact support.", "error");
-      return;
-    }
+  // const handlePayment = () => {
+  //   if (!selectedYear) {
+  //     Swal.fire("Error", "Please select a year to pay for.", "error");
+  //     return;
+  //   }
+  //   if (!amount || amount <= 0) {
+  //     Swal.fire("Error", "Invalid membership amount. Please contact support.", "error");
+  //     return;
+  //   }
 
-    const paystack = new PaystackPop();
-    setIsProcessing(true);
+  //   const paystack = new PaystackPop();
+  //   setIsProcessing(true);
 
+  //   Swal.fire({
+  //     title: "Processing Payment...",
+  //     text: `You will be charged ₦${displayAmount}`,
+  //     allowOutsideClick: false,
+  //     didOpen: () => Swal.showLoading(),
+  //   });
+
+  //   paystack.newTransaction({
+  //     // key: payStackTestKey,
+  //     key: payStackLiveKey,
+  //     amount: Number(amount) * 100,
+  //     email: user.email,
+  //     firstname: user.surname,
+  //     phone: user.mobile,
+  //     onSuccess: async (transaction) => {
+  //       Swal.fire({ text: "Verifying payment with server..." });
+  //       Swal.showLoading();
+
+  //       try {
+  //         // 1️⃣ Verify payment
+  //         const verifyRes = await fetch(`${domain}/verify_payment.php`, {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({ reference: transaction.reference }),
+  //         });
+  //         const verifyData = await verifyRes.json();
+
+  //         if (!verifyData.success) {
+  //           Swal.fire("Error", verifyData.message || "Payment verification failed", "error");
+  //           setIsProcessing(false);
+  //           return;
+  //         }
+
+  //         // 2️⃣ Save payment
+  //         const saveRes = await fetch(`${domain}/save_payment.php`, {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({
+  //             user_id: user.id,
+  //             reference: transaction.reference,
+  //             amount,
+  //             membership: user.membershipCategory,
+  //             description: `Annual Due Payment for ${selectedYear}`,
+              
+  //           }),
+  //         });
+  //         const saveData = await saveRes.json();
+
+  //         if (!saveData.success) {
+  //           Swal.fire("Error", saveData.error || "Failed to save payment", "error");
+  //           setIsProcessing(false);
+  //           return;
+  //         }
+
+  //         // 3️⃣ Generate and send certificate
+  //         const membership_expiry = `${selectedYear}`;
+
+  //         try {
+  //           await generateAndSendCertificate({
+  //             membershipCategory:user.membershipCategory,
+  //             title:user.title,
+  //             surname: user.surname,
+  //             othername: user.othername,
+  //             institution: user.institution,
+  //             id: user.id,
+  //             membership_expiry,
+  //             email: user.email,
+  //           });
+  //         } catch (err) {
+  //           console.error("Certificate generation/send failed:", err);
+  //           Swal.fire(
+  //             "Warning",
+  //             "Payment succeeded and was saved, but sending certificate failed. We will retry sending the certificate.",
+  //             "warning"
+  //           );
+  //           setIsProcessing(false);
+  //           onClose();
+  //           return;
+  //         }
+
+  //         Swal.fire("Success", "Payment successful. Certificate sent to your email!", "success");
+  //         setIsProcessing(false);
+  //         onClose();
+  //       } catch (err) {
+  //         console.error(err);
+  //         Swal.fire("Error", "Network/server error: " + (err.message || err), "error");
+  //         setIsProcessing(false);
+  //       }
+  //     },
+  //     onCancel: () => {
+  //       Swal.fire("Cancelled", "Payment was cancelled", "info");
+  //       setIsProcessing(false);
+  //     },
+  //     onError: (err) => {
+  //       Swal.fire("Payment Error", err.message || "Payment failed", "error");
+  //       setIsProcessing(false);
+  //     },
+  //   });
+  // };
+
+
+
+
+
+
+
+// ==================================================================================
+// 2nd flow
+// --- 1️⃣ PAYSTACK PAYMENT HANDLER ---
+
+
+
+
+const handlePayment = async () => {
+  if (!selectedYear) {
+    Swal.fire("Error", "Please select a year to pay for.", "error");
+    return;
+  }
+  if (!amount || amount <= 0) {
+    Swal.fire("Error", "Invalid membership amount. Please contact support.", "error");
+    return;
+  }
+
+  // localStorage.setItem("niseb_payment_session", JSON.stringify('payment'));
+   dispatch(setPaymentSession("payment"));
+
+  const paystack = new PaystackPop();
+  setIsProcessing(true);
+
+  Swal.fire({
+    title: "Processing Payment...",
+    text: `You will be charged ₦${displayAmount}`,
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading(),
+  });
+
+  paystack.newTransaction({
+    key: payStackLiveKey,
+    amount: Number(amount) * 100,
+    email: user.email,
+    firstname: user.surname,
+    phone: user.mobile,
+
+    // ✅ Add your metadata here
+    metadata: {
+      custom_payment_type: "payment2",   // identifies this payment
+      user_id: user.id,
+      membership: user.membershipCategory,
+      description: `Annual Due Payment for ${selectedYear}`,
+      year: selectedYear,
+    },
+
+    onSuccess: async (transaction) => {
+      Swal.fire({ text: "Verifying payment with server...", allowOutsideClick: false });
+      Swal.showLoading();
+onClose();
+refreshAfter10Seconds();
+      // You can verify or check backend here if needed
+    },
+
+    onCancel: () => {
+      Swal.fire("Cancelled", "Payment was cancelled", "info");
+      setIsProcessing(false);
+        // localStorage.removeItem("niseb_payment_session")
+         dispatch(clearPaymentSession());
+    },
+
+    onError: (err) => {
+      Swal.fire("Payment Error", err.message || "Payment failed", "error");
+      setIsProcessing(false);
+    },
+  });
+};
+
+
+
+
+
+
+function refreshAfter10Seconds() {
+  setTimeout(() => {
+    // Store a flag in localStorage before reload
+    localStorage.setItem("showPaystackAlert", "true");
+
+    // Reload the page
+    window.location.reload();
+  }, 10000);
+}
+
+// ✅ Then, run this once when the page loads
+window.addEventListener("load", () => {
+  const shouldShowAlert = localStorage.getItem("showPaystackAlert");
+
+  if (shouldShowAlert) {
     Swal.fire({
-      title: "Processing Payment...",
-      text: `You will be charged ₦${displayAmount}`,
+      text: "Verifying payment with Paystack...",
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
     });
 
-    paystack.newTransaction({
-      // key: payStackTestKey,
-      key: payStackLiveKey,
-      amount: Number(amount) * 100,
-      email: user.email,
-      firstname: user.surname,
-      phone: user.mobile,
-      onSuccess: async (transaction) => {
-        Swal.fire({ text: "Verifying payment with server..." });
-        Swal.showLoading();
+    // Clear the flag so it doesn't show again on future reloads
+    localStorage.removeItem("showPaystackAlert");
+  }
+});
 
-        try {
-          // 1️⃣ Verify payment
-          const verifyRes = await fetch(`${domain}/verify_payment.php`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ reference: transaction.reference }),
-          });
-          const verifyData = await verifyRes.json();
 
-          if (!verifyData.success) {
-            Swal.fire("Error", verifyData.message || "Payment verification failed", "error");
-            setIsProcessing(false);
-            return;
-          }
 
-          // 2️⃣ Save payment
-          const saveRes = await fetch(`${domain}/save_payment.php`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              user_id: user.id,
-              reference: transaction.reference,
-              amount,
-              membership: user.membershipCategory,
-              description: `Annual Due Payment for ${selectedYear}`,
-              
-            }),
-          });
-          const saveData = await saveRes.json();
 
-          if (!saveData.success) {
-            Swal.fire("Error", saveData.error || "Failed to save payment", "error");
-            setIsProcessing(false);
-            return;
-          }
-
-          // 3️⃣ Generate and send certificate
-          const membership_expiry = `${selectedYear}`;
-
-          try {
-            await generateAndSendCertificate({
-              surname: user.surname,
-              othername: user.othername,
-              institution: user.institution,
-              id: user.id,
-              membership_expiry,
-              email: user.email,
-            });
-          } catch (err) {
-            console.error("Certificate generation/send failed:", err);
-            Swal.fire(
-              "Warning",
-              "Payment succeeded and was saved, but sending certificate failed. We will retry sending the certificate.",
-              "warning"
-            );
-            setIsProcessing(false);
-            onClose();
-            return;
-          }
-
-          Swal.fire("Success", "Payment successful. Certificate sent to your email!", "success");
-          setIsProcessing(false);
-          onClose();
-        } catch (err) {
-          console.error(err);
-          Swal.fire("Error", "Network/server error: " + (err.message || err), "error");
-          setIsProcessing(false);
-        }
-      },
-      onCancel: () => {
-        Swal.fire("Cancelled", "Payment was cancelled", "info");
-        setIsProcessing(false);
-      },
-      onError: (err) => {
-        Swal.fire("Payment Error", err.message || "Payment failed", "error");
-        setIsProcessing(false);
-      },
-    });
-  };
 
   return (
     <Overlay>

@@ -12,6 +12,8 @@ const MySlice = createSlice({
 
     userInfo:null,
     userToken:null,
+
+       paymentSession: null,
   },
   reducers: {
     adminLogin: (state, { payload }) => {
@@ -53,9 +55,27 @@ updateLecturerInfo: (state, { payload }) => {
       state.userToken = null;
     },
 
+      // --- ✅ Payment Session ---
+    setPaymentSession: (state, { payload }) => {
+      state.paymentSession = payload;
+    },
+    clearPaymentSession: (state) => {
+      state.paymentSession = null;
+    },
+
   },
 });
 
-export const { adminLogin, adminLogout, updateAdminInfo , userLogin, userLogout, lecturerLogin, lecturerLogout, updateLecturerInfo} = MySlice.actions;
+export const { adminLogin,
+   adminLogout,
+    updateAdminInfo ,
+     userLogin,
+      userLogout,
+       lecturerLogin,
+        lecturerLogout,
+         updateLecturerInfo,
+        setPaymentSession,
+  clearPaymentSession,
+        } = MySlice.actions;
 export default MySlice.reducer;
 

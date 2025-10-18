@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,6 +22,7 @@ import UserListPage from './Allusers.jsx';
 import PaymentHistoryPage from './PaymentHistory.jsx';
 import Manuscripts from './Manuscripts.jsx';
 import ManagePublications from './ManagePublications.jsx';
+import { Context } from './Context.jsx';
 // import AccessCodeManager from './AccessCodeManager';
 // import AllLecturers from './AllLecturers';
 
@@ -148,6 +149,7 @@ const AdminDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState('profile');
   const adminInfo = useSelector(state=>state.adminInfo)
+  const {generateCertificateTest}=useContext(Context);
   
   console.log(adminInfo)
 
@@ -269,6 +271,8 @@ const AdminDashboard = () => {
           >
             Manage Publications
           </SidebarMenuItem>
+
+         
 
 
  {adminInfo?.role==='Admin'&& <SidebarMenuItem
