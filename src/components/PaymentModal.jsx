@@ -245,6 +245,7 @@ const PaymentModal = ({ user, onClose }) => {
     dollarRate,
     membershipFees,
     generateAndSendCertificate, // make sure this exists in Context
+    startPaymentPolling2
   } = useContext(Context);
 
   const [selectedYear, setSelectedYear] = useState("");
@@ -441,11 +442,12 @@ const handlePayment = async () => {
     },
 
     onSuccess: async (transaction) => {
-      Swal.fire({ text: "Verifying payment with server...", allowOutsideClick: false });
-      Swal.showLoading();
+      // Swal.fire({ text: "Verifying payment with server...", allowOutsideClick: false });
+      // Swal.showLoading();
 onClose();
-refreshAfter10Seconds();
+// refreshAfter10Seconds();
       // You can verify or check backend here if needed
+      startPaymentPolling2("payment2")
     },
 
     onCancel: () => {

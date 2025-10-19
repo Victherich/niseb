@@ -812,7 +812,7 @@ const SubmitButton = styled.button`
 `;
 
 export default function ApplicationForm() {
-  const { domain, dollarRate, payStackLiveKey, membershipFees } = useContext(Context);
+  const { domain, dollarRate, payStackLiveKey, membershipFees, startPaymentPolling1 } = useContext(Context);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -900,17 +900,18 @@ dispatch(setPaymentSession("payment"));
           description: `Membership Registration`,
         },
         onSuccess: async (transaction) => {
-          Swal.fire({
-                  text: "Verifying payment with Paystack...",
-                  allowOutsideClick: false,
-                  didOpen: () => Swal.showLoading(),
-                });
+          // Swal.fire({
+          //         text: "Verifying payment with Paystack...",
+          //         allowOutsideClick: false,
+          //         didOpen: () => Swal.showLoading(),
+          //       });
           // localStorage.removeItem("niseb_formData"); // ✅ Clear saved form
-          refreshAfter10Seconds();
+          // refreshAfter10Seconds();
+          startPaymentPolling1("payment1");
         },
         onCancel: () =>{
           Swal.fire("Cancelled", "You cancelled the payment.", "info");
-            //  localStorage.removeItem("niseb_payment_session");
+        
             dispatch(clearPaymentSession());
 
             },

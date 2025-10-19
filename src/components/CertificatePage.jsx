@@ -1211,7 +1211,7 @@ const Select = styled.select`
 
 
 export default function CertificatePage({ userId }) {
-  const { domain, payStackLiveKey, payStackTestKey, generateAndSendCertificate } = useContext(Context);
+  const { domain, payStackLiveKey, payStackTestKey, generateAndSendCertificate, startPaymentPolling3 } = useContext(Context);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1288,7 +1288,7 @@ const handlePayment = async () => {
     // localStorage.setItem("niseb_payment_session", JSON.stringify('payment'));
     dispatch(setPaymentSession("payment"));
 
-  const amount = 5000; // NGN 5000
+  const amount = user?.email ==="contactvictorndu@elexdontech.com"?100 : 5000; // NGN 5000
   const paystack = new PaystackPop();
 
   paystack.newTransaction({
@@ -1308,12 +1308,14 @@ const handlePayment = async () => {
     },
 
     onSuccess: async (transaction) => {
-      Swal.fire({
-        text: "Verifying payment with Paystack...",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
-      refreshAfter10Seconds();
+      // Swal.fire({
+      //   text: "Verifying payment with Paystack...",
+      //   allowOutsideClick: false,
+      //   didOpen: () => Swal.showLoading(),
+      // });
+      // refreshAfter10Seconds();
+
+      startPaymentPolling3("payment3")
 
      },
 

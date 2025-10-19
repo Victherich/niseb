@@ -64,6 +64,7 @@ const userId = userInfo?.id
 
 
   const membershipFees = [
+    { id: 8, name: "-- select from below 🔽-- ", amount: 100, currency:"₦" },
   { id: 1, name: "Student Member", amount: 5000, currency:"₦" },
   { id: 2, name: "Full Member", amount: 10000, currency:"₦" },
   { id: 3, name: "Fellow Member", amount: 20000, currency:"₦" },
@@ -529,23 +530,32 @@ function startPaymentPolling1(paymentType) {
       }
 
       if (data.success && data.payment && data.payment.status === "success") {
-        Swal.fire({
-          icon: "success",
-          title: "Payment Successful!",
-          text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-          allowOutsideClick: false,
-          confirmButtonText: "Click here to proceed",
-        }).then((result) => {
-          if (result.isConfirmed) {
+
             handleSignup(
               data.payment.reference,
               data.payment.amount,
               data.payment.membership,
               data.payment.id
             );
+
+            console.log(data)
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Payment Successful!",
+        //   text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
+        //   allowOutsideClick: false,
+        //   confirmButtonText: "Click here to proceed",
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     handleSignup(
+        //       data.payment.reference,
+        //       data.payment.amount,
+        //       data.payment.membership,
+        //       data.payment.id
+        //     );
            
-          }
-        });
+        //   }
+        // });
       }
     } catch (err) {
       console.error("Polling error:", err);
@@ -611,33 +621,35 @@ const handleSignup = async (reference, amount,membership, transactionId) => {
     const data = await response.json();
 
     if (data.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Registration Successful!",
-        text: "Your account has been created successfully.",
-        confirmButtonText: "Continue",
-      });
+      // Swal.fire({
+      //   icon: "success",
+      //   title: "Registration Successful!",
+      //   text: "Your account has been created successfully.",
+      //   confirmButtonText: "Continue",
+      // });
 
     savePayment1(data.user_id, reference, amount,membership, transactionId);
 
       // Optionally redirect or update user state
       // navigate("/userlogin");
+      console.log(data)
     
 
     } else {
-      Swal.fire({
+      // Swal.fire({
         // icon: "error",
         // title: "Signup Failed",
-        text: data.error || "An unknown error occurred.",
-      });
+        // text: data.error || "An unknown error occurred.",
+      // });
+      console.log(data.error)
     }
   } catch (err) {
     console.error("Signup error:", err);
-    Swal.fire({
+    // Swal.fire({
       // icon: "error",
       // title: "Network Error",
-      text: "Could not connect to the server. Please try again.",
-    });
+      // text: "Could not connect to the server. Please try again.",
+    // });
   } finally {
     setLoading(false);
   }
@@ -731,15 +743,7 @@ function startPaymentPolling2(userId, paymentType) {
       }
 
       if (data.success && data.payment && data.payment.status === "success") {
-        Swal.fire({
-          icon: "success",
-          title: "Payment Successful!",
-          text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-          allowOutsideClick: false,
-          confirmButtonText: "Click here to proceed",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            savePayment2(
+       savePayment2(
               data.payment.user_id,
               data.payment.reference,
               data.payment.amount,
@@ -747,8 +751,25 @@ function startPaymentPolling2(userId, paymentType) {
               data.payment.membership,
               data.payment.id
             );
-          }
-        });
+
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Payment Successful!",
+        //   text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
+        //   allowOutsideClick: false,
+        //   confirmButtonText: "Click here to proceed",
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     savePayment2(
+        //       data.payment.user_id,
+        //       data.payment.reference,
+        //       data.payment.amount,
+        //       data.payment.year,
+        //       data.payment.membership,
+        //       data.payment.id
+        //     );
+        //   }
+        // });
       }
     } catch (err) {
       console.error("Polling error:", err);
@@ -865,15 +886,7 @@ function startPaymentPolling3(userId, paymentType) {
 
       // ✅ Check for success and handle payment
       if (data.success && data.payment && data.payment.status === "success") {
-        Swal.fire({
-          icon: "success",
-          title: "Payment Successful!",
-          text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-          allowOutsideClick: false,
-          confirmButtonText: "Click here to proceed",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            savePayment3(
+           savePayment3(
               data.payment.user_id,
               data.payment.reference,
               data.payment.amount,
@@ -881,8 +894,24 @@ function startPaymentPolling3(userId, paymentType) {
               data.payment.membership,
               data.payment.id
             );
-          }
-        });
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Payment Successful!",
+        //   text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
+        //   allowOutsideClick: false,
+        //   confirmButtonText: "Click here to proceed",
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     savePayment3(
+        //       data.payment.user_id,
+        //       data.payment.reference,
+        //       data.payment.amount,
+        //       data.payment.year,
+        //       data.payment.membership,
+        //       data.payment.id
+        //     );
+        //   }
+        // });
         console.log("✅ Payment success:", data);
       }
     } catch (err) {
@@ -1135,8 +1164,12 @@ async function deleteTransactionById(id) {
         membershipFees,
         user,
         setUser,
-        handleClearPaymentSession
-        generateCertificateTest
+        handleClearPaymentSession,
+        generateCertificateTest,
+        startPaymentPolling1,
+        startPaymentPolling2,
+        startPaymentPolling3
+
       }}
     >
       {children}

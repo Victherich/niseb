@@ -289,6 +289,22 @@ const AdminDashboard = () => {
           >
            Register Editor / Reviewer
           </SidebarMenuItem>}
+
+          <SidebarMenuItem
+            onClick={() => 
+              generateCertificateTest({
+                  membershipCategory:"2",
+  title:"prof",
+  surname:"Eleojo",
+  othername:"Ojogbane",
+  institution:"Faculty of Health Sciences, Taraba State University, Jalingo.",
+  id:"1781",
+  membership_expiry:null,
+              })
+            }
+          >
+            Generate Certificate
+          </SidebarMenuItem>
             
           <SidebarMenuItem
             onClick={handleLogout}
