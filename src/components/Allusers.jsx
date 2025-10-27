@@ -338,6 +338,10 @@ import {
 } from "react-icons/fa";
 import { Context } from "./Context";
 import UserDetailModal from "./UserDetailModal";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Swal from "sweetalert2";
+
 
 /* ========================= Styled Components ========================= */
 
@@ -436,8 +440,17 @@ const SearchWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
+  align-items:center;
+  flex-direction:column;
+`;
+
+const SearchWrapper2 = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
   gap: 0.5rem;
   flex-wrap: wrap;
+
 `;
 
 const SearchInput = styled.input`
@@ -445,7 +458,11 @@ const SearchInput = styled.input`
   border: 2px solid #008000;
   border-radius: 6px;
   font-size: 1rem;
-  width: 250px;
+  width: 300px;
+
+  @media(max-width:428px){
+  width:250px;
+  }
 `;
 
 const FilterSelect = styled.select`
@@ -538,16 +555,86 @@ const UserListPage = () => {
   
   const totalPages = Math.ceil(totalUsers / usersPerPage);
 
+const handleDownloadAllPDF = async () => {
+  setLoading(true);
+
+  Swal.fire({
+    title: "Generating PDF",
+    text: "Please wait while we prepare your download...",
+    allowOutsideClick: false,
+    didOpen: () => Swal.showLoading(),
+  });
+
+  try {
+    // Fetch all users (the backend should handle ?all=true properly)
+    const response = await fetch(`${domain}/get_all_users2.php?all=true`);
+    const data = await response.json();
+
+    if (!data.success || !data.users || data.users.length === 0) {
+      Swal.fire("No data", "No users found to download.", "info");
+      setLoading(false);
+      return;
+    }
+
+    // Create new PDF
+    const doc = new jsPDF({ orientation: "landscape" });
+
+    // Add header
+    doc.setFontSize(18);
+    doc.setTextColor(0, 128, 0);
+    doc.text("All Registered Users", 14, 20);
+
+    const date = new Date().toLocaleString();
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${date}`, 14, 30);
+
+    // Prepare table data
+    const rows = data.users.map((u) => [
+      u.id,
+      `${u.surname} ${u.othername}`,
+      u.email,
+      u.mobile,
+      membershipFees.find((item) => item.id === Number(u.membershipCategory))?.name || "None",
+    ]);
+
+    // Add table
+    doc.autoTable({
+      startY: 40,
+      head: [["ID", "Name", "Email", "Mobile", "Membership"]],
+      body: rows,
+      styles: { fontSize: 9, cellPadding: 3 },
+      headStyles: { fillColor: [0, 128, 0], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [240, 248, 240] },
+      margin: { top: 40 },
+    });
+
+    // Save the file
+    doc.save("All_Users.pdf");
+
+    Swal.fire("Success", "PDF generated successfully!", "success");
+  } catch (error) {
+    console.error("PDF generation error:", error);
+    Swal.fire("Error", "Failed to generate PDF: " + error.message, "error");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <PageContainer>
       <ContentWrapper>
-        <SectionTitle>All Users ({totalUsers})</SectionTitle>
+        <SectionTitle>All Members ({totalUsers})</SectionTitle>
 
         {/* Search + Filters */}
+       
         <SearchWrapper>
-          <SearchInput 
+           <label style={{color:"green", fontWeight:"bold"}}>Search by surname, othernames or email</label><br/>
+            <SearchWrapper2>
+                 <SearchInput 
             type="text"
-            placeholder="Search by email..."
+            placeholder="Search by surname , othernames or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -565,6 +652,15 @@ const UserListPage = () => {
               <FaTimes /> Cancel
             </Button>
           )}
+            </SearchWrapper2>
+     <Button 
+  bg="#444"
+  onClick={handleDownloadAllPDF}
+>
+  Download All Users (PDF)
+</Button>
+
+
 
           {/* <FilterSelect>
             <option value="all">All Memberships</option>
@@ -588,7 +684,7 @@ const UserListPage = () => {
                 <thead>
                   <tr>
                     <th><FaUser /> ID</th>
-                    <th>Name</th>
+                    <th>Surname | Othernames</th>
                     <th><FaEnvelope /> Email</th>
                     <th><FaPhone /> Mobile</th>
                     <th><FaClock /> Membership</th>
@@ -662,3 +758,94 @@ const UserListPage = () => {
 };
 
 export default UserListPage;
+
+
+
+
+
+// <?php
+// // --- CORS HEADERS (Allow All) ---
+// header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Methods: GET, OPTIONS");
+// header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// header("Access-Control-Allow-Credentials: true");
+
+// // --- HANDLE OPTIONS ---
+// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+//     http_response_code(200);
+//     exit();
+// }
+
+// // --- NO CACHE HEADERS ---
+// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+// header("Cache-Control: post-check=0, pre-check=0", false);
+// header("Pragma: no-cache");
+
+// // --- RESPONSE HEADER ---
+// header('Content-Type: application/json');
+
+// // --- ERROR REPORTING ---
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+
+// // --- DB CONFIG ---
+// // NOTE: You must replace 'config.php' with your actual database connection code.
+// // Example:
+// // $conn = new mysqli('localhost', 'username', 'password', 'database');
+// // if ($conn->connect_error) {
+// //     die(json_encode(['success' => false, 'error' => 'Database connection failed.']));
+// // }
+// include 'config.php';
+
+// // --- PAGINATION PARAMETERS ---
+// $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+// $limit = 100; // Set a fixed limit as requested
+
+// $offset = ($page - 1) * $limit; // Calculate the offset
+
+// // --- OPTIONAL SEARCH ---
+// $search = isset($_GET['search']) ? trim($_GET['search']) : "";
+
+// // --- COUNT TOTAL USERS (Important for pagination) ---
+// if (!empty($search)) {
+//     $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM users WHERE email LIKE ?");
+//     $searchTerm = "%" . $search . "%";
+//     $countStmt->bind_param("s", $searchTerm);
+// } else {
+//     $countStmt = $conn->prepare("SELECT COUNT(*) as total FROM users");
+// }
+// $countStmt->execute();
+// $countResult = $countStmt->get_result();
+// $totalUsers = $countResult->fetch_assoc()['total'];
+// $countStmt->close();
+
+// // --- PAGINATED QUERY ---
+// if (!empty($search)) {
+//     $stmt = $conn->prepare("SELECT * FROM users WHERE email LIKE ? ORDER BY id DESC LIMIT ? OFFSET ?");
+//     $stmt->bind_param("sii", $searchTerm, $limit, $offset);
+// } else {
+//     $stmt = $conn->prepare("SELECT * FROM users ORDER BY id DESC LIMIT ? OFFSET ?");
+//     $stmt->bind_param("ii", $limit, $offset);
+// }
+
+// $stmt->execute();
+// $result = $stmt->get_result();
+
+// // --- FETCH USERS ---
+// $users = [];
+// while ($row = $result->fetch_assoc()) {
+//     $users[] = $row;
+// }
+// $stmt->close();
+
+// // --- RESPONSE ---
+// echo json_encode([
+//     'success' => true,
+//     'users' => $users,
+//     'totalUsers' => $totalUsers, // Send total count to the frontend
+//     'currentPage' => $page,
+//     'perPage' => $limit
+// ]);
+
+// $conn->close();
+// ?>

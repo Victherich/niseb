@@ -290,7 +290,7 @@ const AdminDashboard = () => {
            Register Editor / Reviewer
           </SidebarMenuItem>}
 
-          <SidebarMenuItem
+          {/* <SidebarMenuItem
             onClick={() => 
               generateCertificateTest({
                   membershipCategory:"2",
@@ -304,7 +304,7 @@ const AdminDashboard = () => {
             }
           >
             Generate Certificate
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
             
           <SidebarMenuItem
             onClick={handleLogout}
