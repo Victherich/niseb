@@ -16,6 +16,7 @@ import { FaUser } from 'react-icons/fa';
 import BeautifulDropdown3 from './Dropdown3';
 import { clearPaymentSession } from '../Features/Slice';
 import { Context } from './Context';
+import BeautifulDropdown4 from './DropDown4';
 // import logo from '../Images/logo.png'
 
 // --- Styled Components for the Header ---
@@ -25,7 +26,7 @@ const HeaderContainer = styled.header`
   left: 0;
   width: 100%;
   padding: 1rem 2rem;
-  z-index: 1000;     /* raise z-index so it stays above content */
+  z-index: 300;     /* raise z-index so it stays above content */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -321,6 +322,7 @@ useEffect(() => {
           <NavLink onClick={() => handleNavLinkClick('/bulletin')} className={isActive('/bulletin') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Bulletin</NavLink>
        <NavLink onClick={() => handleNavLinkClick('/editors')} className={isActive('/editors') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Editors</NavLink>
       <BeautifulDropdown2 color={"white"} fontSize={"1rem"}/>
+      <BeautifulDropdown4/>
          <NavLink onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Gallery</NavLink>
       <NavLink onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} style={{ '--animate-duration': '5s' }}>Webinars</NavLink>
       {/* <BeautifulDropdown3 color={"white"} fontSize={"1rem"}/> */}
@@ -329,6 +331,7 @@ useEffect(() => {
       
       </Nav>
       <BeautifulDropdown/>
+      
     
 
  
@@ -347,7 +350,7 @@ useEffect(() => {
          <NavLink2 onClick={() => handleNavLinkClick('/bulletin')} className={isActive('/bulletin') ? 'active' : ''}>Bulletin</NavLink2>
        <NavLink2 onClick={() => handleNavLinkClick('/editors')} className={isActive('/editors') ? 'active' : ''}>Editors</NavLink2>
         <BeautifulDropdown2 color={"green"} fontSize={"1.2rem"}/>
-        
+        <BeautifulDropdown4 color={"green"} fontSize={"1.2rem"}/>
            <NavLink2 onClick={() => handleNavLinkClick('/gallery')} className={isActive('/gallery') ? 'active' : ''} style={{marginTop:"20px"}}>Gallery</NavLink2>
       <NavLink2 onClick={() => handleNavLinkClick('/webinars')} className={isActive('/webinars') ? 'active' : ''} >Webinars</NavLink2>
       

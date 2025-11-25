@@ -47,7 +47,7 @@ const Sidebar = styled.div`
   position: fixed;
   height: 100%;
   min-height:100vh;
-  z-index: 999;
+  z-index: 200;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding-top:50px;
 

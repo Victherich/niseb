@@ -1,4 +1,5 @@
 
+
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Fade } from "react-awesome-reveal";
@@ -147,8 +148,8 @@ const Item = styled.li`
   }
 `;
 
-export default function BeautifulDropdown2({
-  label = "Our Journals",
+export default function BeautifulDropdown4({
+  label = "Publications",
   animationDuration = 600,
   placement = "bottom",
   color, fontSize
@@ -160,12 +161,8 @@ export default function BeautifulDropdown2({
 
   const options = [
    
-    { label: "African Scientist Journal", href: "https://africanscientistjournal.org/" },
-     { label: `African Journal of General Agriculture`, href: "https://www.ajga-journal.org" },
-    { label: "Biokemistri Journal", href: "https://biokemistri.com" },
-    { label: "Bioscience Research Journal", href: "" },
-    { label: "International Journal of Biomedical and Health Sciences", href: "https://ijbhs.org" },
-    { label: "NISEB Journal", href: "" },
+      { label: "PUBLICATIONS", href: "/publications" },
+    { label: "SUBMIT MANUSCRIPT", href: "/submitmanuscripts" },
   ];
 
   useEffect(() => {
@@ -241,21 +238,22 @@ export default function BeautifulDropdown2({
           direction="up"
         >
           <Menu id="beautiful-dropdown-menu" role="menu" placement={placement}>
-            {/* <BeautifulDropdown3/> */}
+        
             {options.map((opt, i) => (
-             <Item
-  key={i}
-  role="menuitem"
-  tabIndex={-1}
-  ref={(el) => (itemsRef.current[i] = el)}
-  data-focused={focusedIndex === i}
-  onMouseEnter={() => setFocusedIndex(i)}
-  onClick={() => setOpen(false)}
->
-  <a href={opt.href} target="_blank" rel="noopener noreferrer">
-    {opt.label}
-  </a>
-</Item>
+           <Item
+                key={i}
+                role="menuitem"
+                tabIndex={-1}
+                ref={(el) => (itemsRef.current[i] = el)}
+                data-focused={focusedIndex === i}
+                onMouseEnter={() => setFocusedIndex(i)}
+                onClick={() => {
+                  window.location.href = opt.href;
+                  setOpen(false);
+                }}
+              >
+                <a href={opt.href}>{opt.label}</a>
+              </Item>
 
             ))}
           </Menu>

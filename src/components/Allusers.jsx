@@ -751,7 +751,7 @@ const handleDownloadAllPDF = async () => {
         )}
       </ContentWrapper>
       {selectedUser && (
-        <UserDetailModal user={selectedUser} onClose={() => setSelectedUser(null)} />
+        <UserDetailModal user={selectedUser} onClose={() => {setSelectedUser(null); fetchUsers(1, "")}} />
       )}
     </PageContainer>
   );
