@@ -37,6 +37,9 @@ import ManuscriptSubmission from './components/ManuscriptSubmission';
 import PublicationsPage from './components/PublicationsPage';
 import PaymentInProgressModal from './components/PaymentInProgressModal';
 import { useSelector } from 'react-redux';
+import BiokemistriSubmissionPage from './components/BiokemistriSubmissionPage.jsx';
+import NisebJournalPage from './components/NisebJournalPage.jsx';
+import BioscienceResearchJournalPage from './components/BioscienceResearchJournalPage.jsx';
 
 
 function App() {
@@ -70,6 +73,9 @@ const paymentSession = useSelector(state=>state.paymentSession)
         <Route path='/webinars' element={<WebinarPage/>}/>
         <Route path='/submitmanuscripts' element={<ManuscriptSubmission/>}/>
         <Route path='/publications' element={<PublicationsPage/>}/>
+        <Route path='/biokemistrijournalpage' element={<BiokemistriSubmissionPage/>}/>
+        <Route path='/nisebjournalpage' element={<NisebJournalPage/>}/>
+        <Route path='/bioscienceresearchjournalpage' element={<BioscienceResearchJournalPage/>}/>
 
 
         {/* admin routes */}
@@ -91,6 +97,7 @@ const paymentSession = useSelector(state=>state.paymentSession)
         <Route path='/userforgotpassword' element={<UserForgotPassword/>}/>
         <Route path='/userresetpassword/:token' element={<UserResetPassword/>}/>
         <Route path='/applicationform' element={<ApplicationForm/>}/>
+        
         
 
     </Routes>

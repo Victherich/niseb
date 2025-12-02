@@ -162,10 +162,10 @@ export default function BeautifulDropdown2({
    
     { label: "African Scientist Journal", href: "https://africanscientistjournal.org/" },
      { label: `African Journal of General Agriculture`, href: "https://www.ajga-journal.org" },
-    { label: "Biokemistri Journal", href: "https://biokemistri.com" },
-    { label: "Bioscience Research Journal", href: "" },
+    { label: "Biokemistri Journal", href: "/biokemistrijournalpage" },
+    { label: "Bioscience Research Journal", href: "/bioscienceresearchjournalpage" },
     { label: "International Journal of Biomedical and Health Sciences", href: "https://ijbhs.org" },
-    { label: "NISEB Journal", href: "" },
+    { label: "NISEB Journal", href: "/nisebjournalpage" },
   ];
 
   useEffect(() => {

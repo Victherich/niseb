@@ -78,9 +78,9 @@ export default function EditorsContacts() {
     },
     {
       title: "BIOSCIENCE RESEARCH JOURNAL (ISSN 0795 8072)",
-      editor: "Prof. Adedoyin Igunnu",
-      phone: "",
-      email: "doyinigunnu@yahoo.com",
+      editor: "Prof. A. A. Abdulrahman",
+      phone: "2348033897870",
+      email: "",
       bank: "2343199441 UBA SEBN BIOSCIENCE RESEARCH JOURNAL"
     },
     {
