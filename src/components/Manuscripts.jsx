@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ManuscriptModal from "./ManuscriptModal";
 import Swal from "sweetalert2";
 import PublishModal from "./PublishArticle";
+import RePublishModal from "./RePublishModal";
 
 const Container = styled.div`
   max-width: 900px;
@@ -176,7 +177,7 @@ const handleDelete = async (id) => {
 
   return (
     <Container>
-      <Title>Submitted Manuscripts</Title>
+      <Title>Submitted Publications</Title>
       <SearchInput
         type="text"
         placeholder="Search by Manuscript ID or Author Email..."
@@ -222,7 +223,7 @@ const handleDelete = async (id) => {
         Delete
       </Button>
          <Button className="view" onClick={()=>handlePublishClick(s)}>
-        Publish
+       Re-Publish
       </Button>
     </div>
           </Card>
@@ -235,7 +236,7 @@ const handleDelete = async (id) => {
         onClose={() => setSelected(null)}
       />
 
-      <PublishModal 
+      {/* <PublishModal 
         show={showModal} 
         manuscript={selected2} 
         onClose={(refresh) => {
@@ -245,7 +246,17 @@ const handleDelete = async (id) => {
             window.location.reload();
           }
         }} 
-      />
+      /> */}
+
+      <RePublishModal
+  show={showModal} 
+  manuscript={selected2} 
+  onClose={(refresh) => {
+    setShowModal(false);
+    if (refresh) fetchData(); // better than full reload
+  }} 
+/>
+
     </Container>
   );
 }

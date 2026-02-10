@@ -22,6 +22,7 @@ const ModalContent = styled.div`
   width: 500px;
   max-height: 80vh;
   overflow-y: auto;
+  font-size:0.8rem;
 `;
 
 const CloseButton = styled.button`
@@ -58,31 +59,36 @@ export default function ManuscriptModal({ show, manuscript, onClose }) {
         <p>
           <strong>Institution:</strong> {manuscript.institution}
         </p>
+        <br/>
         <p>
           <strong>Title:</strong> {manuscript.title}
         </p>
+        <br/>
          <p>
           <strong>Cover Letter:</strong> {manuscript.cover_letter}
         </p>
+        <br/>
         <p>
           <strong>Abstract:</strong> {manuscript.abstract}
         </p>
+        <br/>
         <p>
           <strong>Disclosure:</strong> {manuscript.disclosures}
         </p>
+        <br/>
         {manuscript.manuscript_file && (
           <p>
             <a
               href={`https://nisebnigeria.com/api_niseb/${manuscript.manuscript_file}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "orange" }}
+              style={{ color: "blue", fontWeight:"bold" }}
             >
-              Download Manuscript
+              Download Publication File
             </a>
           </p>
         )}
-        {manuscript.figures_file && (
+        {/* {manuscript.figures_file && (
           <p>
             <a
               href={`https://nisebnigeria.com/api_niseb/${manuscript.figures_file}`}
@@ -93,8 +99,8 @@ export default function ManuscriptModal({ show, manuscript, onClose }) {
               Download Figures
             </a>
           </p>
-        )}
-        {manuscript.tables_file && (
+        )} */}
+        {/* {manuscript.tables_file && (
           <p>
             <a
               href={`https://nisebnigeria.com/api_niseb/${manuscript.tables_file}`}
@@ -105,7 +111,7 @@ export default function ManuscriptModal({ show, manuscript, onClose }) {
               Download Tables
             </a>
           </p>
-        )}
+        )} */}
       </ModalContent>
     </ModalBackground>
   );

@@ -261,16 +261,16 @@ const AdminDashboard = () => {
             active={activeMenu === 'manuscripts'}
             onClick={() => handleMenuClick('manuscripts')}
           >
-            Manuscripts
+            Manage Publications
           </SidebarMenuItem>
 
 
-             <SidebarMenuItem
+             {/* <SidebarMenuItem
             active={activeMenu === 'publications'}
             onClick={() => handleMenuClick('publications')}
           >
             Manage Publications
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
 
          
 
