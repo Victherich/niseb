@@ -226,6 +226,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import pubsImg from '../Images/pubs.png';
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const Hero = styled.section`
@@ -292,7 +293,8 @@ const Card = styled.div`
   background: rgba(0,255,0,0.1);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
 `;
 
 const CardTitle = styled.h3`
@@ -319,6 +321,7 @@ const ButtonRow = styled.div`
 `;
 
 const Button = styled.a`
+cursor:pointer;
   flex: 1;
   padding: 8px 12px;
   border-radius: 6px;
@@ -333,6 +336,10 @@ const Button = styled.a`
   }
 `;
 
+
+
+
+// (Assuming your styled components are already defined above in your file)
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -362,28 +369,44 @@ export default function SubmissionsPage() {
     fetchData();
   }, []);
 
-  // Client-side filter (keeps your search behavior consistent)
-  const filteredSubmissions = submissions.filter((s) =>
-    [s.title, s.authors, s.doi]
-      .filter(Boolean)
-      .some((field) =>
-        field.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
+  // ✅ IMPROVED FUZZY SEARCH (NON-EXACT MATCH)
+  const normalize = (str) =>
+    (str || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/gi, " ") // remove punctuation
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const filteredSubmissions = submissions.filter((s) => {
+    if (!searchTerm.trim()) return true;
+
+    const searchWords = normalize(searchTerm).split(" ");
+
+    const searchableText = normalize(
+      `${s.title} ${s.authors || ""} ${s.doi || ""} ${s.name || ""} ${s.journal || ""}`
+    );
+
+    return searchWords.every((word) => searchableText.includes(word));
+  });
 
 
-const getFileUrl = (file) => {
-  const baseUrl = `https://nisebnigeria.com/api_niseb/${file}`;
 
-  if (file.toLowerCase().endsWith(".pdf")) {
-    return baseUrl; // Browser can open PDF directly
-  }
 
-  // Use Google Docs Viewer for DOCX
-  return `https://docs.google.com/gview?url=${encodeURIComponent(baseUrl)}&embedded=true`;
+
+
+const handleDownload = (file) => {
+  const downloadUrl = `https://nisebnigeria.com/api_niseb/download_file.php?file=${encodeURIComponent(file)}`;
+
+  window.open(downloadUrl, "_blank");
+
+  Swal.fire({
+    icon: "success",
+    title: "Download Started ✅",
+    text: "Please check your Downloads folder.",
+    timer: 3000,
+    showConfirmButton: false,
+  });
 };
-
-
 
   return (
     <div>
@@ -396,19 +419,21 @@ const getFileUrl = (file) => {
       </Hero>
 
       <Container>
-        <Title style={{ textAlign: "center", color: "green", fontSize: "1.1rem" }}>
+        <Title
+          style={{ textAlign: "center", color: "green", fontSize: "1.1rem" }}
+        >
           Publications
         </Title>
 
-        {/* Search bar (retains your filter) */}
+        {/* Search bar */}
         <SearchBar
           type="text"
-          placeholder="Search by title, author, or DOI..."
+          placeholder="Search by title, author, DOI, or journal..."
           value={searchTerm}
           onChange={(e) => {
             const value = e.target.value;
             setSearchTerm(value);
-            fetchData(value); // keeps your search filter working
+            fetchData(value);
           }}
         />
 
@@ -420,40 +445,34 @@ const getFileUrl = (file) => {
               <CardTitle>{s.title?.toUpperCase()}</CardTitle>
               <Authors>{s.authors}</Authors>
               <Meta>
-                {/* Vol. {s.volume}, Issue {s.issue} <br /> */}
-                <strong>DOI:</strong> {s.doi || "N/A"} <br />
-                <strong>Submitted:</strong>{" "}
-                {s.created_at
+                {/* <strong>DOI:</strong> {s.doi || "N/A"} <br /> */}
+                {/* <strong>Submitted:</strong>{" "} */}
+                {/* {s.created_at
                   ? new Date(s.created_at).toLocaleDateString()
-                  : "N/A"}
+                  : "N/A"} */}
                 <br />
-                <strong>Author:</strong> {s.name}<br/>
-                <strong>Journal:</strong> {s.journal}
+                <strong>Author:</strong> {s.name}
+                <br />
+                {/* <strong>Journal:</strong> {s.journal} */}
               </Meta>
 
               <ButtonRow>
-                {/* <Button
+                {/* VIEW PDF (NEW TAB) */}
+                <Button
                   href={`https://nisebnigeria.com/api_niseb/${s.manuscript_file}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Open
-                </Button> */}
+                  View
+                </Button>
 
-                <Button className="view"
-   onClick={()=>navigate(`/manuscript/${s.id}`)} style={{ color: "white", textDecoration: "none",cursor:"pointer" }}>
-    View
-  
-</Button>
-
-
-                {/* <Button
-  href={getFileUrl(s.manuscript_file)}
-  target="_blank"
-  rel="noopener noreferrer"
+                {/* DOWNLOAD PDF */}
+               <Button
+  onClick={() => handleDownload(s.manuscript_file)}
+  style={{ cursor: "pointer" }}
 >
-  Open
-</Button> */}
+  Download
+</Button>
 
               </ButtonRow>
             </Card>
