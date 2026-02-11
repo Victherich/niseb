@@ -17,10 +17,12 @@ const Overlay = styled.div`
 
 const ModalBox = styled.div`
   background: white;
-  width: 500px;
+  width: 650px;
   max-width: 95%;
   padding: 20px;
   border-radius: 10px;
+  max-height: 90vh;
+  overflow-y: auto;
 `;
 
 const Title = styled.h2`
@@ -42,6 +44,14 @@ const TextArea = styled.textarea`
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  min-height: 80px;
+`;
+
+const Label = styled.label`
+  display: block;
+  font-weight: bold;
+  margin-top: 8px;
+  color: green;
 `;
 
 const ButtonRow = styled.div`
@@ -70,26 +80,35 @@ const Button = styled.button`
 export default function RePublishModal({ show, manuscript, onClose }) {
   const [form, setForm] = useState({
     id: "",
-    title: "",
+    manuscript_id: "",
+    name: "",
+    email: "",
+    phone: "",
+    institution: "",
     journal: "",
-    authors: "",
-    doi: "",
-    volume: "",
-    issue: "",
+    title: "",
+    cover_letter: "",
+    abstract: "",
+    disclosures: "",
   });
 
-  // ✅ Auto-fill when modal opens or manuscript changes
+  const [file, setFile] = useState(null);
+
+  // ✅ Auto-fill modal when manuscript is selected
   useEffect(() => {
     if (manuscript) {
       setForm({
         id: manuscript.id || "",
-        title: manuscript.title || "",
+        manuscript_id: manuscript.manuscript_id || "",
+        name: manuscript.name || "",
+        email: manuscript.email || "",
+        phone: manuscript.phone || "",
+        institution: manuscript.institution || "",
         journal: manuscript.journal || "",
-        authors: manuscript.authors || manuscript.name || "",
-        doi: manuscript.doi || "",
-        volume: manuscript.volume || "",
-        issue: manuscript.issue || "",
-        // pages: manuscript.pages || "",
+        title: manuscript.title || "",
+        cover_letter: manuscript.cover_letter || "",
+        abstract: manuscript.abstract || "",
+        disclosures: manuscript.disclosures || "",
       });
     }
   }, [manuscript]);
@@ -100,6 +119,27 @@ export default function RePublishModal({ show, manuscript, onClose }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+
+    if (!selected) return;
+
+    if (selected.type !== "application/pdf") {
+      Swal.fire("Invalid File", "Only PDF files are allowed.", "error");
+      e.target.value = "";
+      return;
+    }
+
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    if (selected.size > MAX_SIZE) {
+      Swal.fire("Too Large", "Max file size is 10MB.", "error");
+      e.target.value = "";
+      return;
+    }
+
+    setFile(selected);
+  };
+
   const handleSubmit = async () => {
     Swal.fire({
       title: "Updating...",
@@ -108,12 +148,20 @@ export default function RePublishModal({ show, manuscript, onClose }) {
     });
 
     try {
+      const formData = new FormData();
+      Object.keys(form).forEach((key) => {
+        formData.append(key, form[key]);
+      });
+
+      if (file) {
+        formData.append("manuscript", file);
+      }
+
       const res = await fetch(
         "https://nisebnigeria.com/api_niseb/update_submission.php",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: formData, // ❗ No JSON headers when sending files
         }
       );
 
@@ -122,7 +170,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
       if (data.success) {
         Swal.fire("Updated!", data.message, "success");
-        onClose(true); // refresh list
+        onClose(true);
       } else {
         Swal.fire("Error!", data.message, "error");
       }
@@ -135,56 +183,44 @@ export default function RePublishModal({ show, manuscript, onClose }) {
   return (
     <Overlay>
       <ModalBox>
-        <Title>Re-Publish / Update Article</Title>
+        <Title>Re-Publish / Update Manuscript</Title>
 
+        <Label>Manuscript ID</Label>
+        <Input name="manuscript_id" value={form.manuscript_id} onChange={handleChange} disabled/>
+
+        <Label>Author Name</Label>
+        <Input name="name" value={form.name} onChange={handleChange} disabled/>
+
+        <Label>Email</Label>
+        <Input name="email" value={form.email} onChange={handleChange} disabled/>
+
+        <Label>Phone</Label>
+        <Input name="phone" value={form.phone} onChange={handleChange} disabled/>
+
+        <Label>Institution</Label>
+        <Input name="institution" value={form.institution} onChange={handleChange} disabled/>
+
+        <Label>Journal</Label>
+        <Input name="journal" value={form.journal} onChange={handleChange} disabled/>
+
+        <Label>Title</Label>
+        <Input name="title" value={form.title} onChange={handleChange} />
+
+        <Label>Cover Letter</Label>
+        <TextArea name="cover_letter" value={form.cover_letter} onChange={handleChange} />
+
+        <Label>Abstract</Label>
+        <TextArea name="abstract" value={form.abstract} onChange={handleChange} />
+
+        <Label>Disclosures</Label>
+        <TextArea name="disclosures" value={form.disclosures} onChange={handleChange} />
+
+        <Label>Upload New Manuscript (PDF only)</Label>
         <Input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Title"
+          type="file"
+          accept="application/pdf"
+          onChange={handleFileChange}
         />
-
-        <Input
-          name="journal"
-          value={form.journal}
-          onChange={handleChange}
-          placeholder="Journal"
-        />
-
-        <Input
-          name="authors"
-          value={form.authors}
-          onChange={handleChange}
-          placeholder="Authors"
-        />
-
-        <Input
-          name="doi"
-          value={form.doi}
-          onChange={handleChange}
-          placeholder="DOI"
-        />
-
-        <Input
-          name="volume"
-          value={form.volume}
-          onChange={handleChange}
-          placeholder="Volume"
-        />
-
-        <Input
-          name="issue"
-          value={form.issue}
-          onChange={handleChange}
-          placeholder="Issue"
-        />
-
-        {/* <Input
-          name="pages"
-          value={form.pages}
-          onChange={handleChange}
-          placeholder="Pages"
-        /> */}
 
         <ButtonRow>
           <Button className="cancel" onClick={() => onClose(false)}>

@@ -225,6 +225,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import pubsImg from '../Images/pubs.png';
+import { Link, useNavigate } from "react-router-dom";
+
 
 const Hero = styled.section`
   height: 300px;
@@ -335,6 +337,7 @@ export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchData = async (query = "") => {
     setLoading(true);
@@ -417,14 +420,14 @@ const getFileUrl = (file) => {
               <CardTitle>{s.title?.toUpperCase()}</CardTitle>
               <Authors>{s.authors}</Authors>
               <Meta>
-                Vol. {s.volume}, Issue {s.issue} <br />
+                {/* Vol. {s.volume}, Issue {s.issue} <br /> */}
                 <strong>DOI:</strong> {s.doi || "N/A"} <br />
                 <strong>Submitted:</strong>{" "}
                 {s.created_at
                   ? new Date(s.created_at).toLocaleDateString()
                   : "N/A"}
                 <br />
-                <strong>Author:</strong> {s.name}
+                <strong>Author:</strong> {s.name}<br/>
                 <strong>Journal:</strong> {s.journal}
               </Meta>
 
@@ -437,13 +440,20 @@ const getFileUrl = (file) => {
                   Open
                 </Button> */}
 
-                <Button
+                <Button className="view"
+   onClick={()=>navigate(`/manuscript/${s.id}`)} style={{ color: "white", textDecoration: "none",cursor:"pointer" }}>
+    View
+  
+</Button>
+
+
+                {/* <Button
   href={getFileUrl(s.manuscript_file)}
   target="_blank"
   rel="noopener noreferrer"
 >
   Open
-</Button>
+</Button> */}
 
               </ButtonRow>
             </Card>

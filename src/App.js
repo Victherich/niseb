@@ -40,6 +40,7 @@ import { useSelector } from 'react-redux';
 import BiokemistriSubmissionPage from './components/BiokemistriSubmissionPage.jsx';
 import NisebJournalPage from './components/NisebJournalPage.jsx';
 import BioscienceResearchJournalPage from './components/BioscienceResearchJournalPage.jsx';
+import ManuscriptDetail from './components/ManuscriptDetailPage.jsx';
 
 
 function App() {
@@ -76,6 +77,7 @@ const paymentSession = useSelector(state=>state.paymentSession)
         <Route path='/biokemistrijournalpage' element={<BiokemistriSubmissionPage/>}/>
         <Route path='/nisebjournalpage' element={<NisebJournalPage/>}/>
         <Route path='/bioscienceresearchjournalpage' element={<BioscienceResearchJournalPage/>}/>
+        <Route path="/manuscript/:id" element={<ManuscriptDetail />} />
 
 
         {/* admin routes */}

@@ -88,7 +88,7 @@ export default function ManuscriptSubmission() {
   const [files, setFiles] = useState({});
   const [loading, setLoading] = useState(false);
 
-  console.log(formData.journal)
+  // console.log(formData.journal)
 
 
 
@@ -213,16 +213,16 @@ export default function ManuscriptSubmission() {
             ></textarea>
           </FormGroup>
           <FormGroup>
-            <label>Full Manuscript (Word file)</label>
+            <label>Full Manuscript (.pdf file)</label>
             <input
               type="file"
               name="manuscript"
-              accept=".doc,.docx"
+             accept="application/pdf"
               required
               onChange={handleFileChange}
             />
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <label>Figures (ZIP/Images)</label>
             <input
               type="file"
@@ -230,8 +230,8 @@ export default function ManuscriptSubmission() {
               accept=".zip,.png,.jpg,.jpeg,.tif"
               onChange={handleFileChange}
             />
-          </FormGroup>
-          <FormGroup>
+          </FormGroup> */}
+          {/* <FormGroup>
             <label>Tables (ZIP/Excel)</label>
             <input
               type="file"
@@ -239,7 +239,7 @@ export default function ManuscriptSubmission() {
               accept=".zip,.xls,.xlsx"
               onChange={handleFileChange}
             />
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup>
             <label>Conflict of Interest / Funding Disclosure</label>
             <textarea name="disclosures" rows="3" onChange={handleChange}></textarea>
