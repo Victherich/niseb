@@ -339,20 +339,25 @@ cursor:pointer;
 
 
 
-// (Assuming your styled components are already defined above in your file)
+// (Assuming your styled components are already defined above)
+
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchData = async (query = "") => {
+  console.log(submissions)
+
+  // FETCH DATA (ONLY ONCE)
+  const fetchData = async () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://nisebnigeria.com/api_niseb/get_submissions.php?search=${query}`
+        "https://nisebnigeria.com/api_niseb/get_submissions.php"
       );
       const data = await res.json();
+
       if (data.success) {
         setSubmissions(data.submissions);
       } else {
@@ -369,52 +374,43 @@ export default function SubmissionsPage() {
     fetchData();
   }, []);
 
-  // ✅ IMPROVED FUZZY SEARCH (NON-EXACT MATCH)
+  // SIMPLE NORMALIZE FUNCTION
   const normalize = (str) =>
     (str || "")
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/gi, " ") // remove punctuation
       .replace(/\s+/g, " ")
       .trim();
 
+  // SEARCH BY TITLE ONLY
   const filteredSubmissions = submissions.filter((s) => {
     if (!searchTerm.trim()) return true;
 
-    const searchWords = normalize(searchTerm).split(" ");
-
-    const searchableText = normalize(
-      `${s.title} ${s.authors || ""} ${s.doi || ""} ${s.name || ""} ${s.journal || ""}`
-    );
-
-    return searchWords.every((word) => searchableText.includes(word));
+    return normalize(s.title).includes(normalize(searchTerm));
   });
 
+  const handleDownload = (file) => {
+    const downloadUrl = `https://nisebnigeria.com/api_niseb/download_file.php?file=${encodeURIComponent(
+      file
+    )}`;
 
+    window.open(downloadUrl, "_blank");
 
-
-
-
-const handleDownload = (file) => {
-  const downloadUrl = `https://nisebnigeria.com/api_niseb/download_file.php?file=${encodeURIComponent(file)}`;
-
-  window.open(downloadUrl, "_blank");
-
-  Swal.fire({
-    icon: "success",
-    title: "Download Started ✅",
-    text: "Please check your Downloads folder.",
-    timer: 3000,
-    showConfirmButton: false,
-  });
-};
+    Swal.fire({
+      icon: "success",
+      title: "Download Started ✅",
+      text: "Please check your Downloads folder.",
+      timer: 3000,
+      showConfirmButton: false,
+    });
+  };
 
   return (
     <div>
       <Hero>
         <Overlay />
         <HeroContent>
-          <Title>Article Submissions</Title>
-          <Subtitle>Explore submitted research papers</Subtitle>
+          <Title>Published Articles</Title>
+          <Subtitle>Explore our Published Articles</Subtitle>
         </HeroContent>
       </Hero>
 
@@ -425,55 +421,46 @@ const handleDownload = (file) => {
           Publications
         </Title>
 
-        {/* Search bar */}
+        {/* SEARCH BAR */}
         <SearchBar
           type="text"
-          placeholder="Search by title, author, DOI, or journal..."
+          placeholder="Search by title..."
           value={searchTerm}
-          onChange={(e) => {
-            const value = e.target.value;
-            setSearchTerm(value);
-            fetchData(value);
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        {loading && <p style={{ textAlign: "center" }}>Searching...</p>}
+        {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
 
         <Grid>
           {filteredSubmissions.map((s) => (
             <Card key={s.id}>
               <CardTitle>{s.title?.toUpperCase()}</CardTitle>
+
               <Authors>{s.authors}</Authors>
+
               <Meta>
-                {/* <strong>DOI:</strong> {s.doi || "N/A"} <br /> */}
-                {/* <strong>Submitted:</strong>{" "} */}
-                {/* {s.created_at
-                  ? new Date(s.created_at).toLocaleDateString()
-                  : "N/A"} */}
-                <br />
                 <strong>Author:</strong> {s.name}
                 <br />
-                {/* <strong>Journal:</strong> {s.journal} */}
+                <strong>DOI:</strong> {s.doi || "N/A"}
+                   <br/>
+                {s.volume&&<span><strong>Volume:</strong> {s.volume} </span>}
+ <br/>
+                {s.issue&&<span><strong>Issue:</strong> {s.issue} </span>}
+                <br />
+           
               </Meta>
 
               <ButtonRow>
-                {/* VIEW PDF (NEW TAB) */}
-                <Button
-                  href={`https://nisebnigeria.com/api_niseb/${s.manuscript_file}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Button onClick={() => navigate(`/publication/${s.id}`)}>
                   View
                 </Button>
 
-                {/* DOWNLOAD PDF */}
-               <Button
-  onClick={() => handleDownload(s.manuscript_file)}
-  style={{ cursor: "pointer" }}
->
-  Download
-</Button>
-
+                <Button
+                  onClick={() => handleDownload(s.manuscript_file)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Download
+                </Button>
               </ButtonRow>
             </Card>
           ))}

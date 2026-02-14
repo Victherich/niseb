@@ -223,7 +223,7 @@ const handleDelete = async (id) => {
         Delete
       </Button>
          <Button className="view" onClick={()=>handlePublishClick(s)}>
-       Re-Publish
+       Publish
       </Button>
     </div>
           </Card>

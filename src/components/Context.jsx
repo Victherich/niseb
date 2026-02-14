@@ -235,7 +235,7 @@ const membership = membershipFees.find(fee => fee.id === Number(membershipCatego
       // alert('Click ok to proceed')
 
       try {
-        const res = await fetch(`${domain}/send_certificate.php`, {
+        const res = await fetch(`${domain}/send_certificate2.php`, {
           method: "POST",
           body: formData,
         });
@@ -308,7 +308,7 @@ const sendCertificateToTreasurer = async (formData) => {
     //   didOpen: () => Swal.showLoading(),
     // });
 
-    const res = await fetch(`${domain}/send_certificate_treasurer.php`, {
+    const res = await fetch(`${domain}/send_certificate_treasurer2.php`, {
       method: "POST",
       body: formData,
     });

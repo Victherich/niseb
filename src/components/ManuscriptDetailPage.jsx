@@ -115,10 +115,10 @@ export default function ManuscriptDetail() {
       {/* DARK HERO SECTION */}
     <Hero>
       <HeroContent>
-        <HeroTitle>Manuscript Details</HeroTitle>
-        <HeroSubtitle>
+        <HeroTitle>Publication Abstract</HeroTitle>
+        {/* <HeroSubtitle>
           View full submission record and manuscript file
-        </HeroSubtitle>
+        </HeroSubtitle> */}
       </HeroContent>
     </Hero>
 
@@ -126,9 +126,9 @@ export default function ManuscriptDetail() {
       <p onClick={()=>window.history.back()} style={{cursor:"pointer", color:"blue"}}>← Back</p>
 
       <Card>
-        <Title>Manuscript Details</Title>
+        <Title>Publication Abstract</Title>
 <br/>
-        <p><Label>ID:</Label> <Value>{manuscript.manuscript_id}</Value></p>
+        {/* <p><Label>ID:</Label> <Value>{manuscript.manuscript_id}</Value></p>
         <p><Label>Name:</Label> <Value>{manuscript.name}</Value></p>
         <p><Label>Email:</Label> <Value>{manuscript.email}</Value></p>
         <p><Label>Phone:</Label> <Value>{manuscript.phone || "N/A"}</Value></p>
@@ -138,20 +138,20 @@ export default function ManuscriptDetail() {
         <p><Label>Title:</Label> <Value>{manuscript.title}</Value></p>
 <br/>
         <p><Label>Cover Letter:</Label></p>
-        <p>{manuscript.cover_letter}</p>
-<br/>
-        <p><Label>Abstract:</Label></p>
+        <p>{manuscript.cover_letter}</p> */}
+
+        <p><Label></Label></p>
         <p>{manuscript.abstract}</p>
 <br/>
-        <p><Label>Disclosures:</Label></p>
+        {/* <p><Label>Disclosures:</Label></p>
         <p>{manuscript.disclosures || "None"}</p>
 <br/>
         <p>
           <Label>Submitted:</Label>{" "}
           {new Date(manuscript.created_at).toLocaleString()}
-        </p>
+        </p> */}
 <br/>
-        {manuscript.manuscript_file_url && (
+        {/* {manuscript.manuscript_file_url && (
           <FileLink
             // href={manuscript.manuscript_file_url}
             // target="_blank"
@@ -162,7 +162,7 @@ export default function ManuscriptDetail() {
           >
             View PDF Manuscript
           </FileLink>
-        )}
+        )} */}
       </Card>
     </Container>
     </>

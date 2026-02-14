@@ -77,7 +77,7 @@ const paymentSession = useSelector(state=>state.paymentSession)
         <Route path='/biokemistrijournalpage' element={<BiokemistriSubmissionPage/>}/>
         <Route path='/nisebjournalpage' element={<NisebJournalPage/>}/>
         <Route path='/bioscienceresearchjournalpage' element={<BioscienceResearchJournalPage/>}/>
-        <Route path="/manuscript/:id" element={<ManuscriptDetail />} />
+        <Route path="/publication/:id" element={<ManuscriptDetail />} />
 
 
         {/* admin routes */}

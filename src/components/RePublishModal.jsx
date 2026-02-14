@@ -77,6 +77,9 @@ const Button = styled.button`
   }
 `;
 
+
+
+
 export default function RePublishModal({ show, manuscript, onClose }) {
   const [form, setForm] = useState({
     id: "",
@@ -90,6 +93,9 @@ export default function RePublishModal({ show, manuscript, onClose }) {
     cover_letter: "",
     abstract: "",
     disclosures: "",
+    volume: "",
+    issue: "",
+    doi: "",
   });
 
   const [file, setFile] = useState(null);
@@ -109,6 +115,9 @@ export default function RePublishModal({ show, manuscript, onClose }) {
         cover_letter: manuscript.cover_letter || "",
         abstract: manuscript.abstract || "",
         disclosures: manuscript.disclosures || "",
+        volume: manuscript.volume || "",
+        issue: manuscript.issue || "",
+        doi: manuscript.doi || "",
       });
     }
   }, [manuscript]);
@@ -121,7 +130,6 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
-
     if (!selected) return;
 
     if (selected.type !== "application/pdf") {
@@ -130,7 +138,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
       return;
     }
 
-    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+    const MAX_SIZE = 10 * 1024 * 1024;
     if (selected.size > MAX_SIZE) {
       Swal.fire("Too Large", "Max file size is 10MB.", "error");
       e.target.value = "";
@@ -149,6 +157,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
     try {
       const formData = new FormData();
+
       Object.keys(form).forEach((key) => {
         formData.append(key, form[key]);
       });
@@ -161,7 +170,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
         "https://nisebnigeria.com/api_niseb/update_submission.php",
         {
           method: "POST",
-          body: formData, // ❗ No JSON headers when sending files
+          body: formData,
         }
       );
 
@@ -186,25 +195,35 @@ export default function RePublishModal({ show, manuscript, onClose }) {
         <Title>Re-Publish / Update Manuscript</Title>
 
         <Label>Manuscript ID</Label>
-        <Input name="manuscript_id" value={form.manuscript_id} onChange={handleChange} disabled/>
+        <Input name="manuscript_id" value={form.manuscript_id} disabled />
 
         <Label>Author Name</Label>
-        <Input name="name" value={form.name} onChange={handleChange} disabled/>
+        <Input name="name" value={form.name} disabled />
 
         <Label>Email</Label>
-        <Input name="email" value={form.email} onChange={handleChange} disabled/>
+        <Input name="email" value={form.email} disabled />
 
         <Label>Phone</Label>
-        <Input name="phone" value={form.phone} onChange={handleChange} disabled/>
+        <Input name="phone" value={form.phone} disabled />
 
         <Label>Institution</Label>
-        <Input name="institution" value={form.institution} onChange={handleChange} disabled/>
+        <Input name="institution" value={form.institution} disabled />
 
         <Label>Journal</Label>
-        <Input name="journal" value={form.journal} onChange={handleChange} disabled/>
+        <Input name="journal" value={form.journal} disabled />
 
         <Label>Title</Label>
         <Input name="title" value={form.title} onChange={handleChange} />
+
+        {/* NEW FIELDS */}
+        <Label>Volume</Label>
+        <Input name="volume" value={form.volume} onChange={handleChange} />
+
+        <Label>Issue</Label>
+        <Input name="issue" value={form.issue} onChange={handleChange} />
+
+        <Label>DOI</Label>
+        <Input name="doi" value={form.doi} onChange={handleChange} />
 
         <Label>Cover Letter</Label>
         <TextArea name="cover_letter" value={form.cover_letter} onChange={handleChange} />
@@ -215,19 +234,15 @@ export default function RePublishModal({ show, manuscript, onClose }) {
         <Label>Disclosures</Label>
         <TextArea name="disclosures" value={form.disclosures} onChange={handleChange} />
 
-        <Label>Upload New Manuscript (PDF only)</Label>
-        <Input
-          type="file"
-          accept="application/pdf"
-          onChange={handleFileChange}
-        />
+        <Label>Upload New Manuscript (PDF only - 10MB Max)</Label>
+        <Input type="file" accept="application/pdf" onChange={handleFileChange} />
 
         <ButtonRow>
           <Button className="cancel" onClick={() => onClose(false)}>
             Cancel
           </Button>
           <Button className="submit" onClick={handleSubmit}>
-            Update & Republish
+            Update & Publish
           </Button>
         </ButtonRow>
       </ModalBox>
