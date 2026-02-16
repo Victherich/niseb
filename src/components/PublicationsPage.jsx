@@ -441,13 +441,17 @@ export default function SubmissionsPage() {
               <Meta>
                 <strong>Author:</strong> {s.name}
                 <br />
-                <strong>DOI:</strong> {s.doi || "N/A"}
-                   <br/>
+               <strong>DOI: </strong>
+<strong><a href={s.doi ? `https://doi.org/${s.doi}` : "#"} target="_blank" rel="noopener noreferrer">
+   {s.doi || "N/A"}
+</a></strong>
+<br/>
                 {s.volume&&<span><strong>Volume:</strong> {s.volume} </span>}
  <br/>
                 {s.issue&&<span><strong>Issue:</strong> {s.issue} </span>}
                 <br />
-           
+                 {s.journal&&<span><strong>Journal:</strong> {s.journal} </span>}
+                <br />
               </Meta>
 
               <ButtonRow>

@@ -207,6 +207,10 @@ const handleDelete = async (id) => {
             <p>
               <Label>Journal:</Label> <Value>{s.journal}</Value>
             </p>
+            <Label>DOI: </Label>
+<strong><a href={s.doi ? `https://doi.org/${s.doi}` : "#"} target="_blank" rel="noopener noreferrer">
+   {s.doi || "N/A"}
+</a></strong>
             {/* <p>
               <Label>Status:</Label> <Value>{s.status}</Value>
             </p> */}
