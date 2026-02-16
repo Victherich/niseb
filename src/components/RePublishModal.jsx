@@ -150,7 +150,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
   const handleSubmit = async () => {
     Swal.fire({
-      title: "Updating...",
+      title: "Publishing...",
       allowOutsideClick: false,
       didOpen: () => Swal.showLoading(),
     });
@@ -163,11 +163,11 @@ export default function RePublishModal({ show, manuscript, onClose }) {
       });
 
       if (file) {
-        formData.append("manuscript", file);
+        formData.append("pdf_file", file);
       }
 
       const res = await fetch(
-        "https://nisebnigeria.com/api_niseb/update_submission.php",
+        "https://nisebnigeria.com/api_niseb/publish_article.php",
         {
           method: "POST",
           body: formData,
@@ -192,7 +192,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
   return (
     <Overlay>
       <ModalBox>
-        <Title>Re-Publish / Update Manuscript</Title>
+        <Title>Publish</Title>
 
         <Label>Manuscript ID</Label>
         <Input name="manuscript_id" value={form.manuscript_id} disabled />
@@ -242,7 +242,7 @@ export default function RePublishModal({ show, manuscript, onClose }) {
             Cancel
           </Button>
           <Button className="submit" onClick={handleSubmit}>
-            Update & Publish
+            Publish
           </Button>
         </ButtonRow>
       </ModalBox>

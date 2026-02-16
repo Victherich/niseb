@@ -70,13 +70,15 @@ const FileLink = styled.a`
   text-decoration: none;
 `;
 
-export default function ManuscriptDetail() {
+
+
+export default function PublicationDetail() {
   const { id } = useParams();
   const [manuscript, setManuscript] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`https://nisebnigeria.com/api_niseb/get_manuscript.php?id=${id}`)
+    fetch(`https://nisebnigeria.com/api_niseb/get_publication.php?id=${id}`)
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -92,16 +94,7 @@ export default function ManuscriptDetail() {
 
 
 
-  const getFileUrl = (file) => {
-  const baseUrl = `https://nisebnigeria.com/api_niseb/${file}`;
 
-  if (file.toLowerCase().endsWith(".pdf")) {
-    return baseUrl; // Browser can open PDF directly
-  }
-
-  // Use Google Docs Viewer for DOCX
-  return `https://docs.google.com/gview?url=${encodeURIComponent(baseUrl)}&embedded=true`;
-};
 
 
 
@@ -116,9 +109,7 @@ export default function ManuscriptDetail() {
     <Hero>
       <HeroContent>
         <HeroTitle>Publication Abstract</HeroTitle>
-        {/* <HeroSubtitle>
-          View full submission record and manuscript file
-        </HeroSubtitle> */}
+
       </HeroContent>
     </Hero>
 
@@ -128,41 +119,12 @@ export default function ManuscriptDetail() {
       <Card>
         <Title>Publication Abstract</Title>
 <br/>
-        {/* <p><Label>ID:</Label> <Value>{manuscript.manuscript_id}</Value></p>
-        <p><Label>Name:</Label> <Value>{manuscript.name}</Value></p>
-        <p><Label>Email:</Label> <Value>{manuscript.email}</Value></p>
-        <p><Label>Phone:</Label> <Value>{manuscript.phone || "N/A"}</Value></p>
-        <p><Label>Institution:</Label> <Value>{manuscript.institution || "N/A"}</Value></p>
-        <p><Label>Journal:</Label> <Value>{manuscript.journal}</Value></p>
-        <br/>
-        <p><Label>Title:</Label> <Value>{manuscript.title}</Value></p>
-<br/>
-        <p><Label>Cover Letter:</Label></p>
-        <p>{manuscript.cover_letter}</p> */}
+
 
         <p><Label></Label></p>
         <p>{manuscript.abstract}</p>
 <br/>
-        {/* <p><Label>Disclosures:</Label></p>
-        <p>{manuscript.disclosures || "None"}</p>
-<br/>
-        <p>
-          <Label>Submitted:</Label>{" "}
-          {new Date(manuscript.created_at).toLocaleString()}
-        </p> */}
-<br/>
-        {/* {manuscript.manuscript_file_url && (
-          <FileLink
-            // href={manuscript.manuscript_file_url}
-            // target="_blank"
-            // rel="noopener noreferrer"
-              href={getFileUrl(manuscript.manuscript_file)}
-  target="_blank"
-  rel="noopener noreferrer"
-          >
-            View PDF Manuscript
-          </FileLink>
-        )} */}
+      
       </Card>
     </Container>
     </>

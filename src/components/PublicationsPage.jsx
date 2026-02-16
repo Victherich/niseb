@@ -225,8 +225,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import pubsImg from '../Images/pubs.png';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import EditPublicationModal from "./EditPublicationModal";
 
 
 const Hero = styled.section`
@@ -266,6 +267,7 @@ const Container = styled.div`
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 20px;
+  padding-top:50px;
 `;
 
 const SearchBar = styled.input`
@@ -339,34 +341,41 @@ cursor:pointer;
 
 
 
-// (Assuming your styled components are already defined above)
+// (Assuming styled components are already defined above)
 
-export default function SubmissionsPage() {
-  const [submissions, setSubmissions] = useState([]);
+export default function PublicationsPage() {
+  const [publications, setPublications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  // console.log(publications)
+const location = useLocation();
+const [editPub, setEditPub] = useState(null);
 
-  console.log(submissions)
 
-  // FETCH DATA (ONLY ONCE)
+  /* ===============================
+     FETCH PUBLICATIONS
+  =============================== */
   const fetchData = async () => {
     setLoading(true);
+
     try {
       const res = await fetch(
-        "https://nisebnigeria.com/api_niseb/get_submissions.php"
+        "https://nisebnigeria.com/api_niseb/get_publications.php"
       );
+
       const data = await res.json();
 
       if (data.success) {
-        setSubmissions(data.submissions);
+        setPublications(data.publications || []);
       } else {
-        setSubmissions([]);
+        setPublications([]);
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      setSubmissions([]);
+      setPublications([]);
     }
+
     setLoading(false);
   };
 
@@ -374,21 +383,26 @@ export default function SubmissionsPage() {
     fetchData();
   }, []);
 
-  // SIMPLE NORMALIZE FUNCTION
+  /* ===============================
+     SEARCH
+  =============================== */
   const normalize = (str) =>
-    (str || "")
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .trim();
+    (str || "").toLowerCase().replace(/\s+/g, " ").trim();
 
-  // SEARCH BY TITLE ONLY
-  const filteredSubmissions = submissions.filter((s) => {
+  const filteredPublications = publications.filter((p) => {
     if (!searchTerm.trim()) return true;
-
-    return normalize(s.title).includes(normalize(searchTerm));
+    return normalize(p.title).includes(normalize(searchTerm));
   });
 
+  /* ===============================
+     DOWNLOAD
+  =============================== */
   const handleDownload = (file) => {
+    if (!file) {
+      Swal.fire("Error", "File not found", "error");
+      return;
+    }
+
     const downloadUrl = `https://nisebnigeria.com/api_niseb/download_file.php?file=${encodeURIComponent(
       file
     )}`;
@@ -404,19 +418,62 @@ export default function SubmissionsPage() {
     });
   };
 
+
+
+
+const handleDelete = (id) => {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "This will permanently delete the publication!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!'
+  }).then(async (result) => {
+    if(result.isConfirmed){
+      try{
+        const res = await fetch('https://nisebnigeria.com/api_niseb/delete_publication.php',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({id})
+        });
+        const data = await res.json();
+        if(data.success){
+          Swal.fire('Deleted!',data.message,'success');
+          fetchData(); // refresh list
+        } else {
+          Swal.fire('Error!',data.message,'error');
+        }
+      } catch(err){
+        Swal.fire('Error!','Network error','error');
+      }
+    }
+  });
+}
+
+
+
+  /* ===============================
+     UI
+  =============================== */
   return (
     <div>
-      <Hero>
+      {location.pathname==='/publications'&&<Hero>
         <Overlay />
         <HeroContent>
           <Title>Published Articles</Title>
           <Subtitle>Explore our Published Articles</Subtitle>
         </HeroContent>
-      </Hero>
+      </Hero>}
 
       <Container>
         <Title
-          style={{ textAlign: "center", color: "green", fontSize: "1.1rem" }}
+          style={{
+            textAlign: "center",
+            color: "green",
+            fontSize: "1.1rem",
+          }}
         >
           Publications
         </Title>
@@ -432,43 +489,75 @@ export default function SubmissionsPage() {
         {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
 
         <Grid>
-          {filteredSubmissions.map((s) => (
-            <Card key={s.id}>
-              <CardTitle>{s.title?.toUpperCase()}</CardTitle>
+          {filteredPublications.map((p) => (
+            <Card key={p.id}>
+              <CardTitle>{p.title?.toUpperCase()}</CardTitle>
 
-              <Authors>{s.authors}</Authors>
+              {/* <Authors>{p.name}</Authors> */}
 
               <Meta>
-                <strong>Author:</strong> {s.name}
+                <strong>Author:</strong> {p.name}
                 <br />
-               <strong>DOI: </strong>
-<strong><a href={s.doi ? `https://doi.org/${s.doi}` : "#"} target="_blank" rel="noopener noreferrer">
-   {s.doi || "N/A"}
-</a></strong>
-<br/>
-                {s.volume&&<span><strong>Volume:</strong> {s.volume} </span>}
- <br/>
-                {s.issue&&<span><strong>Issue:</strong> {s.issue} </span>}
+
+                <strong>DOI: </strong>
+                <strong>
+                  <a
+                    href={p.doi ? `https://doi.org/${p.doi}` : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {`https://doi.org/${p.doi}` || "N/A"}
+                  </a>
+                </strong>
                 <br />
-                 {s.journal&&<span><strong>Journal:</strong> {s.journal} </span>}
-                <br />
+
+                {p.volume && (
+                  <>
+                    <strong>Volume:</strong> {p.volume}
+                    <br />
+                  </>
+                )}
+
+                {p.issue && (
+                  <>
+                    <strong>Issue:</strong> {p.issue}
+                    <br />
+                  </>
+                )}
+
+                {p.journal && (
+                  <>
+                    <strong>Journal:</strong> {p.journal}
+                    <br />
+                  </>
+                )}
               </Meta>
 
               <ButtonRow>
-                <Button onClick={() => navigate(`/publication/${s.id}`)}>
+                <Button onClick={() => navigate(`/publication/${p.id}`)}>
                   View
                 </Button>
 
                 <Button
-                  onClick={() => handleDownload(s.manuscript_file)}
+                  onClick={() => handleDownload(p.pdf_file)}
                   style={{ cursor: "pointer" }}
                 >
                   Download
                 </Button>
+                {/* {location.pathname==='/admindashboard' && <Button onClick={()=>handleDelete(p.id)} style={{background:'red'}}>Delete</Button>} */}
+{/* {location.pathname==='/admindashboard' &&<Button onClick={()=>setEditPub(p)} style={{background:'orange'}}>Edit</Button>} */}
               </ButtonRow>
             </Card>
           ))}
         </Grid>
+
+        {editPub && <EditPublicationModal 
+  show={true} 
+  publication={editPub} 
+  onClose={()=>setEditPub(null)}
+  onUpdated={fetchData}
+/>}
+
       </Container>
     </div>
   );

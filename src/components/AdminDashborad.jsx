@@ -23,6 +23,7 @@ import PaymentHistoryPage from './PaymentHistory.jsx';
 import Manuscripts from './Manuscripts.jsx';
 import ManagePublications from './ManagePublications.jsx';
 import { Context } from './Context.jsx';
+import PublicationsPage from './PublicationsPage.jsx';
 // import AccessCodeManager from './AccessCodeManager';
 // import AllLecturers from './AllLecturers';
 
@@ -135,7 +136,7 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 900;
+  z-index: 100;
 `;
 
 // Content Components
@@ -213,7 +214,8 @@ const AdminDashboard = () => {
         return <Manuscripts/>;
 
       case 'publications':
-        return <ManagePublications/>;
+        // return <ManagePublications/>;
+        return <PublicationsPage/>
 
          case 'paymenthistory':
         return <PaymentHistoryPage/>;
@@ -261,16 +263,16 @@ const AdminDashboard = () => {
             active={activeMenu === 'manuscripts'}
             onClick={() => handleMenuClick('manuscripts')}
           >
-            Manage Publications
+           Submitted Manuscripts
           </SidebarMenuItem>
 
 
-             {/* <SidebarMenuItem
+             <SidebarMenuItem
             active={activeMenu === 'publications'}
             onClick={() => handleMenuClick('publications')}
           >
             Manage Publications
-          </SidebarMenuItem> */}
+          </SidebarMenuItem>
 
          
 

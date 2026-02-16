@@ -161,7 +161,7 @@ const handleDelete = async (id) => {
 };
 
 
-
+console.log(submissions)
 
 
   const [showModal, setShowModal] = useState(false);
@@ -177,7 +177,7 @@ const handleDelete = async (id) => {
 
   return (
     <Container>
-      <Title>Submitted Publications</Title>
+      <Title>Submitted Manuscripts</Title>
       <SearchInput
         type="text"
         placeholder="Search by Manuscript ID or Author Email..."
@@ -211,9 +211,9 @@ const handleDelete = async (id) => {
 <strong><a href={s.doi ? `https://doi.org/${s.doi}` : "#"} target="_blank" rel="noopener noreferrer">
    {s.doi || "N/A"}
 </a></strong>
-            {/* <p>
-              <Label>Status:</Label> <Value>{s.status}</Value>
-            </p> */}
+            <p>
+              <Label>Publishing Status:</Label> <Value>{s.status==="Published"?"Published":"Pending"}</Value>
+            </p>
             <p>
               <Label>Submitted:</Label>{" "}
               <Value>{new Date(s.created_at).toLocaleString()}</Value>

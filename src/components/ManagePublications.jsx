@@ -118,6 +118,8 @@ export default function ManagePublications() {
   const [pubs, setPubs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  console.log(pubs)
+
  
     const fetchPubs=()=>{
     fetch("https://nisebnigeria.com/api_niseb/get_publications.php")
@@ -272,8 +274,12 @@ const handleDelete = async (id) => {
               <CardTitle>{p.title.toUpperCase()}</CardTitle>
               <Authors>{p.authors}</Authors>
               <Meta>
-                Vol. {p.volume}, Issue {p.issue} — Pages {p.pages} <br />
-                <strong>DOI:</strong> {p.doi || "N/A"} <br />
+                Vol. {p.volume}, Issue {p.issue} <br />
+              <strong>DOI: </strong>
+<strong><a href={p.doi ? `https://doi.org/${p.doi}` : "#"} target="_blank" rel="noopener noreferrer">
+  {p.doi || "N/A"}
+</a></strong>
+<br/>
                 <strong>Published:</strong>{" "}
                 {new Date(p.created_at).toLocaleDateString()} <br/>
                 <strong>Journal:</strong> {p.journal}
