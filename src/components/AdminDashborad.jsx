@@ -24,6 +24,7 @@ import Manuscripts from './Manuscripts.jsx';
 import ManagePublications from './ManagePublications.jsx';
 import { Context } from './Context.jsx';
 import PublicationsPage from './PublicationsPage.jsx';
+import ManualCertificateButton from './ManualCertificateButton.jsx';
 // import AccessCodeManager from './AccessCodeManager';
 // import AllLecturers from './AllLecturers';
 
@@ -291,6 +292,8 @@ const AdminDashboard = () => {
           >
            Register Editor / Reviewer
           </SidebarMenuItem>}
+
+          {/* <ManualCertificateButton/> */}
 
           {/* <SidebarMenuItem
             onClick={() => 

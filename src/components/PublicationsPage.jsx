@@ -544,8 +544,8 @@ const handleDelete = (id) => {
                 >
                   Download
                 </Button>
-                {/* {location.pathname==='/admindashboard' && <Button onClick={()=>handleDelete(p.id)} style={{background:'red'}}>Delete</Button>} */}
-{/* {location.pathname==='/admindashboard' &&<Button onClick={()=>setEditPub(p)} style={{background:'orange'}}>Edit</Button>} */}
+                {location.pathname==='/admindashboard' && <Button onClick={()=>handleDelete(p.id)} style={{background:'red'}}>Delete</Button>}
+{location.pathname==='/admindashboard' &&<Button onClick={()=>setEditPub(p)} style={{background:'orange'}}>Edit</Button>}
               </ButtonRow>
             </Card>
           ))}

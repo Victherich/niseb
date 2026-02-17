@@ -36,7 +36,6 @@ export default function EditPublicationModal({ show, publication, onClose, onUpd
         email:publication.email||'',
         phone:publication.phone||'',
         institution:publication.institution||'',
-        authors:publication.authors||'',
         journal:publication.journal||'',
         volume:publication.volume||'',
         issue:publication.issue||'',
@@ -111,9 +110,6 @@ export default function EditPublicationModal({ show, publication, onClose, onUpd
 
         <Label>Title</Label>
         <Input name="title" value={form.title} onChange={handleChange}/>
-
-        <Label>Authors</Label>
-        <Input name="authors" value={form.authors} onChange={handleChange}/>
 
         <Label>Journal</Label>
         <Input name="journal" value={form.journal} onChange={handleChange}/>
