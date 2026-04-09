@@ -245,27 +245,27 @@ const membership = membershipFees.find(fee => fee.id === Number(membershipCatego
     handleClearPaymentSession();
           Swal.fire({
             title: "Success",
-            text: "Certificate sent to your email ✅",
+            text: "Certificate sent to your email . Please go to your member login",
             icon: "success",
             allowOutsideClick: false,
-            confirmButtonText:"Click to Proceed"
+            confirmButtonText:"Ok"
           }).then((res) => {
-            if (res.isConfirmed && window.location.pathname !== "/userdashboard") {
-  window.location.href = "/userlogin";
-      localStorage.removeItem("niseb_formData");
-          //  localStorage.removeItem("niseb_payment_session");
-        
-
-  
-} else if (res.isConfirmed) {
-  window.location.reload();
-          // localStorage.removeItem("niseb_payment_session");
-          // dispatch(clearPaymentSession());
-
+       if (res.isConfirmed) {
+  if (window.location.pathname === "/admindashboard") {
+    // ✅ Admin dashboard → just refresh
+    window.location.reload();
+  } else if (window.location.pathname !== "/userdashboard") {
+    // ✅ Other pages (except userdashboard) → go to login
+    window.location.href = "/userlogin";
+    localStorage.removeItem("niseb_formData");
+  } else {
+    // ✅ userdashboard → refresh
+    window.location.reload();
+  }
 }
 
           });
-          if (navigate) navigate("/userdashboard");
+          // if (navigate) navigate("/userdashboard");
         } else {
           if (attempt < maxRetries) {
             console.warn(`Attempt ${attempt} failed: ${result.error}. Retrying in ${retryDelay}ms...`);

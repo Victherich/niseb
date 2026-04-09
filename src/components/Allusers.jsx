@@ -341,6 +341,7 @@ import UserDetailModal from "./UserDetailModal";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Swal from "sweetalert2";
+import ManualCertificateButton from "./ManualCertificateButton";
 
 
 /* ========================= Styled Components ========================= */
@@ -683,6 +684,7 @@ const handleDownloadAllPDF = async () => {
               <UserTable>
                 <thead>
                   <tr>
+                    <th>Action</th>
                     <th><FaUser /> ID</th>
                     <th>Surname | Othernames</th>
                     <th><FaEnvelope /> Email</th>
@@ -697,6 +699,9 @@ const handleDownloadAllPDF = async () => {
                       key={u.id} 
                       onClick={() => setSelectedUser(u)}
                     >
+                      <td onClick={(e) => e.stopPropagation()}>
+  <ManualCertificateButton user={u} />
+</td>
                       <td>{u.id}</td>
                       <td>{u.surname} {u.othername}</td>
                       <td>{u.email}</td>
