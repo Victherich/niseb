@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PublicationsPage from "./PublicationsPage";
 
 /* ==============
    Layout & Theme
@@ -20,11 +21,30 @@ const Container = styled.div`
 `;
 
 const Hero = styled.section`
-  background: linear-gradient(90deg, #0a1f0a, #1f3b1f); /* dark hero */
-  color: #f2f8ef;
+  position: relative;
+  color: #fff;
   text-align: center;
   padding: 80px 20px;
-  border-bottom: 6px solid #2e662e; /* green accent */
+
+  /* BACKGROUND IMAGE */
+ background: url("https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=1600&q=80");
+background-size: cover;
+  background-position: center;
+
+  /* OVERLAY */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 128, 0, 0.65); /* dark blue overlay */
+    z-index: 0;
+  }
+
+  /* KEEP TEXT ABOVE OVERLAY */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 const HeroTitle = styled.h1`
@@ -385,6 +405,7 @@ export default function BioscienceResearchJournalPage() {
             </FooterNote>
           </Box>
         </Section>
+        <PublicationsPage/>
       </Container>
     </Page>
     </>

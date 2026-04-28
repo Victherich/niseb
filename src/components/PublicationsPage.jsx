@@ -230,6 +230,8 @@ import Swal from "sweetalert2";
 import EditPublicationModal from "./EditPublicationModal";
 
 
+
+
 const Hero = styled.section`
   height: 300px;
   background: url(${pubsImg}) center/cover no-repeat;
@@ -351,6 +353,7 @@ export default function PublicationsPage() {
   // console.log(publications)
 const location = useLocation();
 const [editPub, setEditPub] = useState(null);
+const [color, setColor]=useState("blue");
 
 
   /* ===============================
@@ -383,16 +386,52 @@ const [editPub, setEditPub] = useState(null);
     fetchData();
   }, []);
 
-  /* ===============================
-     SEARCH
-  =============================== */
+
   const normalize = (str) =>
     (str || "").toLowerCase().replace(/\s+/g, " ").trim();
 
-  const filteredPublications = publications.filter((p) => {
-    if (!searchTerm.trim()) return true;
-    return normalize(p.title).includes(normalize(searchTerm));
-  });
+
+const getJournalByRoute = () => {
+  if (location.pathname === "/biokemistrijournalpage") {
+    return "BIOKEMISTRI_JOURNAL";
+  }
+  if (location.pathname === "/bioscienceresearchjournalpage") {
+    return "BIOSCIENCE_RESEARCH_JOURNAL";
+  }
+  if (location.pathname === "/publications") {
+    return "NISEB_JOURNAL";
+  }
+  return null;
+};
+
+const filteredPublications = publications.filter((p) => {
+  const selectedJournal = getJournalByRoute();
+
+  const matchesJournal = selectedJournal
+    ? p.journal === selectedJournal
+    : true;
+
+  const matchesSearch = searchTerm.trim()
+    ? normalize(p.title).includes(normalize(searchTerm))
+    : true;
+
+  return matchesJournal && matchesSearch;
+});
+
+
+
+
+
+  // /* ===============================
+  //    SEARCH
+  // =============================== */
+  // const normalize = (str) =>
+  //   (str || "").toLowerCase().replace(/\s+/g, " ").trim();
+
+  // const filteredPublications = publications.filter((p) => {
+  //   if (!searchTerm.trim()) return true;
+  //   return normalize(p.title).includes(normalize(searchTerm));
+  // });
 
   /* ===============================
      DOWNLOAD
@@ -454,6 +493,8 @@ const handleDelete = (id) => {
 
 
 
+
+
   /* ===============================
      UI
   =============================== */
@@ -471,7 +512,7 @@ const handleDelete = (id) => {
         <Title
           style={{
             textAlign: "center",
-            color: "green",
+            color: 'green',
             fontSize: "1.1rem",
           }}
         >
@@ -540,7 +581,8 @@ const handleDelete = (id) => {
 
                 <Button
                   onClick={() => handleDownload(p.pdf_file)}
-                  style={{ cursor: "pointer" }}
+      
+                  style={{cursor:"pointer"}}
                 >
                   Download
                 </Button>

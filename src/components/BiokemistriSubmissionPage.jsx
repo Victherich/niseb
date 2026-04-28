@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import PublicationsPage from "./PublicationsPage";
 
 /* ================================
    GLOBAL PAGE WRAPPER
@@ -28,10 +29,30 @@ const Container = styled.div`
    HERO HEADER
 ================================ */
 const Hero = styled.section`
-  background: linear-gradient(90deg, #003366, #001a33);
+  position: relative;
   color: #fff;
   text-align: center;
   padding: 80px 20px;
+
+  /* BACKGROUND IMAGE */
+  background: url("https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+
+  /* OVERLAY */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 51, 102, 0.75); /* dark blue overlay */
+    z-index: 0;
+  }
+
+  /* KEEP TEXT ABOVE OVERLAY */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 `;
 
 /* ================================
@@ -295,6 +316,7 @@ const navigate = useNavigate();
           </Guideline>
         </Section>
       </Container>
+      <PublicationsPage/>
     </Page>
     </>
    

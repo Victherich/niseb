@@ -168,7 +168,6 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
       const res = await fetch(
         "https://nisebnigeria.com/api_niseb/publish_article.php",
-        // "https://cwmsrfupre.com.ng/base/publish_article.php",
         {
           method: "POST",
           body: formData,
@@ -180,12 +179,12 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
       if (data.success) {
         Swal.fire("Updated!", data.message, "success");
-// registerDOI(data.data.id)
-// console.log(data.data.id)
+registerDOI(data.data.id)
+console.log(data.data.id)
         onClose(true);
       } else {
         Swal.fire("Error!", data.message, "error");
-      }
+      } 
     } catch (err) {
       Swal.close();
       Swal.fire("Error!", "Network error", "error");
@@ -196,8 +195,55 @@ export default function RePublishModal({ show, manuscript, onClose }) {
 
 
 
-const registerDOI = async (articleId)=>{
+// const registerDOI = async (articleId)=>{
 
+//   Swal.fire({
+//     title: "Registering DOI...",
+//     allowOutsideClick: false,
+//     didOpen: () => Swal.showLoading(),
+//   });
+
+//   try {
+//     const doiRes = await fetch(
+//       "https://nisebnigeria.com/api_niseb/register_doi.php",
+
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           id: articleId,
+//         }),
+//       }
+//     );
+
+//     const doiData = await doiRes.json();
+
+//     Swal.close();
+
+// if (doiData.success) {
+//   Swal.fire(
+//     "Published!",
+//     `DOI: ${doiData.data.doi}`,
+//     "success"
+//   );
+//   onClose(true);
+// } else {
+//   Swal.fire("DOI Failed", doiData.message, "error");
+// }
+
+//   } catch (err) {
+//     Swal.close();
+//     Swal.fire("Error", "DOI registration failed", "error");
+//   }
+// }
+
+
+
+
+
+const registerDOI = async (articleId) => {
   Swal.fire({
     title: "Registering DOI...",
     allowOutsideClick: false,
@@ -205,41 +251,37 @@ const registerDOI = async (articleId)=>{
   });
 
   try {
-    const doiRes = await fetch(
+    const res = await fetch(
       "https://nisebnigeria.com/api_niseb/register_doi.php",
-      // "https://cwmsrfupre.com.ng/base/register_doi.php",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: articleId,
-        }),
+        body: JSON.stringify({ id: articleId }),
       }
     );
 
-    const doiData = await doiRes.json();
+    const data = await res.json();
 
     Swal.close();
 
-if (doiData.success) {
-  Swal.fire(
-    "Published!",
-    `DOI: ${doiData.data.doi}`,
-    "success"
-  );
-  onClose(true);
-} else {
-  Swal.fire("DOI Failed", doiData.message, "error");
-}
+    if (data.success) {
+      Swal.fire(
+        "Success",
+        `DOI: ${data.doi}`,
+        "success"
+      );
+      onClose(true);
+    } else {
+      Swal.fire("Error", data.message, "error");
+    }
 
   } catch (err) {
     Swal.close();
-    Swal.fire("Error", "DOI registration failed", "error");
+    Swal.fire("Error", "Network or server error", "error");
   }
-}
-
+};
 
 
 
