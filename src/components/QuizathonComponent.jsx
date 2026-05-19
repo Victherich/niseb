@@ -4,7 +4,7 @@ import { Fade, Slide, Zoom } from "react-awesome-reveal";
 
 const QuizathonSection = styled.section`
   background: #ffffff;
-  padding: 100px 20px;
+  padding: 100px 5px;
   font-family: "Poppins", sans-serif;
 `;
 
