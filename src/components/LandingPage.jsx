@@ -6,6 +6,9 @@ import Events from './Events'
 import Carousel from './Carousel'
 import QuizPage from './QuizPage'
 import GalleryComponent from './GalleryComponent'
+import ConferenceComponent from './ConferenceComponent'
+import FellowshipComponent from './FellowshipComponent'
+import QuizathonComponent from './QuizathonComponent'
 
 const LandingPage = () => {
   return (
@@ -13,6 +16,9 @@ const LandingPage = () => {
       <Hero/>
       <AboutUsSection/>
       <Carousel/>
+      <ConferenceComponent/>
+      <FellowshipComponent/>
+      <QuizathonComponent/>
       <Events/>
       <QuizPage/>
       <GalleryComponent/>
