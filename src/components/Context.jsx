@@ -1,28 +1,4 @@
 
-// import React, { createContext } from 'react'
-
-// export const Context = createContext();
-
-// const ContextProvider = ({children}) => {
-
-
-
-
-// const domain = "https://nisebnigeria.com/api_niseb"
-// const dollarRate = 1600
-// const payStackTestKey = "pk_test_60e1f53bba7c80b60029bf611a26a66a9a22d4e4"   //hadassahpremium test key
-// const payStackLiveKey = 'pk_live_97c6ecd55b15f2d30a0903f69084bbacc042de40'
-
-//   return (
-//     <Context.Provider  value={{domain, dollarRate, payStackTestKey, payStackLiveKey}}>
-//       {children}
-//     </Context.Provider>
-//   )
-// }
-
-// export default ContextProvider
-
-
 
 
 
@@ -43,7 +19,7 @@ const ContextProvider = ({ children }) => {
   const payStackTestKey = ''
 
 // //  HADASSAH PREMIUM
-//     // const payStackLiveKey = "pk_test_60e1f53bba7c80b60029bf611a26a66a9a22d4e4";  //HADASAH PREMIUM TEST
+    // const payStackLiveKey = "pk_test_60e1f53bba7c80b60029bf611a26a66a9a22d4e4";  //HADASAH PREMIUM TEST
 //     const payStackLiveKey = "pk_live_afb3375b9a770a5a332904dcf1a26e77c2a5f170"; //HADASSAH PREMIUM LIVE
 
 
@@ -75,93 +51,6 @@ const userId = userInfo?.id
 ];
 
 
-// console.log(user)
-
-
-  // const generateAndSendCertificate = async ({
-  //   surname,
-  //   othername,
-  //   institution,
-  //   id,
-  //   membership_expiry,
-  //   email,
-  //   navigate
-  // }) => {
-  //   const fullName = `${surname?.toUpperCase() || ""} ${othername?.toUpperCase() || ""}`.trim();
-  //   // const expiryDate = new Date(membership_expiry).toLocaleDateString("en-GB", {
-  //   //   day: "2-digit",
-  //   //   month: "long",
-  //   //   year: "numeric",
-  //   // });
-
-  //   const expiryYear = membership_expiry ? membership_expiry : new Date().getFullYear();
-
-
-  //   const issueDate = new Date().toLocaleDateString();
-
-  //   const img = new Image();
-  //   img.src = "/certificate_template.png";
-  //   img.crossOrigin = "Anonymous";
-
-  //   img.onload = async () => {
-  //     const doc = new jsPDF("p", "mm", "a4");
-
-  //     // Background
-  //     doc.addImage(img, "PNG", 0, 0, 210, 297);
-
-  //     // Certificate details
-  //     doc.setFont("helvetica", "bold");
-  //     doc.setFontSize(20);
-  //     doc.text(fullName, 105, 143, { align: "center" });
-
-  //     doc.setFont("helvetica", "normal");
-  //     doc.setFontSize(12);
-  //     doc.text(institution, 105, 165, { align: "center" });
-
-  //     doc.setFont("helvetica", "bold");
-  //     doc.setFontSize(16);
-  //     doc.text(id.toString(), 119, 183, { align: "center" });
-
-  //     doc.setFont("helvetica", "bold");
-  //     doc.setFontSize(14);
-  //     doc.text(`Valid from January to December ${expiryYear}`, 105, 220, { align: "center" });
-
-  //     // Convert to blob
-  //     const pdfBlob = doc.output("blob");
-
-  //     const formData = new FormData();
-  //     formData.append("email", email);
-  //     formData.append("fullname", fullName);
-  //     formData.append("certificate", pdfBlob, `${fullName}_certificate.pdf`);
-
-  //     Swal.fire({ text: "Sending your certificate...", allowOutsideClick: false });
-  //     Swal.showLoading();
-
-  //     try {
-  //       const res = await fetch(`${domain}/send_certificate.php`, {
-  //         method: "POST",
-  //         body: formData,
-  //       });
-
-  //       const result = await res.json();
-
-  //       if (result.success) {
-  //         Swal.fire({title:"Success", 
-  //           text:"Certificate sent to your email ✅", 
-  //           icon:"success", 
-  //           allowOutsideClick:false}).then((result)=>{if(result.isConfirmed){
-  //        window.location.reload();   
-  //         }});
-  //         if (navigate) navigate("/userdashboard");
-  //       } else {
-  //         Swal.fire("Error", result.error || "Failed to send certificate", "error");
-  //       }
-  //     } catch (err) {
-  //       Swal.fire("Error", "Network error while sending certificate.", "error");
-  //       console.error("Network error:", err);
-  //     }
-  //   };
-  // };
 
 const generateAndSendCertificate = async ({
   membershipCategory,
@@ -233,16 +122,19 @@ const membership = membershipFees.find(fee => fee.id === Number(membershipCatego
       Swal.showLoading();
 
       // alert('Click ok to proceed')
+      handleClearPaymentSession();
 
       try {
-        const res = await fetch(`${domain}/send_certificate2.php`, {
+        const res = await fetch(`${domain}/send_certificate3.php`, {
+        // const res = await fetch(`https://hudagiantstridetravelsandtour.com/api/send_certificate3.php`, {
+        
           method: "POST",
           body: formData,
         });
         const result = await res.json();
-
+console.log(result)
         if (result.success) {
-    handleClearPaymentSession();
+    // handleClearPaymentSession();
           Swal.fire({
             title: "Success",
             text: "Certificate sent to your email . Please go to your member login",
@@ -276,6 +168,7 @@ const membership = membershipFees.find(fee => fee.id === Number(membershipCatego
           }
         }
       } catch (err) {
+        console.error(err)
         if (attempt < maxRetries) {
           console.warn(`Attempt ${attempt} network error. Retrying in ${retryDelay}ms...`, err);
           setTimeout(sendCertificate, retryDelay);
@@ -293,6 +186,137 @@ const membership = membershipFees.find(fee => fee.id === Number(membershipCatego
 };
 
 
+
+
+// const generateAndSendCertificate = async ({
+//   membershipCategory,
+//   title,
+//   surname,
+//   othername,
+//   institution,
+//   id,
+//   membership_expiry,
+//   email,
+//   navigate,
+//   maxRetries = 3,
+//   retryDelay = 2000,
+// }) => {
+//   const fullName = `${title?.toUpperCase() || ""} ${surname?.toUpperCase() || ""} ${othername?.toUpperCase() || ""}`.trim();
+//   const expiryYear = membership_expiry ? membership_expiry : new Date().getFullYear();
+//   const membership = membershipFees.find(fee => fee.id === Number(membershipCategory))?.name || membershipCategory;
+
+//   const img = new Image();
+//   img.src = "/certificate_template.jpg";
+//   img.crossOrigin = "Anonymous";
+
+//   img.onload = async () => {
+//     const doc = new jsPDF("p", "mm", "a4");
+
+//     // Background
+//     doc.addImage(img, "JPEG", 0, 0, 210, 297);
+
+//     // Certificate details
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(16);
+//     doc.text(fullName, 105, 130, { align: "center" });
+
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(11);
+//     doc.text(institution, 105, 146, { align: "center" });
+
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(14);
+//     doc.text(id.toString(), 118, 162.5, { align: "center" });
+
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(12);
+//     doc.text(membership, 105, 183, { align: "center" });
+
+//     doc.setFont("helvetica", "bold");
+//     doc.setFontSize(14);
+//     doc.text(`Valid from January to December ${expiryYear}`, 105, 220, { align: "center" });
+
+//     // Convert to blob
+//     const pdfBlob = doc.output("blob");
+//     const fileName = `${fullName}_certificate.pdf`;
+
+//     // Optionally send to treasurer first using its own dedicated FormData instance
+//     const treasurerFormData = new FormData();
+//     treasurerFormData.append("email", email);
+//     treasurerFormData.append("fullname", fullName);
+//     treasurerFormData.append("certificate", pdfBlob, fileName);
+//     sendCertificateToTreasurer(treasurerFormData);
+
+//     let attempt = 0;
+
+//     const sendCertificate = async () => {
+//       attempt++;
+//       Swal.fire({ text: "Sending your certificate...", allowOutsideClick: false });
+//       Swal.showLoading();
+
+//       handleClearPaymentSession();
+// console.log(email, fullName, pdfBlob)
+//       // ✅ Create a fresh FormData payload for every single attempt 
+//       // to ensure the Blob stream never gets locked or consumed empty.
+//       const currentFormData = new FormData();
+//       currentFormData.append("email", email);
+//       currentFormData.append("fullname", fullName);
+//       currentFormData.append("certificate", pdfBlob, fileName);
+
+//       console.log(currentFormData)
+
+//       try {
+//         const res = await fetch(`${domain}/send_certificate3.php`, {
+//           method: "POST",
+//           body: currentFormData, // Send the fresh payload
+//         });
+//         const result = await res.json();
+
+//         if (result.success) {
+//           Swal.fire({
+//             title: "Success",
+//             text: "Certificate sent to your email. Please go to your member login",
+//             icon: "success",
+//             allowOutsideClick: false,
+//             confirmButtonText: "Ok"
+//           }).then((res) => {
+//             if (res.isConfirmed) {
+//               if (window.location.pathname === "/admindashboard") {
+//                 window.location.reload();
+//               } else if (window.location.pathname !== "/userdashboard") {
+//                 window.location.href = "/userlogin";
+//                 localStorage.removeItem("niseb_formData");
+//               } else {
+//                 window.location.reload();
+//               }
+//             }
+//           });
+//         } else {
+//           if (attempt < maxRetries) {
+//             console.warn(`Attempt ${attempt} failed: ${result.message || result.error}. Retrying in ${retryDelay}ms...`);
+//             setTimeout(sendCertificate, retryDelay);
+//           } else {
+//             Swal.fire("Error", result.message || result.error || "Failed to send certificate after multiple attempts", "error");
+//           }
+//         }
+//       } catch (err) {
+//         if (attempt < maxRetries) {
+//           console.warn(`Attempt ${attempt} network error. Retrying in ${retryDelay}ms...`, err);
+//           setTimeout(sendCertificate, retryDelay);
+//         } else {
+//           Swal.fire("Error", "Network error while sending certificate.", "error");
+//           console.error("Network error:", err);
+//         }
+//       }
+//     };
+
+//     // Start the first attempt
+//     sendCertificate();
+//   };
+// };
+
+
+
 const handleClearPaymentSession = ()=>{
    dispatch(clearPaymentSession());
 }
@@ -308,7 +332,7 @@ const sendCertificateToTreasurer = async (formData) => {
     //   didOpen: () => Swal.showLoading(),
     // });
 
-    const res = await fetch(`${domain}/send_certificate_treasurer2.php`, {
+    const res = await fetch(`${domain}/send_certificate_treasurer3.php`, {
       method: "POST",
       body: formData,
     });
@@ -317,21 +341,10 @@ const sendCertificateToTreasurer = async (formData) => {
     // Swal.close();
 
     if (result.success) {
-      // Swal.fire({
-      //   title: "✅ Copy Sent",
-      //   text: "Certificate successfully..",
-      //   icon: "success",
-      // });
+    
     } else {
-      // Swal.fire({
-      //   title: "⚠️ Treasurer Email Failed",
-      //   text: result.message || "Could not send certificate to Treasurer.",
-      //   icon: "warning",
-      // });
     }
   } catch (err) {
-    // Swal.close();
-    // Swal.fire("Error", "Failed to send certificate to Treasurer.", "error");
     console.error("Treasurer send error:", err);
   }
 };
@@ -444,60 +457,6 @@ getUser();
 
 
 
-// ======================polling for annula payment renew 
-// function startPaymentPolling1(paymentType) {
-
-//    // ✅ Get user email from localStorage
-//   const savedForm = localStorage.getItem("niseb_formData");
-//   const userEmail = savedForm ? JSON.parse(savedForm).email : null;
-
-//   if (!userEmail || !paymentType) return;
-
-//   const fetchPayment = async () => {
-//     try {
-//       const res = await fetch(`${domain}/fetch_user_payment1.php`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           email: userEmail,
-//           custom_payment_type: paymentType,
-//         }),
-//       });
-
-//       const data = await res.json();
-
-//       if (data.success && data.payment && data.payment.status === "success") {
-//         Swal.fire({
-//           icon: "success",
-//           title: "Payment Successful.!",
-//           text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-//           allowOutsideClick: false,
-//           confirmButtonText: "Click here to proceed",
-//         }).then((result) => {
-//           if (result.isConfirmed) {
-//             handleSignup(
-//               // data.payment.email,
-//               data.payment.reference,
-//               data.payment.amount,
-//               // data.payment.year,
-//               data.payment.membership,
-//               data.payment.id
-//             );
-          
-//           }
-//         });
-//       }
-//     } catch (err) {
-//       console.error("Polling error:", err);
-//     }
-//   };
-
-//   // Run immediately
-//   fetchPayment();
-
-//   // Keep checking every 10 seconds
-//   setInterval(fetchPayment, 10000);
-// }
 
 function startPaymentPolling1(paymentType) {
   // ✅ Get user email from localStorage
@@ -661,59 +620,6 @@ const handleSignup = async (reference, amount,membership, transactionId) => {
 
 
 
-// function startPaymentPolling2(userId, paymentType) {
-//   if (!userId || !paymentType) return;
-
-//   const fetchPayment = async () => {
-//     try {
-//       const res = await fetch(`${domain}/fetch_user_payment.php`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           user_id: userId,
-//           custom_payment_type: paymentType,
-//         }),
-//       });
-
-//       const data = await res.json();
-
-//       if (data.success && data.payment && data.payment.status === "success") {
-//         Swal.fire({
-//           icon: "success",
-//           title: "Payment Successful..!",
-//           text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-//           allowOutsideClick:false,
-//           confirmButtonText:"Click here to proceed"
-//         }).then((result)=>{if(result.isConfirmed){
-//             savePayment2(data.payment.user_id, 
-//               data.payment.reference, 
-//               data.payment.amount, 
-//               data.payment.year,
-//               data.payment.membership,
-//               data.payment.id
-//             )
-//         }})
-//         console.log(data)
-//       }
-//     } catch (err) {
-//       console.error("Polling error:", err);
-//     }
-//   };
-
-//   // Run immediately
-//   fetchPayment();
-
-//   // Keep running forever every 2 seconds
-//   setInterval(fetchPayment, 10000);
-// }
-
-// useEffect(() => {
-//   startPaymentPolling2(userInfo?.id, "payment2");
-// }, []);
-
-
-
-
 
 function startPaymentPolling2(userId, paymentType) {
   if (!userId || !paymentType) {
@@ -804,57 +710,6 @@ useEffect(() => {
 
 
 
-
-
-// function startPaymentPolling3(userId, paymentType) {
-//   if (!userId || !paymentType) return;
-
-//   const fetchPayment = async () => {
-//     try {
-//       const res = await fetch(`${domain}/fetch_user_payment.php`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           user_id: userId,
-//           custom_payment_type: paymentType,
-//         }),
-//       });
-
-//       const data = await res.json();
-
-//       if (data.success && data.payment && data.payment.status === "success") {
-//         Swal.fire({
-//           icon: "success",
-//           title: "Payment Successful...!",
-//           text: `Reference: ${data.payment.reference}\nAmount: ₦${data.payment.amount}`,
-//           allowOutsideClick:false,
-//           confirmButtonText:"Click here to proceed"
-//         }).then((result)=>{if(result.isConfirmed){
-//             savePayment3(data.payment.user_id, 
-//               data.payment.reference, 
-//               data.payment.amount, 
-//               data.payment.year,
-//               data.payment.membership,
-//               data.payment.id
-//             )
-//         }})
-//         console.log(data)
-//       }
-//     } catch (err) {
-//       console.error("Polling error:", err);
-//     }
-//   };
-
-//   // Run immediately
-//   fetchPayment();
-
-//   // Keep running forever every 2 seconds
-//   setInterval(fetchPayment, 10000);
-// }
-
-// useEffect(() => {
-//   startPaymentPolling3(userInfo?.id, "payment3");
-// }, []);
 
 
 function startPaymentPolling3(userId, paymentType) {

@@ -119,6 +119,8 @@ export default function ManuscriptSubmission() {
 
     try {
       const res = await fetch(`https://nisebnigeria.com/api_niseb/${formData.journal}.php`, {
+          // const res = await fetch(`https://hudagiantstridetravelsandtour.com/api/${formData.journal}.php`, {
+    
         method: "POST",
         body: data,
       });
